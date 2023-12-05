@@ -6,6 +6,8 @@ import { UsersService } from '../users/users.service';
 import { AdminIdError } from '../users/exceptions';
 import { UpdateCriminal } from './dto';
 import { Users } from '../users/entities/users.entity';
+import { ToastsService } from '../toasts/toasts.service';
+import { InvalidCriminalId } from './exceptions/invalid-criminal-id.error';
 
 @Injectable()
 export class CriminalsService {
@@ -14,7 +16,10 @@ export class CriminalsService {
     private criminalsModel: typeof Criminals,
 
     @Inject(UsersService)
-    private usersService: UsersService
+    private usersService: UsersService,
+
+    @Inject(ToastsService)
+    private toastsService: ToastsService
   ) {}
 
   async getCriminals() {
@@ -50,6 +55,15 @@ export class CriminalsService {
 
   async deleteCriminal(criminalId: string, adminId: string) {
     if (await this.usersService.isAdmin(adminId)) {
+      const criminal = await this.criminalsModel.findOne({
+        where: { id: criminalId },
+      });
+      if (criminal == null) {
+        throw new InvalidCriminalId();
+      }
+      this.toastsService.toastsModel.destroy({
+        where: { isConvicting: true, userId: criminal?.userId },
+      });
       return await this.criminalsModel.destroy({ where: { id: criminalId } });
     }
     throw new AdminIdError();

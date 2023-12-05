@@ -5,19 +5,15 @@ import { CreateToast } from './dto/create-toast.dto';
 import { UpdateToast } from './dto/update-toast.dto';
 import { UsersService } from '../users/users.service';
 import { InvalidUserID, NoToastsHappened } from './exceptions';
-import { CriminalsService } from '../criminals/criminals.service';
 
 @Injectable()
 export class ToastsService {
   constructor(
     @InjectModel(Toasts)
-    private toastsModel: typeof Toasts,
+    public toastsModel: typeof Toasts,
 
     @Inject(UsersService)
-    private usersService: UsersService,
-
-    @Inject(CriminalsService)
-    private criminalsService: CriminalsService
+    private usersService: UsersService
   ) {}
 
   /**
@@ -62,8 +58,15 @@ export class ToastsService {
    * @param: update dto and id of instance
    * @return: object with number of effected rows
    */
-  async updateToast(toastParams: UpdateToast, toastId: string, userId: string) {
+  async updateToast(
+    toastParams: UpdateToast,
+    toastId: string,
+    userId?: string
+  ) {
     const isAdmin = await this.usersService.isAdmin(userId);
+    if (!isAdmin && userId === undefined) {
+      throw new InvalidUserID();
+    }
     return isAdmin
       ? await this.toastsModel.update(toastParams, { where: { id: toastId } })
       : await this.toastsModel.update(toastParams, {
@@ -84,11 +87,12 @@ export class ToastsService {
     const boundaryDate = this.findBoundaryDate();
     let toasts = await this.getToasts();
 
-    // Removing Criminal toasts and toasts that are in the future
+    // Removing Convicting toasts and toasts that are in the future
     toasts = toasts.filter((toast) => {
       return !toast.isConvicting && toast.date <= currDate;
     });
 
+    // Adding slots to period list based on oldest date
     toasts.forEach((toast) => {
       const difference = this.monthDifference(toast.date, boundaryDate);
       for (let i: number = 0; i < Math.floor(difference / 6) + 1; i++) {
@@ -97,13 +101,14 @@ export class ToastsService {
         }
       }
     });
+    // Incrementing periods based on toasts that happened in them
     toasts.forEach((toast) => {
       const difference = this.monthDifference(toast.date, boundaryDate);
       if (toast.date.getTime() > boundaryDate.getTime()) {
         periodList[0] += 1;
       } else if (
         toast.date.getTime() < boundaryDate.getTime() &&
-        difference < 6
+        difference <= 6
       ) {
         periodList[1] += 1;
       } else {
@@ -130,8 +135,8 @@ export class ToastsService {
   }
 
   /**
-   * Finds the difference in months between 2 dates
-   * @param: 2 dates
+   * Finds the difference in months between two dates
+   * @param: two dates
    * @returns: difference in months (number)
    */
   private monthDifference(d1: Date, d2: Date): number {
