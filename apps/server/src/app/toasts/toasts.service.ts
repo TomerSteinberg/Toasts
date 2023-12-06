@@ -5,6 +5,9 @@ import { CreateToast } from './dto/create-toast.dto';
 import { UpdateToast } from './dto/update-toast.dto';
 import { UsersService } from '../users/users.service';
 import { InvalidUserID, NoToastsHappened } from './exceptions';
+import { Op, Sequelize } from 'sequelize';
+import { Users } from '../users/entities/users.entity';
+import { group } from 'console';
 
 @Injectable()
 export class ToastsService {
@@ -147,7 +150,23 @@ export class ToastsService {
     return months <= 0 ? 0 : months;
   }
 
+  /**
+   * Gets the leaderboard of users who did the most toasts
+   * @param: None
+   * @returns: List of users and their number of toasts in the last period
+   * ordered by the number
+   */
   async getToastsLeaderBoard() {
-    return this.toastsModel.findAll();
+    const today = new Date();
+    return await this.toastsModel.findAll({
+      attributes: [[Sequelize.fn('COUNT', 'userId'), 'Toasts']],
+      where: { isConvicting: false, date: { [Op.lte]: today } },
+      include: {
+        model: Users,
+        attributes: ['username'],
+      },
+      order: [['Toasts', 'DESC']],
+      group: ['user.id'],
+    });
   }
 }
