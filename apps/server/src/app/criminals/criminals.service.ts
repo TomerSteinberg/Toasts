@@ -22,6 +22,11 @@ export class CriminalsService {
     private toastsService: ToastsService
   ) {}
 
+  /**
+   * gets all criminals from db
+   * @param: None
+   * @returns: all criminals
+   */
   async getCriminals() {
     return await this.criminalsModel.findAll({
       include: [
@@ -33,6 +38,12 @@ export class CriminalsService {
     });
   }
 
+  /**
+   * adds criminal to db (requires valid admin id)
+   * @param addCriminal
+   * @param adminId
+   * @returns code of success
+   */
   async addCriminal(addCriminal: AddCriminal, adminId: string) {
     if (await this.usersService.isAdmin(adminId)) {
       return await this.criminalsModel.create(addCriminal);
@@ -40,6 +51,13 @@ export class CriminalsService {
     throw new AdminIdError();
   }
 
+  /**
+   * updates criminal in db (requires valid adminId)
+   * @param newCriminalType
+   * @param adminId
+   * @param criminalId
+   * @returns if succeeded
+   */
   async updateCriminal(
     newCriminalType: UpdateCriminal,
     adminId: string,
@@ -53,6 +71,12 @@ export class CriminalsService {
     throw new AdminIdError();
   }
 
+  /**
+   * Deletes criminal from db with all of his convicting toasts
+   * @param criminalId
+   * @param adminId
+   * @returns number of rows destroyed
+   */
   async deleteCriminal(criminalId: string, adminId: string) {
     if (await this.usersService.isAdmin(adminId)) {
       const criminal = await this.criminalsModel.findOne({

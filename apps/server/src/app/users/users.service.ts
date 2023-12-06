@@ -16,10 +16,10 @@ export class UsersService {
     private UsersModel: typeof Users
   ) {}
 
-  /*
+  /**
    * Creates a user in the Database (Only admins can set users as admins)
-   * @Param: username, password and adminId (if you want to make the new user an admin)
-   * @Return:
+   * @param: username, password and adminId (if you want to make the new user an admin)
+   * @return: if succeeded
    */
   async signup(userParams: CreateUser, adminId?: string) {
     if (userParams.isAdmin) {
@@ -36,10 +36,10 @@ export class UsersService {
     }
   }
 
-  /*
+  /**
    * Finds user and sends it's id and admin flag
-   * @Param: User credentials (Username and Password)
-   * @Return: User id and admin flag
+   * @param: User credentials (Username and Password)
+   * @return: User id and admin flag
    */
   async login(userParams: UserLogin) {
     const user = await this.UsersModel.findOne({
@@ -52,10 +52,10 @@ export class UsersService {
     return user;
   }
 
-  /*
+  /**
    * Updates a user instance in db
-   * @Param: update dto and id of instance
-   * @Return: object with number of effected rows
+   * @param: update dto and id of instance
+   * @return: object with number of effected rows
    */
   async updateUser(userParams: UpdateUser, userId: string) {
     return await this.UsersModel.update(userParams, { where: { id: userId } });
@@ -72,10 +72,10 @@ export class UsersService {
     );
   }
 
-  /*
+  /**
    * Checks if the admin id given actually belongs to a real admin user
-   * @Param: id of the admin (given in string of UUIDV4)
-   * @Returns: True if the id matches an admin user in the DB
+   * @param: id of the admin (given in string of UUIDV4)
+   * @returns: True if the id matches an admin user in the DB
    */
   async isAdmin(adminId?: string) {
     if (
@@ -95,10 +95,10 @@ export class UsersService {
     return true;
   }
 
-  /*
+  /**
    * get all users from db
-   * @Param: None
-   * @Return: id, username and admin status of all users
+   * @param: None
+   * @return: id, username and admin status of all users
    */
   async getUsers(): Promise<Users[]> {
     return this.UsersModel.findAll({
@@ -106,6 +106,11 @@ export class UsersService {
     });
   }
 
+  /**
+   * checks if a user exists
+   * @param userId
+   * @returns true if the user exists. false otherwise
+   */
   async doesExist(userId: string): Promise<boolean> {
     if (
       userId === undefined ||

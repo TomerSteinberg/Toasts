@@ -7,7 +7,6 @@ import { UsersService } from '../users/users.service';
 import { InvalidUserID, NoToastsHappened } from './exceptions';
 import { Op, Sequelize } from 'sequelize';
 import { Users } from '../users/entities/users.entity';
-import { group } from 'console';
 
 @Injectable()
 export class ToastsService {
@@ -26,6 +25,17 @@ export class ToastsService {
    */
   async getToasts(): Promise<Toasts[]> {
     return await this.toastsModel.findAll();
+  }
+
+  /**
+   * get all toasts from db of a specific user
+   * @param: user Id
+   * @return: All the toasts from the db that belong to given user
+   */
+  async getToastsById(userId: string) {
+    return await this.toastsModel.findAll({
+      where: { userId: userId },
+    });
   }
 
   /**
