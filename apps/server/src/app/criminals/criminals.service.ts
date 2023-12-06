@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Criminals } from './entities/criminals.entity';
 import { AddCriminal } from './dto/add-criminal.dto';
@@ -15,10 +15,8 @@ export class CriminalsService {
     @InjectModel(Criminals)
     private criminalsModel: typeof Criminals,
 
-    @Inject(UsersService)
     private usersService: UsersService,
 
-    @Inject(ToastsService)
     private toastsService: ToastsService
   ) {}
 
@@ -28,14 +26,14 @@ export class CriminalsService {
    * @returns: all criminals
    */
   async getCriminals() {
-    return await this.criminalsModel.findAll({
+    const criminals = await this.criminalsModel.findAll({
       include: [
         {
           model: Users,
-          attributes: ['id', 'username'],
         },
       ],
     });
+    return criminals;
   }
 
   /**
@@ -46,7 +44,8 @@ export class CriminalsService {
    */
   async addCriminal(addCriminal: AddCriminal, adminId: string) {
     if (await this.usersService.isAdmin(adminId)) {
-      return await this.criminalsModel.create(addCriminal);
+      const newCriminal = await this.criminalsModel.create(addCriminal);
+      return newCriminal;
     }
     throw new AdminIdError();
   }
@@ -64,9 +63,13 @@ export class CriminalsService {
     criminalId: string
   ) {
     if (await this.usersService.isAdmin(adminId)) {
-      return await this.criminalsModel.update(newCriminalType, {
-        where: { id: criminalId },
-      });
+      const affectedCriminals = await this.criminalsModel.update(
+        newCriminalType,
+        {
+          where: { id: criminalId },
+        }
+      );
+      return affectedCriminals;
     }
     throw new AdminIdError();
   }
@@ -88,7 +91,11 @@ export class CriminalsService {
       this.toastsService.toastsModel.destroy({
         where: { isConvicting: true, userId: criminal?.userId },
       });
-      return await this.criminalsModel.destroy({ where: { id: criminalId } });
+
+      const destroy = await this.criminalsModel.destroy({
+        where: { id: criminalId },
+      });
+      return destroy;
     }
     throw new AdminIdError();
   }

@@ -8,6 +8,7 @@ import {
   DuplicateUsernameError,
   AdminIdError,
 } from './exceptions';
+import { z } from 'zod';
 
 @Injectable()
 export class UsersService {
@@ -43,7 +44,6 @@ export class UsersService {
    */
   async login(userParams: UserLogin) {
     const user = await this.UsersModel.findOne({
-      attributes: ['isAdmin', 'id'],
       where: { username: userParams.username, password: userParams.password },
     });
     if (!user) {
@@ -58,18 +58,28 @@ export class UsersService {
    * @return: object with number of effected rows
    */
   async updateUser(userParams: UpdateUser, userId: string) {
-    return await this.UsersModel.update(userParams, { where: { id: userId } });
+    const affectedUsers = await this.UsersModel.update(userParams, {
+      where: { id: userId },
+    });
+    return affectedUsers;
   }
 
+  /**
+   * Promotes a user to an admin
+   * @param userId
+   * @param adminId
+   * @returns affected user
+   */
   async makeAdmin(userId: string, adminId: string) {
     const adminCheck = !(await this.isAdmin(adminId));
     if (adminCheck) {
       throw new AdminIdError();
     }
-    return await this.UsersModel.update(
+    const affectedUsers = await this.UsersModel.update(
       { isAdmin: true },
       { where: { id: userId } }
     );
+    return affectedUsers;
   }
 
   /**
@@ -78,12 +88,13 @@ export class UsersService {
    * @returns: True if the id matches an admin user in the DB
    */
   async isAdmin(adminId?: string) {
-    if (
-      !adminId ||
-      !adminId.match(
-        /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
-      )
-    ) {
+    const schema = z.string().uuid();
+    if (!adminId) {
+      return false;
+    }
+    try {
+      schema.parse(adminId);
+    } catch (e) {
       return false;
     }
     const admin = await this.UsersModel.findOne({
@@ -101,9 +112,8 @@ export class UsersService {
    * @return: id, username and admin status of all users
    */
   async getUsers(): Promise<Users[]> {
-    return this.UsersModel.findAll({
-      attributes: ['id', 'username', 'isAdmin'],
-    });
+    const users = this.UsersModel.findAll();
+    return users;
   }
 
   /**
@@ -112,12 +122,13 @@ export class UsersService {
    * @returns true if the user exists. false otherwise
    */
   async doesExist(userId: string): Promise<boolean> {
-    if (
-      userId === undefined ||
-      !userId.match(
-        /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
-      )
-    ) {
+    const schema = z.string().uuid();
+    if (userId === undefined) {
+      return false;
+    }
+    try {
+      schema.parse(userId);
+    } catch (e) {
       return false;
     }
     const user = await this.UsersModel.findOne({ where: { id: userId } });
