@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateToast } from './dto/create-toast.dto';
 import { UpdateToast } from './dto/update-toast.dto';
 import { UsersService } from '../users/users.service';
-import { InvalidUserID } from './exceptions';
+import { InvalidUserID, NoToastsHappened } from './exceptions';
 import { Op, Sequelize } from 'sequelize';
 import { Users } from '../users/entities/users.entity';
 
@@ -99,33 +99,28 @@ export class ToastsService {
    * and in the record period of time
    */
   async getToastNumber() {
-    const periodList: number[] = [];
-    const currDate = new Date();
-    const boundaryDate = this.findBoundaryDate();
-  }
+    const JULY = 7;
+    const JUNE = 6;
+    const boundaryMonth = new Date().getMonth() > JUNE ? JUNE : JULY;
+    const maxBeforeJune = await this.getMaxOfYearlyPeriod(JULY, false, true);
+    const maxAfterJune = await this.getMaxOfYearlyPeriod(JUNE, true, true);
+    const currPeriodToasts = await this.getMaxOfYearlyPeriod(
+      boundaryMonth,
+      boundaryMonth == JUNE ? true : false,
+      false
+    );
 
-  /**
-   * Finds the beginning of the current period of toasts
-   * @param: None
-   * @returns: beginning date
-   */
-  private findBoundaryDate() {
-    const currMonth = new Date().getMonth() + 1;
-    const currYear = new Date().getFullYear();
-    return currMonth >= 6 ? new Date(currYear, 6, 1) : new Date(currYear, 0, 1);
-  }
+    if (maxBeforeJune === undefined || maxAfterJune === undefined) {
+      throw new NoToastsHappened();
+    }
 
-  /**
-   * Finds the difference in months between two dates
-   * @param: two dates
-   * @returns: difference in months (number)
-   */
-  private monthDifference(d1: Date, d2: Date): number {
-    let months: number;
-    months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth();
-    months += d2.getMonth();
-    return months <= 0 ? 0 : months;
+    return {
+      current_period: parseInt(currPeriodToasts.toasts),
+      record: Math.max(
+        parseInt(maxAfterJune.toasts),
+        parseInt(maxBeforeJune.toasts)
+      ),
+    };
   }
 
   /**
@@ -146,5 +141,47 @@ export class ToastsService {
       group: ['user.id'],
     });
     return leaderboard;
+  }
+
+  /**
+   * Gets the number of toasts done in all the first or second period of all years
+   * @param month boundary month of period
+   * @param isGreater if the period is greater or lesser than the boundary month
+   * @param isRecord if the number returned should be the record of the period or current month number
+   * @returns number of toasts done in given period (max if isRecord is true)
+   */
+  private async getMaxOfYearlyPeriod(
+    month: number,
+    isGreater: boolean,
+    isRecord: boolean
+  ) {
+    const currDate = new Date();
+    const maxOfPeriod = await this.toastsModel
+      .findAll({
+        attributes: [
+          [Sequelize.fn('date_trunc', 'year', Sequelize.col('date')), 'year'],
+          [Sequelize.fn('count', 'Toasts.id'), 'toasts'],
+        ],
+        where: {
+          isConvicting: false,
+          date: {
+            [Op.lte]: currDate,
+          },
+          [Op.and]: [
+            Sequelize.where(
+              Sequelize.fn('date_part', 'month', Sequelize.col('date')),
+              isGreater ? Op.gt : Op.lt,
+              month
+            ),
+          ],
+        },
+        order: [[Sequelize.col(isRecord ? 'toasts' : 'year'), 'DESC']],
+        limit: 1,
+        group: Sequelize.fn('date_trunc', 'year', Sequelize.col('date')),
+      })
+      .then((periodMax) => {
+        return periodMax[0].dataValues as { year: string; toasts: string };
+      });
+    return maxOfPeriod;
   }
 }
