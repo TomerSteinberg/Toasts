@@ -102,10 +102,9 @@ export class ToastsService {
     const JULY = 7;
     const JUNE = 6;
     const boundaryMonth = new Date().getMonth() > JUNE ? JUNE : JULY;
-    const maxBeforeJune = await this.getMaxOfYearlyPeriod(JULY, false, true);
-    const maxAfterJune = await this.getMaxOfYearlyPeriod(JUNE, true, true);
+    const maxBeforeJune = await this.getMaxOfYearlyPeriod(false, true);
+    const maxAfterJune = await this.getMaxOfYearlyPeriod(true, true);
     const currPeriodToasts = await this.getMaxOfYearlyPeriod(
-      boundaryMonth,
       boundaryMonth == JUNE ? true : false,
       false
     );
@@ -145,16 +144,13 @@ export class ToastsService {
 
   /**
    * Gets the number of toasts done in all the first or second period of all years
-   * @param month boundary month of period
-   * @param isGreater if the period is greater or lesser than the boundary month
-   * @param isRecord if the number returned should be the record of the period or current month number
+   * @param isGreater true if we are calculating the second period of the year
+   * @param isRecord true if the number returned should be the record of the period or current month number
    * @returns number of toasts done in given period (max if isRecord is true)
    */
-  private async getMaxOfYearlyPeriod(
-    month: number,
-    isGreater: boolean,
-    isRecord: boolean
-  ) {
+  private async getMaxOfYearlyPeriod(isGreater: boolean, isRecord: boolean) {
+    const JULY = 7;
+    const JUNE = 6;
     const currDate = new Date();
     const maxOfPeriod = await this.toastsModel
       .findAll({
@@ -171,7 +167,7 @@ export class ToastsService {
             Sequelize.where(
               Sequelize.fn('date_part', 'month', Sequelize.col('date')),
               isGreater ? Op.gt : Op.lt,
-              month
+              isGreater ? JUNE : JULY
             ),
           ],
         },
