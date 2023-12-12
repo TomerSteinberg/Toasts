@@ -123,7 +123,7 @@ export class UsersService {
    */
   async doesExist(userId: string): Promise<boolean> {
     const schema = z.string().uuid();
-    if (userId === undefined) {
+    if (!userId) {
       return false;
     }
     try {

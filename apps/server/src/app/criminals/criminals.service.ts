@@ -6,8 +6,8 @@ import { UsersService } from '../users/users.service';
 import { AdminIdError } from '../users/exceptions';
 import { UpdateCriminal } from './dto';
 import { Users } from '../users/entities/users.entity';
-import { ToastsService } from '../toasts/toasts.service';
 import { InvalidCriminalId } from './exceptions/invalid-criminal-id.error';
+import { Toasts } from '../toasts/entities/toasts.entity';
 
 @Injectable()
 export class CriminalsService {
@@ -15,9 +15,10 @@ export class CriminalsService {
     @InjectModel(Criminals)
     private criminalsModel: typeof Criminals,
 
-    private usersService: UsersService,
+    @InjectModel(Toasts)
+    private toastsModel: typeof Toasts,
 
-    private toastsService: ToastsService
+    private usersService: UsersService
   ) {}
 
   /**
@@ -82,14 +83,13 @@ export class CriminalsService {
    */
   async deleteCriminal(criminalId: string, adminId: string) {
     if (await this.usersService.isAdmin(adminId)) {
-      const criminal = await this.criminalsModel.findOne({
-        where: { id: criminalId },
-      });
-      if (criminal == null) {
+      const criminal = await this.criminalsModel.findByPk(criminalId);
+      if (!criminal) {
         throw new InvalidCriminalId();
       }
-      this.toastsService.toastsModel.destroy({
-        where: { isConvicting: true, userId: criminal?.userId },
+
+      this.toastsModel.destroy({
+        where: { isConvicting: true, userId: criminal.userId },
       });
 
       const destroy = await this.criminalsModel.destroy({

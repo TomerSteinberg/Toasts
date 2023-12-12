@@ -12,7 +12,7 @@ import { Users } from '../users/entities/users.entity';
 export class ToastsService {
   constructor(
     @InjectModel(Toasts)
-    public toastsModel: typeof Toasts,
+    private toastsModel: typeof Toasts,
 
     private usersService: UsersService
   ) {}
@@ -34,7 +34,7 @@ export class ToastsService {
    */
   async getToastsById(userId: string) {
     const userToasts = await this.toastsModel.findAll({
-      where: { userId: userId },
+      where: { userId },
     });
     return userToasts;
   }
@@ -64,7 +64,7 @@ export class ToastsService {
       throw new InvalidUserID();
     }
     const destroy = await this.toastsModel.destroy({
-      where: { id: toastId, userId: userId },
+      where: { id: toastId, userId },
     });
     return destroy;
   }
