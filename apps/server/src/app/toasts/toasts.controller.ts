@@ -14,6 +14,11 @@ export class ToastsController {
     return this.toastsService.getToasts();
   }
 
+  @Get('user_toasts/:userId')
+  getUserToasts(@Param('userId') userId: string) {
+    return this.toastsService.getToastsById(userId);
+  }
+
   @Post('toast')
   addToast(@Body() toastParams: CreateToast) {
     return this.toastsService.createToast(toastParams);

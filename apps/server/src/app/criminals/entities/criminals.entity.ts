@@ -7,7 +7,6 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { DataType } from 'sequelize-typescript';
-import { Toasts } from '../../toasts/entities/toasts.entity';
 import { Users } from '../../users/entities/users.entity';
 
 @Table
@@ -23,5 +22,5 @@ export class Criminals extends Model<Partial<Criminals>> {
   @Column(DataType.BOOLEAN)
   criminalType: boolean;
 
-  @BelongsTo(() => Users) toast: Toasts;
+  @BelongsTo(() => Users) users: Users;
 }

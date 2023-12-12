@@ -1,11 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Toasts } from './entities/toasts.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateToast } from './dto/create-toast.dto';
 import { UpdateToast } from './dto/update-toast.dto';
 import { UsersService } from '../users/users.service';
 import { InvalidUserID, NoToastsHappened } from './exceptions';
-import { CriminalsService } from '../criminals/criminals.service';
+import { Op, Sequelize } from 'sequelize';
+import { Users } from '../users/entities/users.entity';
 
 @Injectable()
 export class ToastsService {
@@ -13,11 +14,7 @@ export class ToastsService {
     @InjectModel(Toasts)
     private toastsModel: typeof Toasts,
 
-    @Inject(UsersService)
-    private usersService: UsersService,
-
-    @Inject(CriminalsService)
-    private criminalsService: CriminalsService
+    private usersService: UsersService
   ) {}
 
   /**
@@ -26,7 +23,20 @@ export class ToastsService {
    * @return: All the toasts from the db
    */
   async getToasts(): Promise<Toasts[]> {
-    return await this.toastsModel.findAll();
+    const toasts = await this.toastsModel.findAll();
+    return toasts;
+  }
+
+  /**
+   * get all toasts from db of a specific user
+   * @param: user Id
+   * @return: All the toasts from the db that belong to given user
+   */
+  async getToastsById(userId: string) {
+    const userToasts = await this.toastsModel.findAll({
+      where: { userId },
+    });
+    return userToasts;
   }
 
   /**
@@ -39,7 +49,8 @@ export class ToastsService {
     if (!doesUserExist) {
       throw new InvalidUserID();
     }
-    return this.toastsModel.create(toastParams);
+    const newToast = await this.toastsModel.create(toastParams);
+    return newToast;
   }
 
   /**
@@ -52,9 +63,10 @@ export class ToastsService {
     if (!doesUserExist) {
       throw new InvalidUserID();
     }
-    return await this.toastsModel.destroy({
-      where: { id: toastId, userId: userId },
+    const destroy = await this.toastsModel.destroy({
+      where: { id: toastId, userId },
     });
+    return destroy;
   }
 
   /**
@@ -62,13 +74,21 @@ export class ToastsService {
    * @param: update dto and id of instance
    * @return: object with number of effected rows
    */
-  async updateToast(toastParams: UpdateToast, toastId: string, userId: string) {
+  async updateToast(
+    toastParams: UpdateToast,
+    toastId: string,
+    userId?: string
+  ) {
     const isAdmin = await this.usersService.isAdmin(userId);
-    return isAdmin
+    if (!isAdmin && userId === undefined) {
+      throw new InvalidUserID();
+    }
+    const updatedToast = isAdmin
       ? await this.toastsModel.update(toastParams, { where: { id: toastId } })
       : await this.toastsModel.update(toastParams, {
           where: { id: toastId, userId: userId },
         });
+    return updatedToast;
   }
 
   /**
@@ -79,70 +99,85 @@ export class ToastsService {
    * and in the record period of time
    */
   async getToastNumber() {
-    const periodList: number[] = [];
-    const currDate = new Date();
-    const boundaryDate = this.findBoundaryDate();
-    let toasts = await this.getToasts();
+    const JULY = 7;
+    const JUNE = 6;
+    const boundaryMonth = new Date().getMonth() > JUNE ? JUNE : JULY;
+    const maxBeforeJune = await this.getMaxOfYearlyPeriod(false, true);
+    const maxAfterJune = await this.getMaxOfYearlyPeriod(true, true);
+    const currPeriodToasts = await this.getMaxOfYearlyPeriod(
+      boundaryMonth == JUNE ? true : false,
+      false
+    );
 
-    // Removing Criminal toasts and toasts that are in the future
-    toasts = toasts.filter((toast) => {
-      return !toast.isConvicting && toast.date <= currDate;
-    });
-
-    toasts.forEach((toast) => {
-      const difference = this.monthDifference(toast.date, boundaryDate);
-      for (let i: number = 0; i < Math.floor(difference / 6) + 1; i++) {
-        if (i + 1 >= periodList.length) {
-          periodList.push(0);
-        }
-      }
-    });
-    toasts.forEach((toast) => {
-      const difference = this.monthDifference(toast.date, boundaryDate);
-      if (toast.date.getTime() > boundaryDate.getTime()) {
-        periodList[0] += 1;
-      } else if (
-        toast.date.getTime() < boundaryDate.getTime() &&
-        difference < 6
-      ) {
-        periodList[1] += 1;
-      } else {
-        periodList[Math.floor(difference / 6) + 1] += 1;
-      }
-    });
-    if (periodList.length == 0) {
+    if (maxBeforeJune === undefined || maxAfterJune === undefined) {
       throw new NoToastsHappened();
     }
-    const currentNumber: number = periodList[0];
-    periodList.shift();
-    return { current: currentNumber, record: Math.max(...periodList) };
+
+    return {
+      current_period: parseInt(currPeriodToasts.toasts),
+      record: Math.max(
+        parseInt(maxAfterJune.toasts),
+        parseInt(maxBeforeJune.toasts)
+      ),
+    };
   }
 
   /**
-   * Finds the beginning of the current period of toasts
+   * Gets the leaderboard of users who did the most toasts
    * @param: None
-   * @returns: beginning date
+   * @returns: List of users and their number of toasts in the last period
+   * ordered by the number
    */
-  private findBoundaryDate() {
-    const currMonth = new Date().getMonth() + 1;
-    const currYear = new Date().getFullYear();
-    return currMonth >= 6 ? new Date(currYear, 6, 1) : new Date(currYear, 0, 1);
+  async getToastsLeaderBoard() {
+    const today = new Date();
+    const leaderboard = this.toastsModel.findAll({
+      attributes: [[Sequelize.fn('COUNT', 'userId'), 'Toasts']],
+      where: { isConvicting: false, date: { [Op.lte]: today } },
+      include: {
+        model: Users,
+      },
+      order: [['Toasts', 'DESC']],
+      group: ['user.id'],
+    });
+    return leaderboard;
   }
 
   /**
-   * Finds the difference in months between 2 dates
-   * @param: 2 dates
-   * @returns: difference in months (number)
+   * Gets the number of toasts done in all the first or second period of all years
+   * @param isGreater true if we are calculating the second period of the year
+   * @param isRecord true if the number returned should be the record of the period or current month number
+   * @returns number of toasts done in given period (max if isRecord is true)
    */
-  private monthDifference(d1: Date, d2: Date): number {
-    let months: number;
-    months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth();
-    months += d2.getMonth();
-    return months <= 0 ? 0 : months;
-  }
-
-  async getToastsLeaderBoard() {
-    return this.toastsModel.findAll();
+  private async getMaxOfYearlyPeriod(isGreater: boolean, isRecord: boolean) {
+    const JULY = 7;
+    const JUNE = 6;
+    const currDate = new Date();
+    const maxOfPeriod = await this.toastsModel
+      .findAll({
+        attributes: [
+          [Sequelize.fn('date_trunc', 'year', Sequelize.col('date')), 'year'],
+          [Sequelize.fn('count', 'Toasts.id'), 'toasts'],
+        ],
+        where: {
+          isConvicting: false,
+          date: {
+            [Op.lte]: currDate,
+          },
+          [Op.and]: [
+            Sequelize.where(
+              Sequelize.fn('date_part', 'month', Sequelize.col('date')),
+              isGreater ? Op.gt : Op.lt,
+              isGreater ? JUNE : JULY
+            ),
+          ],
+        },
+        order: [[Sequelize.col(isRecord ? 'toasts' : 'year'), 'DESC']],
+        limit: 1,
+        group: Sequelize.fn('date_trunc', 'year', Sequelize.col('date')),
+      })
+      .then((periodMax) => {
+        return periodMax[0].dataValues as { year: string; toasts: string };
+      });
+    return maxOfPeriod;
   }
 }

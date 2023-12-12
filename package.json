@@ -40,6 +40,7 @@
     "@nestjs/typeorm": "^10.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
@@ -48,6 +49,7 @@
     "sequelize": "^6.35.1",
     "sequelize-typescript": "^2.1.6",
     "tslib": "^2.3.0",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "zod": "^3.22.4"
   }
 }
