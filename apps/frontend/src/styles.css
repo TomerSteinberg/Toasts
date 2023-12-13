@@ -1,11 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-  background: rgb(240, 162, 132);
+  background: #ffffff;
   background: linear-gradient(
     90deg,
-    rgba(240, 162, 132, 1) 0%,
-    rgba(255, 232, 142, 0.7346288857339811) 0%,
-    rgba(255, 248, 220, 1) 100%
+    rgba(117, 2, 96, 0.778) 0%,
+    rgba(225, 23, 87, 0.749) 52%,
+    rgba(255, 113, 31, 0.786) 89%,
+    rgba(255, 162, 1, 0.779) 100%
   );
   overflow: hidden;
   height: 100%;
