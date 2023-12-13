@@ -7,7 +7,7 @@ export function Criminal(props: CriminalProps) {
   return (
     <div className={styles.container}>
       <p>תומר</p>
-      <p>רגיל </p>
+      <p>פושע רגיל</p>
     </div>
   );
 }

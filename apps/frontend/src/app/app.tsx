@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Card from '../components/card/card';
-import Toast from '../components/toast/toast';
+import Options from '../components/options/options';
 import styles from './app.module.css';
 
 export function App() {
@@ -9,6 +9,7 @@ export function App() {
       <Card title="🚷פושעים"></Card>
       <Card title="🏆לוח תוצאות"></Card>
       <Card title="🍺שתיות קרובות"></Card>
+      <Options></Options>
     </div>
   );
 }

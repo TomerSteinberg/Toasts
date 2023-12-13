@@ -1,7 +1,30 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
+.container {
+}
+
+.options {
+  border-radius: 100%;
+  border-width: 0.2em;
+  border-style: solid;
+  color: black;
+  border-color: #4d4e9da5;
+  height: 5em;
+  width: 5em;
+  background-color: white;
+  transition-duration: 100ms;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 100ms;
+}
+
+.options:hover {
+  background-color: #ffffff;
+  transform: scale(1.125);
+}
+
+.options_icon {
+  transform: scale(2.75);
+  border-radius: 100%;
+  border: none;
+  transition-duration: 200ms;
+}
