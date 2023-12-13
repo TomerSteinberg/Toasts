@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import CriminalModal from './criminalModal';
+import Options from './options';
 
-describe('CriminalModal', () => {
+describe('Options', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<CriminalModal />);
+    const { baseElement } = render(<Options />);
     expect(baseElement).toBeTruthy();
   });
 });

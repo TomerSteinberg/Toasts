@@ -5,8 +5,10 @@ export interface ToastProps {}
 
 export function Toast(props: ToastProps) {
   return (
-    <div className={styles['container']}>
-      <h1>Welcome to Toast!</h1>
+    <div className={styles.container}>
+      <p>name</p>
+      <p>date</p>
+      <p>reason</p>
     </div>
   );
 }
