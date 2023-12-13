@@ -6,9 +6,9 @@ import styles from './app.module.css';
 export function App() {
   return (
     <div className={styles.container}>
-      <Card>
-        <Toast></Toast>
-      </Card>
+      <Card title="פושעים"></Card>
+      <Card title="לוח תוצאות"></Card>
+      <Card title="שתיות"></Card>
     </div>
   );
 }

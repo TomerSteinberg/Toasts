@@ -5,8 +5,9 @@ export interface CriminalProps {}
 
 export function Criminal(props: CriminalProps) {
   return (
-    <div className={styles['container']}>
-      <h1>Welcome to Criminal!</h1>
+    <div className={styles.container}>
+      <p>תומר</p>
+      <p>רגיל </p>
     </div>
   );
 }

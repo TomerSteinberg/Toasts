@@ -6,9 +6,9 @@ export interface ToastProps {}
 export function Toast(props: ToastProps) {
   return (
     <div className={styles.container}>
-      <p>name</p>
-      <p>date</p>
-      <p>reason</p>
+      <p>תומר</p>
+      <p>14/02/2024</p>
+      <p>יום הולדת</p>
     </div>
   );
 }

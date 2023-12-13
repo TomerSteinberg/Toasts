@@ -1,7 +1,36 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #b2ad7f;
+  border-radius: 1.5vh;
+  height: 100%;
+  width: 30%;
+}
+
+h1 {
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+ul {
+  overflow-y: auto;
+  margin: auto;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  height: 32em;
+  width: 100%;
+  padding: 0 0 0 0;
+}
+
+li {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
