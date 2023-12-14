@@ -1,0 +1,19 @@
+.add_btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition-duration: 150ms;
+  transition-property: transform;
+}
+
+.add_btn:hover {
+  transform: scale(1.25);
+}
+
+.add_toast {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-right: 16%;
+  width: 100%;
+}

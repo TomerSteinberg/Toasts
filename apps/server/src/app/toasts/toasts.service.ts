@@ -135,6 +135,7 @@ export class ToastsService {
       where: { isConvicting: false, date: { [Op.lte]: today } },
       include: {
         model: Users,
+        attributes: { exclude: ['password'] },
       },
       order: [['Toasts', 'DESC']],
       group: ['user.id'],

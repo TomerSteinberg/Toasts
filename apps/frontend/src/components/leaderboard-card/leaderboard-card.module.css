@@ -1,0 +1,25 @@
+.number_label {
+  display: flex;
+  justify-content: space-between;
+}
+
+label {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.count_container {
+  margin-bottom: 5%;
+}
+
+.toast_number {
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 3em;
+  margin: auto;
+  margin-top: 3%;
+}
+
+h1 {
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
