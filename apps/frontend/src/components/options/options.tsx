@@ -23,13 +23,15 @@ export function Options(props: OptionsProps) {
           toggle();
         }}
       >
-        <SettingsIcon className={styles.options_icon} />
+        <SettingsIcon
+          className={isClicked ? styles.options_icon_open : styles.options_icon}
+        />
       </button>
       {isClicked && (
         <div className={styles.menu_buttons}>
           <button className={styles.menu_btn}>
             <Tooltip
-              title="Profile Settings"
+              title="הגדרות משתמש"
               TransitionComponent={Fade}
               TransitionProps={{ timeout: 300 }}
               placement="left"
@@ -39,7 +41,7 @@ export function Options(props: OptionsProps) {
           </button>
           <button className={styles.menu_btn}>
             <Tooltip
-              title="Toast History"
+              title="היסטורית שתיות"
               TransitionComponent={Fade}
               TransitionProps={{ timeout: 300 }}
               placement="left"
