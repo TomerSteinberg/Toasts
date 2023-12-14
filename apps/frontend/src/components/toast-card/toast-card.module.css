@@ -1,7 +1,3 @@
-.container {
-  width: 100%;
-}
-
 .add_btn {
   background-color: transparent;
   border: none;
@@ -18,5 +14,6 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  margin-right: 8%;
+  margin-right: 16%;
+  width: 100%;
 }

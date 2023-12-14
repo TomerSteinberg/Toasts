@@ -1,9 +1,6 @@
 import styles from './score.module.css';
 
-/* eslint-disable-next-line */
-export interface ScoreProps {}
-
-export const Score: React.FC<ScoreProps> = (props: ScoreProps) => {
+export const Score = () => {
   return (
     <div className={styles.container}>
       <h2 className="placement">תומר 1</h2>
@@ -11,5 +8,3 @@ export const Score: React.FC<ScoreProps> = (props: ScoreProps) => {
     </div>
   );
 };
-
-export default Score;

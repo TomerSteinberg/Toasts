@@ -1,12 +1,10 @@
-import Score from '../score/score';
+import { Score } from '../score';
 import styles from './leaderboard-card.module.css';
+import { Card } from '../card';
 
-/* eslint-disable-next-line */
-export interface LeaderboardCardProps {}
-
-export function LeaderboardCard(props: LeaderboardCardProps) {
+export const LeaderboardCard = () => {
   return (
-    <>
+    <Card title="🏆לוח תוצאות">
       <ul className={styles.score_list}>
         <li>
           <Score></Score>
@@ -37,8 +35,6 @@ export function LeaderboardCard(props: LeaderboardCardProps) {
           <label>שיא </label>
         </div>
       </div>
-    </>
+    </Card>
   );
-}
-
-export default LeaderboardCard;
+};

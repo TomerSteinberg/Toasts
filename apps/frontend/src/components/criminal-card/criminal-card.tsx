@@ -1,25 +1,23 @@
-import Criminal from '../criminal/criminal';
+import { Card } from '../card';
+import { Criminal } from '../criminal';
 
-/* eslint-disable-next-line */
-export interface CriminalCardProps {}
-
-export function CriminalCard(props: CriminalCardProps) {
+export const CriminalCard = () => {
   return (
-    <ul>
-      <li>
-        <Criminal></Criminal>
-      </li>
-      <li>
-        <Criminal></Criminal>
-      </li>
-      <li>
-        <Criminal></Criminal>
-      </li>
-      <li>
-        <Criminal></Criminal>
-      </li>
-    </ul>
+    <Card title="🚷פושעים">
+      <ul>
+        <li>
+          <Criminal></Criminal>
+        </li>
+        <li>
+          <Criminal></Criminal>
+        </li>
+        <li>
+          <Criminal></Criminal>
+        </li>
+        <li>
+          <Criminal></Criminal>
+        </li>
+      </ul>
+    </Card>
   );
-}
-
-export default CriminalCard;
+};

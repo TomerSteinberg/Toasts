@@ -1,9 +1,6 @@
 import styles from './toast.module.css';
 
-/* eslint-disable-next-line */
-export interface ToastProps {}
-
-export const Toast: React.FC<ToastProps> = (props: ToastProps) => {
+export const Toast = () => {
   return (
     <div className={styles.container}>
       <p>תומר</p>
@@ -12,5 +9,3 @@ export const Toast: React.FC<ToastProps> = (props: ToastProps) => {
     </div>
   );
 };
-
-export default Toast;

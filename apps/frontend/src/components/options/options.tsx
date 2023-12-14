@@ -6,10 +6,7 @@ import { useState } from 'react';
 import { Tooltip } from '@mui/material';
 import Fade from '@mui/material/Fade';
 
-/* eslint-disable-next-line */
-export interface OptionsProps {}
-
-export function Options(props: OptionsProps) {
+export const Options = () => {
   const [isClicked, setIsClicked] = useState(false);
   const toggle = () => {
     setIsClicked(!isClicked);
@@ -53,6 +50,4 @@ export function Options(props: OptionsProps) {
       )}
     </div>
   );
-}
-
-export default Options;
+};

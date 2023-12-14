@@ -1,13 +1,11 @@
-import Toast from '../toast/toast';
+import { Toast } from '../toast';
 import styles from './toast-card.module.css';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import { Card } from '../card';
 
-/* eslint-disable-next-line */
-export interface ToastCardProps {}
-
-export function ToastCard(props: ToastCardProps) {
+export const ToastCard = () => {
   return (
-    <div className={styles.container}>
+    <Card title="🍺שתיות קרובות">
       <div className={styles.add_toast}>
         <button className={styles.add_btn}>
           <ControlPointIcon />
@@ -27,8 +25,6 @@ export function ToastCard(props: ToastCardProps) {
           <Toast></Toast>
         </li>
       </ul>
-    </div>
+    </Card>
   );
-}
-
-export default ToastCard;
+};
