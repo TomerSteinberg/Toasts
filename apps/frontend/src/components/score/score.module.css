@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: row-reverse;
+  border-radius: 1.5vh;
+  border-color: #715659;
+  border-style: solid;
+  border-width: 0.2rem;
+  background-color: #fde625;
+  justify-content: space-evenly;
+  height: 3rem;
+  width: 80%;
+  transition-duration: 100ms;
+  transition-property: background-color;
+}
+
+.container:hover {
+  background-color: #fae103;
+}
+
+.placement {
+}
+
+p,
+h2 {
+  margin: auto;
+  font-size: large;
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: black;
+}

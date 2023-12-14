@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import Leaderboard from './leaderboard';
+import Score from './score';
 
-describe('Leaderboard', () => {
+describe('Score', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Leaderboard />);
+    const { baseElement } = render(<Score />);
     expect(baseElement).toBeTruthy();
   });
 });

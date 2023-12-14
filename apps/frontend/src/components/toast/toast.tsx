@@ -3,7 +3,7 @@ import styles from './toast.module.css';
 /* eslint-disable-next-line */
 export interface ToastProps {}
 
-export function Toast(props: ToastProps) {
+export const Toast: React.FC<ToastProps> = (props: ToastProps) => {
   return (
     <div className={styles.container}>
       <p>תומר</p>
@@ -11,6 +11,6 @@ export function Toast(props: ToastProps) {
       <p>יום הולדת</p>
     </div>
   );
-}
+};
 
 export default Toast;

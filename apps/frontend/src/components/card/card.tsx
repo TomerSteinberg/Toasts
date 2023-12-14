@@ -1,7 +1,7 @@
 import styles from './card.module.css';
-//import Toast from '../toast/toast';
 import Criminal from '../criminal/criminal';
 import Toast from '../toast/toast';
+import Score from '../score/score';
 
 /* eslint-disable-next-line */
 export interface CardProps {
@@ -18,6 +18,9 @@ export const Card: React.FC<CardProps> = (props: CardProps) => {
         </li>
         <li>
           <Toast></Toast>
+        </li>
+        <li>
+          <Score></Score>
         </li>
       </ul>
     </div>

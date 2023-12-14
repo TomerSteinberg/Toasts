@@ -1,4 +1,6 @@
 .container {
+  display: flex;
+  flex-direction: column;
 }
 
 .options {
@@ -6,25 +8,60 @@
   border-width: 0.2em;
   border-style: solid;
   color: black;
-  border-color: #4d4e9da5;
+  border-color: transparent;
   height: 5em;
   width: 5em;
-  background-color: white;
+  background-color: transparent;
   transition-duration: 100ms;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition-duration: 100ms;
+  transition-duration: 170ms;
 }
 
 .options:hover {
-  background-color: #ffffff;
-  transform: scale(1.125);
+  transform: scale(1.15);
 }
 
 .options_icon {
-  transform: scale(2.75);
+  cursor: pointer;
+  font-size: large;
   border-radius: 100%;
   border: none;
+  transition-duration: 100ms;
+  font-size: 5.8em !important;
+  transition-property: transform !important;
+}
+
+.options_icon:hover {
+  transform: rotate(70deg);
+}
+
+.menu_buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.menu_btn {
+  background-color: transparent;
+  border: none;
   transition-duration: 200ms;
+  cursor: pointer;
+}
+
+.menu_icons {
+  font-size: 2.5em !important;
+  transition-duration: 200ms;
+  transition-property: transform !important;
+}
+
+.menu_btn:hover {
+  transform: scale(1.15);
+}
+
+.menu_icons:hover {
+  transform: rotate(45deg);
 }
