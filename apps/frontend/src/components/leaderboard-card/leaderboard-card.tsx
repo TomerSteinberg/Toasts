@@ -7,7 +7,7 @@ export interface LeaderboardCardProps {}
 export function LeaderboardCard(props: LeaderboardCardProps) {
   return (
     <>
-      <ul>
+      <ul className={styles.score_list}>
         <li>
           <Score></Score>
         </li>
@@ -30,7 +30,7 @@ export function LeaderboardCard(props: LeaderboardCardProps) {
           <Score></Score>
         </li>
       </ul>
-      <div className="count_container">
+      <div className={styles.count_container}>
         <h1 className={styles.toast_number}>32 / 35</h1>
         <div className={styles.number_label}>
           <label>נוכחי</label>

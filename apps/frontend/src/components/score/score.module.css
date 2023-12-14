@@ -5,7 +5,7 @@
   border-color: #715659;
   border-style: solid;
   border-width: 0.2rem;
-  background-color: #fde625;
+  background-color: #fce834;
   justify-content: space-evenly;
   height: 3rem;
   width: 80%;
@@ -14,7 +14,7 @@
 }
 
 .container:hover {
-  background-color: #fae103;
+  background-color: #e4ce03;
 }
 
 .placement {
