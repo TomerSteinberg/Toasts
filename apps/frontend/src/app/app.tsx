@@ -4,15 +4,15 @@ import { Options } from '../components/options';
 import { ToastCard } from '../components/toast-card';
 import styles from './app.module.css';
 
-export function App() {
+export const App = () => {
   return (
     <div className={styles.container}>
       <CriminalCard />
       <LeaderboardCard />
       <ToastCard />
-      <Options></Options>
+      <Options />
     </div>
   );
-}
+};
 
 export default App;

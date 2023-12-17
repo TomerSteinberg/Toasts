@@ -5,7 +5,7 @@ export interface AuthenticatorProps {}
 
 export const Authenticator = (props: AuthenticatorProps) => {
   return (
-    <div className={styles['container']}>
+    <div className={styles.container}>
       <h1>Welcome to Authenticator!</h1>
     </div>
   );
