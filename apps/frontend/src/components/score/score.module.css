@@ -8,13 +8,9 @@
   background-color: #fee92e;
   justify-content: space-evenly;
   height: 3rem;
-  width: 80%;
+  width: 90%;
   transition-duration: 100ms;
   transition-property: background-color;
-}
-
-.container:hover {
-  background-color: #e9d528;
 }
 
 .placement {
@@ -28,4 +24,5 @@ h2 {
   font-weight: 500;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: black;
+  overflow-x: auto;
 }

@@ -128,12 +128,19 @@ export class ToastsService {
     }
 
     return {
-      current_period: parseInt(currPeriodToasts.toasts),
+      currentPeriod: parseInt(currPeriodToasts.toasts),
       record: Math.max(
         parseInt(maxAfterJune.toasts),
         parseInt(maxBeforeJune.toasts)
       ),
     };
+  }
+
+  private getBoundaryDate() {
+    const JUNE = 5;
+    return new Date().getMonth() > JUNE
+      ? new Date(new Date().getFullYear() + '-07-01')
+      : new Date(new Date().getFullYear() + '-01-01');
   }
 
   /**
@@ -145,13 +152,19 @@ export class ToastsService {
   async getToastsLeaderBoard() {
     const today = new Date();
     const leaderboard = this.toastsModel.findAll({
-      attributes: [[Sequelize.fn('COUNT', 'userId'), 'Toasts']],
-      where: { isConvicting: false, date: { [Op.lte]: today } },
+      attributes: [[Sequelize.fn('COUNT', 'userId'), 'toasts']],
+      where: {
+        isConvicting: false,
+        date: {
+          [Op.lte]: today,
+          [Op.gte]: this.getBoundaryDate(),
+        },
+      },
       include: {
         model: Users,
         attributes: { exclude: ['password'] },
       },
-      order: [['Toasts', 'DESC']],
+      order: [['toasts', 'DESC']],
       group: ['user.id'],
     });
     return leaderboard;

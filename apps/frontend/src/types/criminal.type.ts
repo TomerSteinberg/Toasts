@@ -1,7 +1,9 @@
+import { user } from './user.type';
+
 export type Criminal = {
   id: string;
-  username: string;
-  type: boolean;
+  criminalType: boolean;
+  users: user;
   createdAt: string;
   updatedAt: string;
 };
