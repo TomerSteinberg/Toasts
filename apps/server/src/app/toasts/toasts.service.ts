@@ -179,7 +179,10 @@ export class ToastsService {
   private async getMaxOfYearlyPeriod(isGreater: boolean, isRecord: boolean) {
     const JULY = 7;
     const JUNE = 6;
-    const currDate = new Date();
+    const JANUARY = 0;
+    const boundary = this.getBoundaryDate();
+    boundary.setMonth(isGreater ? JANUARY : JULY);
+    const currDate = isRecord ? boundary : new Date();
     const maxOfPeriod = await this.toastsModel
       .findAll({
         attributes: [

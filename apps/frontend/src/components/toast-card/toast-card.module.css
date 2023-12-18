@@ -1,4 +1,4 @@
-.add_btn {
+.addBtn {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -6,14 +6,19 @@
   transition-property: transform;
 }
 
-.add_btn:hover {
+.addBtn:hover {
   transform: scale(1.25);
 }
 
-.add_toast {
+.addToast {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   margin-right: 8%;
   width: 100%;
+}
+
+.empty {
+  opacity: 0.6;
+  user-select: none;
 }

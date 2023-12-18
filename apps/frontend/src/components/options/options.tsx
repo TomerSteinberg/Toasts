@@ -21,29 +21,29 @@ export const Options = () => {
         }}
       >
         <SettingsIcon
-          className={isClicked ? styles.options_icon_open : styles.options_icon}
+          className={isClicked ? styles.optionsIconOpen : styles.optionsIcon}
         />
       </button>
       {isClicked && (
-        <div className={styles.menu_buttons}>
-          <button className={styles.menu_btn}>
+        <div className={styles.menuButtons}>
+          <button className={styles.menuBtn}>
             <Tooltip
               title="הגדרות משתמש"
               TransitionComponent={Fade}
               TransitionProps={{ timeout: 300 }}
               placement="left"
             >
-              <AccountCircleIcon className={styles.menu_icons} />
+              <AccountCircleIcon className={styles.menuIcons} />
             </Tooltip>
           </button>
-          <button className={styles.menu_btn}>
+          <button className={styles.menuBtn}>
             <Tooltip
               title="היסטורית שתיות"
               TransitionComponent={Fade}
               TransitionProps={{ timeout: 300 }}
               placement="left"
             >
-              <HistoryIcon className={styles.menu_icons} />
+              <HistoryIcon className={styles.menuIcons} />
             </Tooltip>
           </button>
         </div>

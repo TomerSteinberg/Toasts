@@ -1,9 +1,9 @@
-import { user } from './user.type';
+import { User } from './user.type';
 
 export type Criminal = {
   id: string;
   criminalType: boolean;
-  users: user;
+  users: User;
   createdAt: string;
   updatedAt: string;
 };

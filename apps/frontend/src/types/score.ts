@@ -1,6 +1,6 @@
-import { user } from './user.type';
+import { User } from './user.type';
 
 export type Score = {
   toasts: number;
-  user: user;
+  user: User;
 };

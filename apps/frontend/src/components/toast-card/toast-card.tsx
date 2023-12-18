@@ -10,25 +10,31 @@ export const ToastCard = () => {
   const { data: futureToasts } = useGetFutureToastsQuery();
   return (
     <Card title="🍺שתיות קרובות">
-      <div className={styles.add_toast}>
-        <button className={styles.add_btn}>
+      <div className={styles.addToast}>
+        <button className={styles.addBtn}>
           <Tooltip title="הוספת שתיה" placement="left">
             <ControlPointIcon />
           </Tooltip>
         </button>
       </div>
       <ul>
-        {futureToasts?.map((toast) => {
-          return (
-            <li key={toast.id}>
-              <Toast
-                name={toast.user.username}
-                date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
-                reason={toast.reason}
-              ></Toast>
-            </li>
-          );
-        })}
+        {futureToasts === undefined || futureToasts.length === 0 ? (
+          <li>
+            <h1 className={styles.empty}>אין</h1>
+          </li>
+        ) : (
+          futureToasts.map((toast) => {
+            return (
+              <li key={toast.id}>
+                <Toast
+                  name={toast.user.username}
+                  date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
+                  reason={toast.reason}
+                ></Toast>
+              </li>
+            );
+          })
+        )}
       </ul>
     </Card>
   );
