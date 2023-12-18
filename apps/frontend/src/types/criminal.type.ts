@@ -1,4 +1,7 @@
 export type Criminal = {
-    id: string;
-    username: string;
+  id: string;
+  username: string;
+  type: boolean;
+  createdAt: string;
+  updatedAt: string;
 };

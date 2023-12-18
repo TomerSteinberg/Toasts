@@ -14,6 +14,11 @@ export class ToastsController {
     return this.toastsService.getToasts();
   }
 
+  @Get('future_toast')
+  getFutureToasts(): Promise<Toasts[]> {
+    return this.toastsService.getFutureToasts();
+  }
+
   @Get('user_toasts/:userId')
   getUserToasts(@Param('userId') userId: string) {
     return this.toastsService.getToastsById(userId);

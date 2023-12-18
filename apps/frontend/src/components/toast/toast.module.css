@@ -13,7 +13,7 @@
   border-color: #715659;
   border-style: solid;
   border-width: 0.2rem;
-  background-color: #f5b252;
+  background-color: #f4a22e;
   justify-content: space-evenly;
   height: 3rem;
   width: 80%;
@@ -22,7 +22,7 @@
 }
 
 .container:hover {
-  background-color: #f4a22e;
+  background-color: #e0942a;
 }
 
 p {

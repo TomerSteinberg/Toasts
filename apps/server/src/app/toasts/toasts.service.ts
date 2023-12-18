@@ -28,6 +28,20 @@ export class ToastsService {
   }
 
   /**
+   * get all future toasts
+   * @param: None
+   * @return All future toasts
+   */
+  async getFutureToasts(): Promise<Toasts[]> {
+    const currDate = new Date();
+    const toasts = await this.toastsModel.findAll({
+      where: { date: { [Op.gt]: currDate } },
+      include: { model: Users, attributes: ['username'] },
+    });
+    return toasts;
+  }
+
+  /**
    * get all toasts from db of a specific user
    * @param: user Id
    * @return: All the toasts from the db that belong to given user
