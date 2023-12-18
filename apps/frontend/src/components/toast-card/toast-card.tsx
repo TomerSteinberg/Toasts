@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 export const ToastCard = () => {
   const { data: futureToasts } = useGetFutureToastsQuery();
   return (
-    <Card title="🍺שתיות קרובות">
+    <Card title="🍺שתיות קרובות" width="40%">
       <div className={styles.addToast}>
         <button className={styles.addBtn}>
           <Tooltip title="הוספת שתיה" placement="left">

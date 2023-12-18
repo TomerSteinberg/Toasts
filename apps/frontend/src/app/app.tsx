@@ -8,8 +8,8 @@ export const App = () => {
   return (
     <div className={styles.container}>
       <CriminalCard />
-      <LeaderboardCard />
       <ToastCard />
+      <LeaderboardCard />
       <Options />
     </div>
   );

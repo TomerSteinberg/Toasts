@@ -11,7 +11,7 @@ export const LeaderboardCard = () => {
   const { data: toastNumber } = useGetTotalToastsQuery();
 
   return (
-    <Card title="🏆לוח תוצאות">
+    <Card title="🏆לוח תוצאות" width="25%">
       <ul className={styles.score_list}>
         {leaderboard === undefined || leaderboard.length === 0 ? (
           <li>
