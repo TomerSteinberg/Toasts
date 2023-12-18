@@ -1,7 +1,4 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
+.empty {
+  opacity: 0.6;
+  user-select: none;
+}

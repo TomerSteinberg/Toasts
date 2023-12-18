@@ -28,6 +28,20 @@ export class ToastsService {
   }
 
   /**
+   * get all future toasts
+   * @param: None
+   * @return All future toasts
+   */
+  async getFutureToasts(): Promise<Toasts[]> {
+    const currDate = new Date();
+    const toasts = await this.toastsModel.findAll({
+      where: { date: { [Op.gt]: currDate } },
+      include: { model: Users, attributes: ['username'] },
+    });
+    return toasts;
+  }
+
+  /**
    * get all toasts from db of a specific user
    * @param: user Id
    * @return: All the toasts from the db that belong to given user
@@ -114,12 +128,19 @@ export class ToastsService {
     }
 
     return {
-      current_period: parseInt(currPeriodToasts.toasts),
+      currentPeriod: parseInt(currPeriodToasts.toasts),
       record: Math.max(
         parseInt(maxAfterJune.toasts),
         parseInt(maxBeforeJune.toasts)
       ),
     };
+  }
+
+  private getBoundaryDate() {
+    const JUNE = 5;
+    return new Date().getMonth() > JUNE
+      ? new Date(new Date().getFullYear() + '-07-01')
+      : new Date(new Date().getFullYear() + '-01-01');
   }
 
   /**
@@ -131,13 +152,19 @@ export class ToastsService {
   async getToastsLeaderBoard() {
     const today = new Date();
     const leaderboard = this.toastsModel.findAll({
-      attributes: [[Sequelize.fn('COUNT', 'userId'), 'Toasts']],
-      where: { isConvicting: false, date: { [Op.lte]: today } },
+      attributes: [[Sequelize.fn('COUNT', 'userId'), 'toasts']],
+      where: {
+        isConvicting: false,
+        date: {
+          [Op.lte]: today,
+          [Op.gte]: this.getBoundaryDate(),
+        },
+      },
       include: {
         model: Users,
         attributes: { exclude: ['password'] },
       },
-      order: [['Toasts', 'DESC']],
+      order: [['toasts', 'DESC']],
       group: ['user.id'],
     });
     return leaderboard;
@@ -152,7 +179,10 @@ export class ToastsService {
   private async getMaxOfYearlyPeriod(isGreater: boolean, isRecord: boolean) {
     const JULY = 7;
     const JUNE = 6;
-    const currDate = new Date();
+    const JANUARY = 0;
+    const boundary = this.getBoundaryDate();
+    boundary.setMonth(isGreater ? JANUARY : JULY);
+    const currDate = isRecord ? boundary : new Date();
     const maxOfPeriod = await this.toastsModel
       .findAll({
         attributes: [

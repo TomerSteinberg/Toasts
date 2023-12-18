@@ -13,16 +13,12 @@
   border-color: #715659;
   border-style: solid;
   border-width: 0.2rem;
-  background-color: #f5b252;
+  background-color: #f4a22e;
   justify-content: space-evenly;
   height: 3rem;
-  width: 80%;
+  width: 90%;
   transition-duration: 100ms;
   transition-property: background-color;
-}
-
-.container:hover {
-  background-color: #f4a22e;
 }
 
 p {
@@ -31,4 +27,23 @@ p {
   font-weight: 500;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: black;
+  overflow-x: auto;
+}
+
+.toastBtn {
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 30%;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.toastIcon {
+  cursor: pointer;
+  transition-duration: 70ms;
+  transition-property: transform !important;
+}
+
+.toastIcon:hover {
+  transform: scale(1.35);
 }

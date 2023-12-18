@@ -23,7 +23,7 @@
   transform: scale(1.15);
 }
 
-.options_icon {
+.optionsIcon {
   cursor: pointer;
   font-size: large;
   border-radius: 100%;
@@ -32,7 +32,7 @@
   font-size: 5.8em !important;
   transition-property: transform !important;
 }
-.options_icon_open {
+.optionsIconOpen {
   cursor: pointer;
   font-size: large;
   border-radius: 100%;
@@ -43,7 +43,7 @@
   transform: rotate(70deg);
 }
 
-.menu_buttons {
+.menuButtons {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,7 +52,7 @@
   animation: slide_down 150ms linear;
 }
 
-.menu_btn {
+.menuBtn {
   background-color: transparent;
   border: none;
   transition-duration: 200ms;
@@ -60,18 +60,18 @@
   animation: menu_pop 200ms linear;
 }
 
-.menu_icons {
+.menuIcons {
   font-size: 2.5em !important;
   transition-duration: 200ms;
   transition-property: transform !important;
   animation: menu_rotate 250ms linear;
 }
 
-.menu_btn:hover {
+.menuBtn:hover {
   transform: scale(1.15);
 }
 
-.menu_icons:hover {
+.menuIcons:hover {
   transform: rotate(45deg);
 }
 

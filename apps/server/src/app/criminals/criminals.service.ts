@@ -31,6 +31,7 @@ export class CriminalsService {
       include: [
         {
           model: Users,
+          attributes: { exclude: ['password'] },
         },
       ],
     });

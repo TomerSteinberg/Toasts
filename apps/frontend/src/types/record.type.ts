@@ -1,4 +1,4 @@
-export type record = {
-  periodToastCount: number;
-  recordPeriodCount: number;
+export type Record = {
+  currentPeriod: number;
+  record: number;
 };
