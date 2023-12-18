@@ -20,7 +20,7 @@ export const ToastCard = () => {
       <ul>
         {futureToasts === undefined || futureToasts.length === 0 ? (
           <li>
-            <h1 className={styles.empty}>אין</h1>
+            <p className={styles.empty}>אין שתיות</p>
           </li>
         ) : (
           futureToasts.map((toast) => {

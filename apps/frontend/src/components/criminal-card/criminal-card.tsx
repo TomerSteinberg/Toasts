@@ -11,7 +11,7 @@ export const CriminalCard = () => {
       <ul>
         {criminals === undefined || criminals.length === 0 ? (
           <li>
-            <h1 className={styles.empty}>אין</h1>
+            <p className={styles.empty}>אין פושעים</p>
           </li>
         ) : (
           criminals.map((criminal) => {

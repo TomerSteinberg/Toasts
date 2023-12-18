@@ -15,7 +15,7 @@ export const LeaderboardCard = () => {
       <ul className={styles.score_list}>
         {leaderboard === undefined || leaderboard.length === 0 ? (
           <li>
-            <h1 className={styles.empty}>אין</h1>
+            <p className={styles.empty}>אין נקודות</p>
           </li>
         ) : (
           leaderboard.map((entry, index) => {
