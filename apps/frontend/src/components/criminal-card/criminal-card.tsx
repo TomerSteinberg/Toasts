@@ -7,7 +7,8 @@ export const CriminalCard = () => {
   const { data: criminals } = useGetCriminalsQuery();
 
   return (
-    <Card title="🚷פושעים" width="25%">
+    <Card title="🚷פושעים" width="25%" height="95vh">
+      <div className={styles.emptyContainer}></div>
       <ul>
         {criminals === undefined || criminals.length === 0 ? (
           <li>

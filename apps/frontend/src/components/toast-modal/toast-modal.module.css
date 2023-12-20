@@ -1,7 +1,53 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
+.actionContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: 10%;
+  height: 3em;
+}
+
+.modalBtnDisabled {
+  cursor: initial !important;
+  border-color: transparent !important;
+}
+
+.modalBtnDisabled,
+.modalBtn {
+  border-color: rgb(0, 0, 0);
+  border-style: solid;
+  border-radius: 1vh;
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-right: 3%;
+  transition-duration: 100ms;
+}
+
+.modalBtn:hover {
+  transform: scale(1.1);
+}
+
+.timeInput {
+  margin-left: 2%;
+}
+
+.timeInput,
+.userInput {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid;
+  outline: 0;
+  font-size: 1.3rem;
+  color: rgb(0, 0, 0);
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+  text-align: right;
+}
+
+.pickerContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5%;
+}

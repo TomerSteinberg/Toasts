@@ -183,6 +183,7 @@ export class ToastsService {
     const boundary = this.getBoundaryDate();
     boundary.setMonth(isGreater ? JANUARY : JULY);
     const currDate = isRecord ? boundary : new Date();
+
     const maxOfPeriod = await this.toastsModel
       .findAll({
         attributes: [
