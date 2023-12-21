@@ -25,7 +25,11 @@ export const ToastCard = () => {
             <ControlPointIcon />
           </Tooltip>
         </button>
-        <ToastModal setOpenModal={setIsOpen} openModal={isOpen} />
+        <ToastModal
+          title="הוספת שתיה"
+          setOpenModal={setIsOpen}
+          openModal={isOpen}
+        />
       </div>
       <ul>
         {futureToasts === undefined || futureToasts.length === 0 ? (

@@ -1,32 +1,47 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styles from './toast-modal.module.css';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import {
-  DatePicker,
-  DateValidationError,
-  PickerChangeHandlerContext,
-  TimePicker,
-} from '@mui/x-date-pickers';
 import { useState } from 'react';
+import { format, parse } from 'date-fns';
 
 export interface Props {
+  title: string;
   openModal: boolean;
   setOpenModal: Dispatch<SetStateAction<boolean>>;
+  defaultDate?: string;
+  defaultReason?: string;
 }
 
-export const ToastModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [reason, setReason] = useState('');
-
-  const handleClose = () => {
-    setOpenModal(false);
-  };
+export const ToastModal: React.FC<Props> = ({
+  title,
+  openModal,
+  setOpenModal,
+  defaultDate,
+  defaultReason,
+}) => {
+  const [date, setDate] = useState(
+    defaultDate !== undefined
+      ? defaultDate.split(' ')[0].split('/').reverse().join('-')
+      : ''
+  );
+  const [time, setTime] = useState(
+    defaultDate !== undefined ? defaultDate.split(' ')[1] : ''
+  );
+  const [reason, setReason] = useState(
+    defaultReason !== undefined ? defaultReason : ''
+  );
 
   const resetStates = () => {
     setTime('');
     setDate('');
     setReason('');
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+    if (!defaultReason && !defaultDate) {
+      resetStates();
+    }
   };
 
   return (
@@ -47,7 +62,7 @@ export const ToastModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
             backgroundColor: '#f9eeda',
           }}
         >
-          הוספת שתיה
+          {title}
         </DialogTitle>
         <DialogContent
           sx={{
@@ -58,6 +73,7 @@ export const ToastModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
         >
           <div className={styles.pickerContainer}>
             <input
+              defaultValue={date}
               className={styles.userInput}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 if (new Date(e.target.value) >= new Date()) {
@@ -67,23 +83,25 @@ export const ToastModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
                 setDate('');
               }}
               type="date"
-            ></input>
+            />
             <input
+              defaultValue={time}
               className={styles.timeInput}
               type="time"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setTime(e.target.value);
               }}
-            ></input>
+            />
           </div>
           <input
+            defaultValue={reason}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setReason(e.target.value);
             }}
             maxLength={20}
             placeholder="סיבה לשתיה"
             className={styles.userInput}
-          ></input>
+          />
           <div className={styles.actionContainer}>
             <button
               className={
@@ -98,19 +116,17 @@ export const ToastModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
               }
               onClick={() => {
                 handleClose();
-                resetStates();
               }}
             >
-              קביעה
+              שמור
             </button>
             <button
               className={styles.modalBtn}
               onClick={() => {
                 handleClose();
-                resetStates();
               }}
             >
-              סגירה
+              סגור
             </button>
           </div>
         </DialogContent>
