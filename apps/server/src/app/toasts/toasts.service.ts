@@ -37,6 +37,7 @@ export class ToastsService {
     const toasts = await this.toastsModel.findAll({
       where: { date: { [Op.gt]: currDate } },
       include: { model: Users, attributes: ['username'] },
+      order: [['date', 'ASC']],
     });
     return toasts;
   }

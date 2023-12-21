@@ -1,0 +1,58 @@
+.sendBtnDisabled,
+.sendBtn {
+  border-color: rgb(0, 0, 0);
+  border-style: solid;
+  border-radius: 1vh;
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-right: 3%;
+  transition-duration: 100ms;
+  width: 25%;
+}
+
+.sendBtnDisabled {
+  cursor: initial !important;
+  border-color: transparent !important;
+}
+
+.sendBtn:hover {
+  transform: scale(1.1);
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 18em;
+  justify-content: space-evenly;
+}
+
+.errorContainer {
+  height: 2em;
+}
+
+.error {
+  color: red;
+}
+
+.titleContainer {
+  display: flex;
+}
+
+.signupTitle,
+.loginTitle {
+  color: black;
+  cursor: pointer;
+  transition-property: transform;
+  transition-duration: 100ms;
+}
+
+.signupTitle:hover,
+.loginTitle:hover {
+  transform: scale(1.08);
+}
+
+h2 {
+  font-size: larger;
+}

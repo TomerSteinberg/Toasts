@@ -5,8 +5,10 @@ import HistoryIcon from '@mui/icons-material/History';
 import { useState } from 'react';
 import { Tooltip } from '@mui/material';
 import Fade from '@mui/material/Fade';
+import { UserModal } from '../user-modal';
 
 export const Options = () => {
+  const [updateUserOpen, setUpdateUserOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const toggle = () => {
     setIsClicked(!isClicked);
@@ -26,7 +28,12 @@ export const Options = () => {
       </button>
       {isClicked && (
         <div className={styles.menuButtons}>
-          <button className={styles.menuBtn}>
+          <button
+            className={styles.menuBtn}
+            onClick={() => {
+              setUpdateUserOpen(true);
+            }}
+          >
             <Tooltip
               title="הגדרות משתמש"
               TransitionComponent={Fade}
@@ -48,6 +55,12 @@ export const Options = () => {
           </button>
         </div>
       )}
+      <UserModal
+        openModal={updateUserOpen}
+        setOpenModal={setUpdateUserOpen}
+        username="placeholder"
+        password="placeholder"
+      />
     </div>
   );
 };

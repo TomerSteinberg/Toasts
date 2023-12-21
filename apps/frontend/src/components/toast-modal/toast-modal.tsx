@@ -2,7 +2,6 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styles from './toast-modal.module.css';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { useState } from 'react';
-import { format, parse } from 'date-fns';
 
 export interface Props {
   title: string;
@@ -32,6 +31,12 @@ export const ToastModal: React.FC<Props> = ({
   );
 
   const resetStates = () => {
+    if (defaultReason !== undefined && defaultDate !== undefined) {
+      setReason(defaultReason);
+      setDate(defaultDate.split(' ')[0].split('/').reverse().join('-'));
+      setTime(defaultDate.split(' ')[1]);
+      return;
+    }
     setTime('');
     setDate('');
     setReason('');
@@ -39,9 +44,11 @@ export const ToastModal: React.FC<Props> = ({
 
   const handleClose = () => {
     setOpenModal(false);
-    if (!defaultReason && !defaultDate) {
-      resetStates();
-    }
+    resetStates();
+  };
+
+  const inputsFilled = (): boolean => {
+    return date === '' || reason.length === 0 || time.length === 0;
   };
 
   return (
@@ -74,7 +81,6 @@ export const ToastModal: React.FC<Props> = ({
           <div className={styles.pickerContainer}>
             <input
               defaultValue={date}
-              className={styles.userInput}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 if (new Date(e.target.value) >= new Date()) {
                   setDate(e.target.value);
@@ -100,20 +106,13 @@ export const ToastModal: React.FC<Props> = ({
             }}
             maxLength={20}
             placeholder="סיבה לשתיה"
-            className={styles.userInput}
           />
           <div className={styles.actionContainer}>
             <button
               className={
-                date === '' || reason.length === 0 || time.length === 0
-                  ? styles.modalBtnDisabled
-                  : styles.modalBtn
+                inputsFilled() ? styles.modalBtnDisabled : styles.modalBtn
               }
-              disabled={
-                date === '' || reason.length === 0 || time.length === 0
-                  ? true
-                  : false
-              }
+              disabled={inputsFilled() ? true : false}
               onClick={() => {
                 handleClose();
               }}
