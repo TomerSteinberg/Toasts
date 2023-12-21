@@ -8,7 +8,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-right: 3%;
   transition-duration: 100ms;
-  width: 25%;
+  width: 22%;
 }
 
 .sendBtnDisabled {
@@ -55,4 +55,14 @@
 
 h2 {
   font-size: larger;
+}
+
+.btnContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10%;
+  height: 3em;
 }

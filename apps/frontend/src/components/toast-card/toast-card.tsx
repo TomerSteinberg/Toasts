@@ -41,6 +41,7 @@ export const ToastCard = () => {
             return (
               <li key={toast.id}>
                 <Toast
+                  pastToast={false}
                   name={toast.user.username}
                   date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
                   reason={toast.reason}

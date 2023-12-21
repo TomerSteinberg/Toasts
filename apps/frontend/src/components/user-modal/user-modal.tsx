@@ -43,7 +43,6 @@ export const UserModal: React.FC<Props> = ({
     return usernameIn !== '' && passwordIn !== '';
   };
 
-  console.log(isUpdateUserMode());
   return (
     <div className={styles.container}>
       <Dialog
@@ -56,7 +55,7 @@ export const UserModal: React.FC<Props> = ({
           },
         }}
         open={openModal}
-        onClose={handleClose}
+        onClose={isUpdateUserMode() ? handleClose : () => {}}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         maxWidth="xl"
@@ -122,18 +121,30 @@ export const UserModal: React.FC<Props> = ({
             <div className={styles.errorContainer}>
               {error && <p className={styles.error}>{error}</p>}
             </div>
-            <button
-              className={
-                inputsFilled() ? styles.sendBtn : styles.sendBtnDisabled
-              }
-              disabled={!inputsFilled()}
-            >
-              {isUpdateUserMode()
-                ? 'עדכן פרטים'
-                : authType
-                ? 'צור משתמש'
-                : 'התחבר'}
-            </button>
+            <div className={styles.btnContainer}>
+              <button
+                className={
+                  inputsFilled() ? styles.sendBtn : styles.sendBtnDisabled
+                }
+                disabled={!inputsFilled()}
+              >
+                {isUpdateUserMode()
+                  ? 'עדכן פרטים'
+                  : authType
+                  ? 'צור משתמש'
+                  : 'התחבר'}
+              </button>
+              {isUpdateUserMode() && (
+                <button
+                  onClick={() => {
+                    handleClose();
+                  }}
+                  className={styles.sendBtn}
+                >
+                  סגור
+                </button>
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>

@@ -6,8 +6,10 @@ import { useState } from 'react';
 import { Tooltip } from '@mui/material';
 import Fade from '@mui/material/Fade';
 import { UserModal } from '../user-modal';
+import { ListModal } from '../list-modal/list-modal';
 
 export const Options = () => {
+  const [historyOpen, setHistoryOpen] = useState(false);
   const [updateUserOpen, setUpdateUserOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const toggle = () => {
@@ -43,7 +45,12 @@ export const Options = () => {
               <AccountCircleIcon className={styles.menuIcons} />
             </Tooltip>
           </button>
-          <button className={styles.menuBtn}>
+          <button
+            className={styles.menuBtn}
+            onClick={() => {
+              setHistoryOpen(true);
+            }}
+          >
             <Tooltip
               title="היסטורית שתיות"
               TransitionComponent={Fade}
@@ -61,6 +68,7 @@ export const Options = () => {
         username="placeholder"
         password="placeholder"
       />
+      <ListModal openModal={historyOpen} setOpenModal={setHistoryOpen} />
     </div>
   );
 };
