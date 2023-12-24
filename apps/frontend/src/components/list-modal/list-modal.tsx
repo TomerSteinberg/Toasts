@@ -59,12 +59,19 @@ export const ListModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
             flexDirection: 'column',
           }}
         >
+          <div className={styles.colName}>
+            <label>שם</label>
+            <label>שעה</label>
+            <label>תאריך</label>
+            <label>סיבה לשתיה</label>
+            <label>שתיה מפשיעה</label>
+          </div>
           <ul>
             <li>
               <Toast
                 pastToast={true}
                 name="test"
-                date="2023-10-10 14:48:00+03"
+                date="2023-10-10 14:48"
                 reason="because"
               ></Toast>
             </li>

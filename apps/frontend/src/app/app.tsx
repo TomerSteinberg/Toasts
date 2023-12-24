@@ -11,8 +11,8 @@ import { useState } from 'react';
 export const App = () => {
   const [loggedOut, setLoggedOut] = useState(true);
   return (
-    //<UserModal openModal={loggedOut} setOpenModal={setLoggedOut} />
     <div className={styles.container}>
+      <UserModal openModal={loggedOut} setOpenModal={setLoggedOut} />
       <CriminalCard />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ToastCard />

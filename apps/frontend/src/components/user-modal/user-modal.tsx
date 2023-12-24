@@ -1,6 +1,8 @@
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import styles from './user-modal.module.css';
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { useLoginMutation } from '../../store/services/user.api';
+import { Login } from '../../types/login.type';
 
 export interface Props {
   openModal: boolean;
@@ -17,6 +19,10 @@ export const UserModal: React.FC<Props> = ({
 }) => {
   const LOGIN = false;
   const SIGNUP = true;
+
+  const [updatePost] = useLoginMutation({
+    fixedCacheKey: 'shared-update-post',
+  });
 
   const isUpdateUserMode = (): boolean => {
     return username !== undefined && password !== undefined;
@@ -39,8 +45,24 @@ export const UserModal: React.FC<Props> = ({
     setOpenModal(false);
   };
 
+  const sendLogin = async () => {
+    if (usernameIn && passwordIn) {
+      const loginParams: Login = { username: usernameIn, password: passwordIn };
+      try {
+        const { username, password, isAdmin } = await updatePost(
+          loginParams
+        ).unwrap();
+        handleClose();
+      } catch (e) {
+        setError(e.data.message);
+      }
+    }
+  };
+
   const inputsFilled = (): boolean => {
-    return usernameIn !== '' && passwordIn !== '';
+    return (
+      usernameIn !== '' && passwordIn !== undefined && passwordIn.length > 8
+    );
   };
 
   return (
@@ -127,6 +149,9 @@ export const UserModal: React.FC<Props> = ({
                   inputsFilled() ? styles.sendBtn : styles.sendBtnDisabled
                 }
                 disabled={!inputsFilled()}
+                onClick={() => {
+                  sendLogin();
+                }}
               >
                 {isUpdateUserMode()
                   ? 'עדכן פרטים'
