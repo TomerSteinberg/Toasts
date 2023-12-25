@@ -5,27 +5,26 @@ import { useState } from 'react';
 
 export interface Props {
   title: string;
-  openModal: boolean;
-  setOpenModal: Dispatch<SetStateAction<boolean>>;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
   defaultDate?: string;
   defaultReason?: string;
 }
 
 export const ToastModal: React.FC<Props> = ({
   title,
-  openModal,
-  setOpenModal,
+  isOpen,
+  setIsOpen,
   defaultDate,
   defaultReason,
 }) => {
-  const [date, setDate] = useState(
-    defaultDate !== undefined
-      ? defaultDate.split(' ')[0].split('/').reverse().join('-')
-      : ''
-  );
-  const [time, setTime] = useState(
-    defaultDate !== undefined ? defaultDate.split(' ')[1] : ''
-  );
+  const parsedDate = defaultDate
+    ? defaultDate.split(' ')[0].split('/').reverse().join('-')
+    : '';
+  const parsedTime = defaultDate ? defaultDate.split(' ')[1] : '';
+
+  const [date, setDate] = useState(parsedDate);
+  const [time, setTime] = useState(parsedTime);
   const [reason, setReason] = useState(
     defaultReason !== undefined ? defaultReason : ''
   );
@@ -33,8 +32,8 @@ export const ToastModal: React.FC<Props> = ({
   const resetStates = () => {
     if (defaultReason !== undefined && defaultDate !== undefined) {
       setReason(defaultReason);
-      setDate(defaultDate.split(' ')[0].split('/').reverse().join('-'));
-      setTime(defaultDate.split(' ')[1]);
+      setDate(parsedDate);
+      setTime(parsedTime);
       return;
     }
     setTime('');
@@ -43,19 +42,20 @@ export const ToastModal: React.FC<Props> = ({
   };
 
   const handleClose = () => {
-    setOpenModal(false);
+    setIsOpen(false);
     resetStates();
   };
 
   const inputsFilled = (): boolean => {
     return date === '' || reason.length === 0 || time.length === 0;
   };
+  const allInputsFilled: boolean = inputsFilled();
 
   return (
     <div className={styles.container}>
       <Dialog
         sx={{ borderRadius: '1.5vh' }}
-        open={openModal}
+        open={isOpen}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -110,9 +110,9 @@ export const ToastModal: React.FC<Props> = ({
           <div className={styles.actionContainer}>
             <button
               className={
-                inputsFilled() ? styles.modalBtnDisabled : styles.modalBtn
+                allInputsFilled ? styles.modalBtnDisabled : styles.modalBtn
               }
-              disabled={inputsFilled() ? true : false}
+              disabled={allInputsFilled ? true : false}
               onClick={() => {
                 handleClose();
               }}

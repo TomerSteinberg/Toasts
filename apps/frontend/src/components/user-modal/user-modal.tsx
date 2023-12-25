@@ -5,15 +5,15 @@ import { useLoginMutation } from '../../store/services/user.api';
 import { Login } from '../../types/login.type';
 
 export interface Props {
-  openModal: boolean;
-  setOpenModal: Dispatch<SetStateAction<boolean>>;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
   username?: string;
   password?: string;
 }
 
 export const UserModal: React.FC<Props> = ({
-  openModal,
-  setOpenModal,
+  isOpen,
+  setIsOpen,
   username,
   password,
 }) => {
@@ -43,7 +43,7 @@ export const UserModal: React.FC<Props> = ({
       setUsernameIn(username);
       setPasswordIn(password);
     }
-    setOpenModal(false);
+    setIsOpen(false);
   };
 
   const sendLogin = async () => {
@@ -77,7 +77,7 @@ export const UserModal: React.FC<Props> = ({
             },
           },
         }}
-        open={openModal}
+        open={isOpen}
         onClose={isUpdateUserMode() ? handleClose : () => {}}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

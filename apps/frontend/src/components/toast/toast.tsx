@@ -61,8 +61,8 @@ export const Toast: React.FC<Props> = ({
       )}
       <ToastModal
         title="שינוי שתיה"
-        openModal={isOpen}
-        setOpenModal={setIsOpen}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
         defaultDate={date}
         defaultReason={reason}
       />

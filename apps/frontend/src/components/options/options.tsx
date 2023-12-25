@@ -11,7 +11,7 @@ import { ListModal } from '../list-modal/list-modal';
 import { useLoginMutation } from '../../store/services/user.api';
 
 export const Options = () => {
-  const [historyOpen, setHistoryOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [updateUserOpen, setUpdateUserOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
@@ -39,7 +39,7 @@ export const Options = () => {
       {isClicked && (
         <div className={styles.menuButtons}>
           <button
-            className={styles.menuBtn}
+            className={styles.menuButton}
             onClick={() => {
               setUpdateUserOpen(true);
             }}
@@ -54,9 +54,9 @@ export const Options = () => {
             </Tooltip>
           </button>
           <button
-            className={styles.menuBtn}
+            className={styles.menuButton}
             onClick={() => {
-              setHistoryOpen(true);
+              setIsHistoryOpen(true);
             }}
           >
             <Tooltip
@@ -71,12 +71,12 @@ export const Options = () => {
         </div>
       )}
       <UserModal
-        openModal={updateUserOpen}
-        setOpenModal={setUpdateUserOpen}
+        isOpen={updateUserOpen}
+        setIsOpen={setUpdateUserOpen}
         username={result.data?.username}
         password={result.data?.password}
       />
-      <ListModal openModal={historyOpen} setOpenModal={setHistoryOpen} />
+      <ListModal isOpen={isHistoryOpen} setIsOpen={setIsHistoryOpen} />
     </div>
   );
 };

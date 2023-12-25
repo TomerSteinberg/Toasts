@@ -9,11 +9,11 @@ import { Toast } from '../toast';
 import { format } from 'date-fns';
 
 export interface Props {
-  openModal: boolean;
-  setOpenModal: Dispatch<SetStateAction<boolean>>;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const ListModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
+export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
     fixedCacheKey: 'shared-update-post',
@@ -26,14 +26,12 @@ export const ListModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
   } = useGetPastUserToastsQuery(
     result.isUninitialized || !result.data ? '' : result.data.id,
     {
-      skip: result.isUninitialized ? true : false,
+      skip: result.isUninitialized,
     }
   );
-  console.log(isLoading);
-  console.log(toasts);
 
   const handleClose = () => {
-    setOpenModal(false);
+    setIsOpen(false);
   };
 
   return (
@@ -47,7 +45,7 @@ export const ListModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
             },
           },
         }}
-        open={openModal}
+        open={isOpen}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
