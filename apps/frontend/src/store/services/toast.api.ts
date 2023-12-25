@@ -15,6 +15,12 @@ const toastApi = serverApi.injectEndpoints({
     GetPastUserToasts: builder.query<Toast[], string>({
       query: (id) => ({ url: `user_past_toasts/${id}`, method: 'GET' }),
     }),
+    DeleteToast: builder.query<number, { id: string; userId: string }>({
+      query: (ids) => ({
+        url: `remove_toast/${ids.id}?userId=${ids.userId}`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -23,4 +29,5 @@ export const {
   useGetLeaderboardQuery,
   useGetTotalToastsQuery,
   useGetPastUserToastsQuery,
+  useLazyDeleteToastQuery,
 } = toastApi;

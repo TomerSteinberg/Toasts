@@ -100,6 +100,7 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
                       isUserToast={false}
                       pastToast={true}
                       isConvicting={toast.isConvicting}
+                      id={toast.id}
                     ></Toast>
                   </li>
                 );
