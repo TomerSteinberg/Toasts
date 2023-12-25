@@ -8,7 +8,7 @@ export class CreateUser {
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(8)
+  @MinLength(7)
   @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
   password: string;
 

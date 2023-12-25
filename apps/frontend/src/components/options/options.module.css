@@ -52,7 +52,7 @@
   animation: slide_down 150ms linear;
 }
 
-.menuBtn {
+.menuButton {
   background-color: transparent;
   border: none;
   transition-duration: 200ms;

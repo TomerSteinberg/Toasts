@@ -37,6 +37,7 @@ export class ToastsService {
     const toasts = await this.toastsModel.findAll({
       where: { date: { [Op.gt]: currDate } },
       include: { model: Users, attributes: ['username'] },
+      order: [['date', 'ASC']],
     });
     return toasts;
   }
@@ -46,9 +47,11 @@ export class ToastsService {
    * @param: user Id
    * @return: All the toasts from the db that belong to given user
    */
-  async getToastsById(userId: string) {
+  async getPastToastsById(userId: string) {
     const userToasts = await this.toastsModel.findAll({
-      where: { userId },
+      where: { userId, date: { [Op.lte]: new Date() } },
+      include: { model: Users, attributes: ['username'] },
+      order: [['date', 'DESC']],
     });
     return userToasts;
   }
@@ -183,6 +186,7 @@ export class ToastsService {
     const boundary = this.getBoundaryDate();
     boundary.setMonth(isGreater ? JANUARY : JULY);
     const currDate = isRecord ? boundary : new Date();
+
     const maxOfPeriod = await this.toastsModel
       .findAll({
         attributes: [

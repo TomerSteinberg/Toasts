@@ -1,0 +1,25 @@
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.closeBtn {
+  border: none;
+  background-color: transparent;
+}
+
+.colName {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.closeIcon {
+  transform: scale(1.25);
+  cursor: pointer;
+}
+.closeIcon:hover {
+  transform: scale(1.5);
+  color: red;
+}

@@ -5,12 +5,24 @@ import HistoryIcon from '@mui/icons-material/History';
 import { useState } from 'react';
 import { Tooltip } from '@mui/material';
 import Fade from '@mui/material/Fade';
+import { UserModal } from '../user-modal';
+import { ListModal } from '../list-modal/list-modal';
+
+import { useLoginMutation } from '../../store/services/user.api';
 
 export const Options = () => {
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [updateUserOpen, setUpdateUserOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+
   const toggle = () => {
     setIsClicked(!isClicked);
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, result] = useLoginMutation({
+    fixedCacheKey: 'shared-update-post',
+  });
 
   return (
     <div className={styles.container}>
@@ -26,7 +38,12 @@ export const Options = () => {
       </button>
       {isClicked && (
         <div className={styles.menuButtons}>
-          <button className={styles.menuBtn}>
+          <button
+            className={styles.menuButton}
+            onClick={() => {
+              setUpdateUserOpen(true);
+            }}
+          >
             <Tooltip
               title="הגדרות משתמש"
               TransitionComponent={Fade}
@@ -36,7 +53,12 @@ export const Options = () => {
               <AccountCircleIcon className={styles.menuIcons} />
             </Tooltip>
           </button>
-          <button className={styles.menuBtn}>
+          <button
+            className={styles.menuButton}
+            onClick={() => {
+              setIsHistoryOpen(true);
+            }}
+          >
             <Tooltip
               title="היסטורית שתיות"
               TransitionComponent={Fade}
@@ -48,6 +70,13 @@ export const Options = () => {
           </button>
         </div>
       )}
+      <UserModal
+        isOpen={updateUserOpen}
+        setIsOpen={setUpdateUserOpen}
+        username={result.data?.username}
+        password={result.data?.password}
+      />
+      <ListModal isOpen={isHistoryOpen} setIsOpen={setIsHistoryOpen} />
     </div>
   );
 };

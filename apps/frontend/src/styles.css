@@ -1,6 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-  background: #ffffff;
   background: linear-gradient(
     90deg,
     rgba(117, 2, 96, 0.778) 0%,
@@ -11,6 +10,7 @@ body {
   overflow: hidden;
   height: 100vh;
   width: 100vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -55,4 +55,19 @@ li {
   justify-content: center;
   padding-top: 5px;
   padding-bottom: 10px;
+}
+
+input {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid;
+  outline: 0;
+  font-size: 1.3rem;
+  color: black;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+  text-align: right;
+  cursor: text;
 }

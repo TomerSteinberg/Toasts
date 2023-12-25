@@ -1,0 +1,68 @@
+.sendButtonDisabled,
+.sendButton {
+  border-color: black;
+  border-style: solid;
+  border-radius: 1vh;
+  background-color: white;
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-right: 3%;
+  transition-duration: 100ms;
+  width: 22%;
+}
+
+.sendButtonDisabled {
+  cursor: initial !important;
+  border-color: transparent !important;
+}
+
+.sendButton:hover {
+  transform: scale(1.1);
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 18em;
+  justify-content: space-evenly;
+}
+
+.errorContainer {
+  height: 2em;
+}
+
+.error {
+  color: red;
+}
+
+.titleContainer {
+  display: flex;
+}
+
+.signupTitle,
+.loginTitle {
+  color: black;
+  cursor: pointer;
+  transition-property: transform;
+  transition-duration: 100ms;
+}
+
+.signupTitle:hover,
+.loginTitle:hover {
+  transform: scale(1.08);
+}
+
+h2 {
+  font-size: larger;
+}
+
+.ButtonContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10%;
+  height: 3em;
+}

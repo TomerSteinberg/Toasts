@@ -1,7 +1,39 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
+.actionContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10%;
+  height: 3em;
+}
+
+.modalButtonDisabled {
+  cursor: initial !important;
+  border-color: transparent !important;
+}
+
+.modalButtonDisabled,
+.modalButton {
+  border-color: black;
+  border-style: solid;
+  border-radius: 1vh;
+  background-color: white;
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-right: 3%;
+  transition-duration: 100ms;
+}
+
+.modalButton:hover {
+  transform: scale(1.1);
+}
+
+.timeInput {
+  margin-left: 2%;
+}
+
+.pickerContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5%;
+}

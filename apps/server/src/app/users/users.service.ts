@@ -112,7 +112,9 @@ export class UsersService {
    * @return: id, username and admin status of all users
    */
   async getUsers(): Promise<Users[]> {
-    const users = this.UsersModel.findAll();
+    const users = this.UsersModel.findAll({
+      attributes: { exclude: ['password'] },
+    });
     return users;
   }
 
