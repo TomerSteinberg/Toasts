@@ -19,9 +19,9 @@ export class ToastsController {
     return this.toastsService.getFutureToasts();
   }
 
-  @Get('user_toasts/:userId')
+  @Get('user_past_toasts/:userId')
   getUserToasts(@Param('userId') userId: string) {
-    return this.toastsService.getToastsById(userId);
+    return this.toastsService.getPastToastsById(userId);
   }
 
   @Post('toast')

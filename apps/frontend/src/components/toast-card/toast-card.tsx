@@ -7,8 +7,14 @@ import { useGetFutureToastsQuery } from '../../store/services/toast.api';
 import { format } from 'date-fns';
 import { useState } from 'react';
 import { ToastModal } from '../toast-modal';
+import { useLoginMutation } from '../../store/services/user.api';
 
 export const ToastCard = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, result] = useLoginMutation({
+    fixedCacheKey: 'shared-update-post',
+  });
+
   const { data: futureToasts } = useGetFutureToastsQuery();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -45,6 +51,11 @@ export const ToastCard = () => {
                   name={toast.user.username}
                   date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
                   reason={toast.reason}
+                  isUserToast={
+                    result.data !== undefined && toast.userId === result.data.id
+                      ? true
+                      : false
+                  }
                 ></Toast>
               </li>
             );

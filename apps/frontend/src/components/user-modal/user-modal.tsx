@@ -34,6 +34,7 @@ export const UserModal: React.FC<Props> = ({
   const [passwordIn, setPasswordIn] = useState(
     isUpdateUserMode() ? password : ''
   );
+
   const [error, setError] = useState('');
   const [authType, setAuthType] = useState(LOGIN);
 
@@ -48,14 +49,14 @@ export const UserModal: React.FC<Props> = ({
   const sendLogin = async () => {
     if (usernameIn && passwordIn) {
       const loginParams: Login = { username: usernameIn, password: passwordIn };
-      try {
-        const { username, password, isAdmin } = await updatePost(
-          loginParams
-        ).unwrap();
-        handleClose();
-      } catch (e) {
-        setError(e.data.message);
-      }
+      await updatePost(loginParams)
+        .unwrap()
+        .then(() => {
+          handleClose();
+        })
+        .catch((error: { data: { message: string } }) =>
+          setError(error.data.message)
+        );
     }
   };
 

@@ -10,13 +10,22 @@ export interface Props {
   date: string;
   reason: string;
   pastToast: boolean;
+  isUserToast: boolean;
+  isConvicting?: boolean;
 }
-export const Toast: React.FC<Props> = ({ name, date, reason, pastToast }) => {
+export const Toast: React.FC<Props> = ({
+  name,
+  date,
+  reason,
+  pastToast,
+  isUserToast,
+  isConvicting,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className={styles.container}>
-      {!pastToast && (
+      {!pastToast && isUserToast && (
         <button className={styles.toastBtn}>
           <Tooltip title="מחיקת שתיה">
             <ClearIcon className={styles.toastIcon} />
@@ -26,7 +35,7 @@ export const Toast: React.FC<Props> = ({ name, date, reason, pastToast }) => {
       <p>{name}</p>
       <p>{date}</p>
       <p>{reason}</p>
-      {!pastToast && (
+      {!pastToast && isUserToast && (
         <button
           className={styles.toastBtn}
           onClick={() => {
@@ -40,6 +49,7 @@ export const Toast: React.FC<Props> = ({ name, date, reason, pastToast }) => {
       )}
       {pastToast && (
         <Checkbox
+          checked={isConvicting ? true : false}
           disabled={true}
           sx={{
             color: 'black',

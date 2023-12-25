@@ -2,7 +2,11 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import styles from './list-modal.module.css';
 import { Dispatch, SetStateAction } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import { useGetPastUserToastsQuery } from '../../store/services/toast.api';
+import { useLoginMutation } from '../../store/services/user.api';
+import { Toast as ToastType } from '../../types';
 import { Toast } from '../toast';
+import { format } from 'date-fns';
 
 export interface Props {
   openModal: boolean;
@@ -10,6 +14,24 @@ export interface Props {
 }
 
 export const ListModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, result] = useLoginMutation({
+    fixedCacheKey: 'shared-update-post',
+  });
+
+  const {
+    data: toasts,
+    isLoading,
+    isError,
+  } = useGetPastUserToastsQuery(
+    result.isUninitialized || !result.data ? '' : result.data.id,
+    {
+      skip: result.isUninitialized ? true : false,
+    }
+  );
+  console.log(isLoading);
+  console.log(toasts);
+
   const handleClose = () => {
     setOpenModal(false);
   };
@@ -67,78 +89,23 @@ export const ListModal: React.FC<Props> = ({ openModal, setOpenModal }) => {
             <label>שתיה מפשיעה</label>
           </div>
           <ul>
-            <li>
-              <Toast
-                pastToast={true}
-                name="test"
-                date="2023-10-10 14:48"
-                reason="because"
-              ></Toast>
-            </li>
-            <li>
-              <Toast
-                pastToast={true}
-                name="test"
-                date="2023-10-10 14:48:00+03"
-                reason="because"
-              ></Toast>
-            </li>
-            <li>
-              <Toast
-                pastToast={true}
-                name="test"
-                date="2023-10-10 14:48:00+03"
-                reason="because"
-              ></Toast>
-            </li>
-            <li>
-              <Toast
-                pastToast={true}
-                name="test"
-                date="2023-10-10 14:48:00+03"
-                reason="because"
-              ></Toast>
-            </li>
-            <li>
-              <Toast
-                pastToast={true}
-                name="test"
-                date="2023-10-10 14:48:00+03"
-                reason="because"
-              ></Toast>
-            </li>
-            <li>
-              <Toast
-                pastToast={true}
-                name="test"
-                date="2023-10-10 14:48:00+03"
-                reason="because"
-              ></Toast>
-            </li>
-            <li>
-              <Toast
-                pastToast={true}
-                name="test"
-                date="2023-10-10 14:48:00+03"
-                reason="because"
-              ></Toast>
-            </li>
-            <li>
-              <Toast
-                pastToast={true}
-                name="test"
-                date="2023-10-10 14:48:00+03"
-                reason="because"
-              ></Toast>
-            </li>
-            <li>
-              <Toast
-                pastToast={true}
-                name="test"
-                date="2023-10-10 14:48:00+03"
-                reason="because"
-              ></Toast>
-            </li>
+            {toasts &&
+              !isError &&
+              !isLoading &&
+              toasts.map((toast: ToastType) => {
+                return (
+                  <li>
+                    <Toast
+                      name={toast.user.username}
+                      reason={toast.reason}
+                      date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
+                      isUserToast={false}
+                      pastToast={true}
+                      isConvicting={toast.isConvicting}
+                    ></Toast>
+                  </li>
+                );
+              })}
           </ul>
         </DialogContent>
       </Dialog>

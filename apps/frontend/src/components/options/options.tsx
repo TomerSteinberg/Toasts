@@ -73,8 +73,8 @@ export const Options = () => {
       <UserModal
         openModal={updateUserOpen}
         setOpenModal={setUpdateUserOpen}
-        username="placeholder"
-        password="placeholder"
+        username={result.data?.username}
+        password={result.data?.password}
       />
       <ListModal openModal={historyOpen} setOpenModal={setHistoryOpen} />
     </div>

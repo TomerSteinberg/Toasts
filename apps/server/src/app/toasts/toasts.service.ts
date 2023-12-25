@@ -47,9 +47,11 @@ export class ToastsService {
    * @param: user Id
    * @return: All the toasts from the db that belong to given user
    */
-  async getToastsById(userId: string) {
+  async getPastToastsById(userId: string) {
     const userToasts = await this.toastsModel.findAll({
-      where: { userId },
+      where: { userId, date: { [Op.lte]: new Date() } },
+      include: { model: Users, attributes: ['username'] },
+      order: [['date', 'DESC']],
     });
     return userToasts;
   }
