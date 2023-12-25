@@ -92,7 +92,7 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
               !isLoading &&
               toasts.map((toast: ToastType) => {
                 return (
-                  <li>
+                  <li key={toast.id}>
                     <Toast
                       name={toast.user.username}
                       reason={toast.reason}

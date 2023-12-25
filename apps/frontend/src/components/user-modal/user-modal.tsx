@@ -62,7 +62,9 @@ export const UserModal: React.FC<Props> = ({
 
   const inputsFilled = (): boolean => {
     return (
-      usernameIn !== '' && passwordIn !== undefined && passwordIn.length > 8
+      usernameIn !== undefined &&
+      passwordIn !== undefined &&
+      passwordIn.length > 8
     );
   };
 
@@ -144,10 +146,10 @@ export const UserModal: React.FC<Props> = ({
             <div className={styles.errorContainer}>
               {error && <p className={styles.error}>{error}</p>}
             </div>
-            <div className={styles.btnContainer}>
+            <div className={styles.ButtonContainer}>
               <button
                 className={
-                  inputsFilled() ? styles.sendBtn : styles.sendBtnDisabled
+                  inputsFilled() ? styles.sendButton : styles.sendButtonDisabled
                 }
                 disabled={!inputsFilled()}
                 onClick={() => {
@@ -165,7 +167,7 @@ export const UserModal: React.FC<Props> = ({
                   onClick={() => {
                     handleClose();
                   }}
-                  className={styles.sendBtn}
+                  className={styles.sendButton}
                 >
                   סגור
                 </button>

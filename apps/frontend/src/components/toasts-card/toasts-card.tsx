@@ -1,5 +1,5 @@
 import { Toast } from '../toast';
-import styles from './toast-card.module.css';
+import styles from './toasts-card.module.css';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { Card } from '../card';
 import { Tooltip } from '@mui/material';
@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { ToastModal } from '../toast-modal';
 import { useLoginMutation } from '../../store/services/user.api';
 
-export const ToastCard = () => {
+export const ToastsCard = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
     fixedCacheKey: 'shared-update-post',
@@ -19,7 +19,7 @@ export const ToastCard = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Card title="🍺שתיות קרובות" width="40%" height="95vh">
+    <Card title="🍺שתיות קרובות" width="40vw" height="95vh">
       <div className={styles.addToast}>
         <button
           className={styles.addBtn}

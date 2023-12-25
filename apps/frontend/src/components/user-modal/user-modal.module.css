@@ -1,9 +1,9 @@
-.sendBtnDisabled,
-.sendBtn {
-  border-color: rgb(0, 0, 0);
+.sendButtonDisabled,
+.sendButton {
+  border-color: black;
   border-style: solid;
   border-radius: 1vh;
-  background-color: rgb(255, 255, 255);
+  background-color: white;
   cursor: pointer;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-right: 3%;
@@ -11,12 +11,12 @@
   width: 22%;
 }
 
-.sendBtnDisabled {
+.sendButtonDisabled {
   cursor: initial !important;
   border-color: transparent !important;
 }
 
-.sendBtn:hover {
+.sendButton:hover {
   transform: scale(1.1);
 }
 
@@ -57,7 +57,7 @@ h2 {
   font-size: larger;
 }
 
-.btnContainer {
+.ButtonContainer {
   width: 100%;
   display: flex;
   flex-direction: row;

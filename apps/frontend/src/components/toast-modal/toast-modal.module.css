@@ -7,24 +7,24 @@
   height: 3em;
 }
 
-.modalBtnDisabled {
+.modalButtonDisabled {
   cursor: initial !important;
   border-color: transparent !important;
 }
 
-.modalBtnDisabled,
-.modalBtn {
-  border-color: rgb(0, 0, 0);
+.modalButtonDisabled,
+.modalButton {
+  border-color: black;
   border-style: solid;
   border-radius: 1vh;
-  background-color: rgb(255, 255, 255);
+  background-color: white;
   cursor: pointer;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-right: 3%;
   transition-duration: 100ms;
 }
 
-.modalBtn:hover {
+.modalButton:hover {
   transform: scale(1.1);
 }
 

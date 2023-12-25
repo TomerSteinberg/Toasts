@@ -1,7 +1,7 @@
 import { CriminalCard } from '../components/criminal-card';
 import { LeaderboardCard } from '../components/leaderboard-card';
 import { Options } from '../components/options';
-import { ToastCard } from '../components/toast-card';
+import { ToastsCard } from '../components/toasts-card';
 import styles from './app.module.css';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -15,7 +15,7 @@ export const App = () => {
       <UserModal isOpen={isLoggedOut} setIsOpen={setIsLoggedOut} />
       <CriminalCard />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <ToastCard />
+        <ToastsCard />
       </LocalizationProvider>
       <LeaderboardCard />
       <Options />

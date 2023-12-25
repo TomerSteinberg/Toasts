@@ -110,7 +110,9 @@ export const ToastModal: React.FC<Props> = ({
           <div className={styles.actionContainer}>
             <button
               className={
-                allInputsFilled ? styles.modalBtnDisabled : styles.modalBtn
+                allInputsFilled
+                  ? styles.modalButtonDisabled
+                  : styles.modalButton
               }
               disabled={allInputsFilled ? true : false}
               onClick={() => {
@@ -120,7 +122,7 @@ export const ToastModal: React.FC<Props> = ({
               שמור
             </button>
             <button
-              className={styles.modalBtn}
+              className={styles.modalButton}
               onClick={() => {
                 handleClose();
               }}

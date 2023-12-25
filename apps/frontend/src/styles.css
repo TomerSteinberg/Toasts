@@ -64,7 +64,7 @@ input {
   border-bottom: 2px solid;
   outline: 0;
   font-size: 1.3rem;
-  color: rgb(0, 0, 0);
+  color: black;
   padding: 7px 0;
   background: transparent;
   transition: border-color 0.2s;
