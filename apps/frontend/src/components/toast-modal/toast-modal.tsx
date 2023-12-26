@@ -3,6 +3,7 @@ import styles from './toast-modal.module.css';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { useState } from 'react';
 import { useCreateToastMutation } from '../../store/services/toast.api';
+import { useLoginMutation } from '../../store/services/user.api';
 
 export interface Props {
   title: string;
@@ -24,12 +25,26 @@ export const ToastModal: React.FC<Props> = ({
     : '';
   const parsedTime = defaultDate ? defaultDate.split(' ')[1] : '';
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, result] = useLoginMutation({
+    fixedCacheKey: 'shared-update-post',
+  });
   const [trigger] = useCreateToastMutation();
   const [date, setDate] = useState(parsedDate);
   const [time, setTime] = useState(parsedTime);
   const [reason, setReason] = useState(
     defaultReason !== undefined ? defaultReason : ''
   );
+
+  const createToast = () => {
+    if (result.data) {
+      trigger({
+        reason: reason,
+        userId: result.data.id,
+        date: new Date(date + ' ' + time).toISOString(),
+      });
+    }
+  };
 
   const resetStates = () => {
     if (defaultReason !== undefined && defaultDate !== undefined) {
@@ -118,6 +133,7 @@ export const ToastModal: React.FC<Props> = ({
               }
               disabled={allInputsFilled ? true : false}
               onClick={() => {
+                createToast();
                 handleClose();
               }}
             >
