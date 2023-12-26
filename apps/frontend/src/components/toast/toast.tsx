@@ -89,6 +89,7 @@ export const Toast: React.FC<Props> = ({
         setIsOpen={setIsOpen}
         defaultDate={date}
         defaultReason={reason}
+        toastId={id}
       />
     </div>
   );

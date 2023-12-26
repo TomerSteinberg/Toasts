@@ -2,7 +2,10 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styles from './toast-modal.module.css';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { useState } from 'react';
-import { useCreateToastMutation } from '../../store/services/toast.api';
+import {
+  useCreateToastMutation,
+  useUpdateToastMutation,
+} from '../../store/services/toast.api';
 import { useLoginMutation } from '../../store/services/user.api';
 
 export interface Props {
@@ -11,6 +14,7 @@ export interface Props {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   defaultDate?: string;
   defaultReason?: string;
+  toastId?: string;
 }
 
 export const ToastModal: React.FC<Props> = ({
@@ -19,6 +23,7 @@ export const ToastModal: React.FC<Props> = ({
   setIsOpen,
   defaultDate,
   defaultReason,
+  toastId,
 }) => {
   const parsedDate = defaultDate
     ? defaultDate.split(' ')[0].split('/').reverse().join('-')
@@ -29,19 +34,35 @@ export const ToastModal: React.FC<Props> = ({
   const [_, result] = useLoginMutation({
     fixedCacheKey: 'shared-update-post',
   });
-  const [trigger] = useCreateToastMutation();
+  const [createTrigger] = useCreateToastMutation();
+  const [updateTrigger] = useUpdateToastMutation();
   const [date, setDate] = useState(parsedDate);
   const [time, setTime] = useState(parsedTime);
   const [reason, setReason] = useState(
     defaultReason !== undefined ? defaultReason : ''
   );
 
+  const isUpdateMode = (): boolean => {
+    return defaultDate !== undefined && defaultReason !== undefined;
+  };
+
   const createToast = () => {
     if (result.data) {
-      trigger({
+      createTrigger({
         reason: reason,
         userId: result.data.id,
         date: new Date(date + ' ' + time).toISOString(),
+      });
+    }
+  };
+
+  const updateToast = () => {
+    if (result.data && toastId) {
+      updateTrigger({
+        reason: reason,
+        date: new Date(date + ' ' + time).toISOString(),
+        id: toastId,
+        userId: result.data.id,
       });
     }
   };
@@ -133,7 +154,7 @@ export const ToastModal: React.FC<Props> = ({
               }
               disabled={allInputsFilled ? true : false}
               onClick={() => {
-                createToast();
+                isUpdateMode() ? updateToast() : createToast();
                 handleClose();
               }}
             >

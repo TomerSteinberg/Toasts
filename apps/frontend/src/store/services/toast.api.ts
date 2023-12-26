@@ -1,4 +1,4 @@
-import { Toast, Score, Record } from '../../types';
+import { Toast, Score, Record, UpdateToast } from '../../types';
 import { AddToast } from '../../types/add-toast.type';
 import { serverApi } from './server.api';
 
@@ -29,6 +29,13 @@ const toastApi = serverApi.injectEndpoints({
         body,
       }),
     }),
+    UpdateToast: builder.mutation<number, UpdateToast>({
+      query: (body) => ({
+        url: `toast/${body.id}/?userId=${body.userId}`,
+        method: 'PATCH',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -39,4 +46,5 @@ export const {
   useGetPastUserToastsQuery,
   useDeleteToastMutation,
   useCreateToastMutation,
+  useUpdateToastMutation,
 } = toastApi;
