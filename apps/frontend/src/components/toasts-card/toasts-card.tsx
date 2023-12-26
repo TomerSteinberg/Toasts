@@ -33,7 +33,7 @@ export const ToastsCard = () => {
         </button>
         <ToastModal title="הוספת שתיה" setIsOpen={setIsOpen} isOpen={isOpen} />
       </div>
-      <ul>
+      <ul className={styles.toastList}>
         {futureToasts === undefined || futureToasts.length === 0 ? (
           <li>
             <p className={styles.empty}>אין שתיות</p>
@@ -41,7 +41,7 @@ export const ToastsCard = () => {
         ) : (
           futureToasts.map((toast) => {
             return (
-              <li key={toast.id}>
+              <li key={toast.id} className={styles.toast}>
                 <Toast
                   pastToast={false}
                   name={toast.user.username}

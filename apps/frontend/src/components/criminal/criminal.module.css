@@ -9,8 +9,12 @@
   justify-content: space-evenly;
   height: 3rem;
   width: 90%;
-  transition-duration: 100ms;
-  transition-property: background-color;
+  transition-duration: 170ms;
+  transition-property: transform;
+}
+
+.container:hover {
+  transform: scale(1.07);
 }
 
 p {

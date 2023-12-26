@@ -8,26 +8,41 @@
 
 .container {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: column;
   border-radius: 1.5vh;
   border-color: #715659;
   border-style: solid;
   border-width: 0.2rem;
   background-color: #f4a22e;
-  justify-content: space-evenly;
-  height: 3rem;
-  width: 90%;
+  height: 10rem;
+  width: 8rem;
   transition-duration: 100ms;
   transition-property: background-color;
+  flex-basis: 90%;
+  overflow-x: hidden;
+  transition-duration: 170ms;
+  transition-property: transform;
+  gap: 4%;
 }
 
-p {
+.container:hover {
+  transform: scale(1.06);
+}
+
+.emptyContainer {
+  height: 1em;
+  flex-shrink: 0;
+}
+
+.toastText {
   margin: auto;
   font-size: large;
   font-weight: 500;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: black;
   overflow-x: auto;
+  max-width: 80%;
+  max-height: 30%;
 }
 
 .toastBtn {
@@ -46,4 +61,13 @@ p {
 
 .toastIcon:hover {
   transform: scale(1.35);
+}
+
+.toastButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+label {
+  text-align: center;
 }

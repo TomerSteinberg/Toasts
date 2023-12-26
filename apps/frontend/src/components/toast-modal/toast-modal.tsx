@@ -2,6 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styles from './toast-modal.module.css';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { useState } from 'react';
+import { useCreateToastMutation } from '../../store/services/toast.api';
 
 export interface Props {
   title: string;
@@ -23,6 +24,7 @@ export const ToastModal: React.FC<Props> = ({
     : '';
   const parsedTime = defaultDate ? defaultDate.split(' ')[1] : '';
 
+  const [trigger] = useCreateToastMutation();
   const [date, setDate] = useState(parsedDate);
   const [time, setTime] = useState(parsedTime);
   const [reason, setReason] = useState(

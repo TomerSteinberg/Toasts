@@ -5,7 +5,7 @@ import { Tooltip, Checkbox } from '@mui/material';
 import { useState } from 'react';
 import { ToastModal } from '../toast-modal';
 import { useLoginMutation } from '../../store/services/user.api';
-import { useLazyDeleteToastQuery } from '../../store/services/toast.api';
+import { useDeleteToastMutation } from '../../store/services/toast.api';
 
 export interface Props {
   name: string;
@@ -31,41 +31,41 @@ export const Toast: React.FC<Props> = ({
     fixedCacheKey: 'shared-update-post',
   });
 
-  const [trigger] = useLazyDeleteToastQuery();
+  const [trigger] = useDeleteToastMutation();
 
   const deleteToast = async (id: string, userId: string) => {
     await trigger({ id: id, userId: userId });
   };
   return (
     <div className={styles.container}>
+      <p className={styles.toastText}>{name}</p>
+      <p className={styles.toastText}>{reason}</p>
+      <label>{date}</label>
       {!pastToast && isUserToast && (
-        <button
-          className={styles.toastBtn}
-          onClick={() => {
-            if (result.data) {
-              deleteToast(id, result.data.id);
-            }
-          }}
-        >
-          <Tooltip title="מחיקת שתיה">
-            <ClearIcon className={styles.toastIcon} />
-          </Tooltip>
-        </button>
-      )}
-      <p>{name}</p>
-      <p>{date}</p>
-      <p>{reason}</p>
-      {!pastToast && isUserToast && (
-        <button
-          className={styles.toastBtn}
-          onClick={() => {
-            setIsOpen(true);
-          }}
-        >
-          <Tooltip title="שינוי שתיה">
-            <EditIcon className={styles.toastIcon} />
-          </Tooltip>
-        </button>
+        <div className={styles.toastButtonContainer}>
+          <button
+            className={styles.toastBtn}
+            onClick={() => {
+              if (result.data) {
+                deleteToast(id, result.data.id);
+              }
+            }}
+          >
+            <Tooltip title="מחיקת שתיה">
+              <ClearIcon className={styles.toastIcon} />
+            </Tooltip>
+          </button>
+          <button
+            className={styles.toastBtn}
+            onClick={() => {
+              setIsOpen(true);
+            }}
+          >
+            <Tooltip title="שינוי שתיה">
+              <EditIcon className={styles.toastIcon} />
+            </Tooltip>
+          </button>
+        </div>
       )}
       {pastToast && (
         <Checkbox
@@ -78,6 +78,10 @@ export const Toast: React.FC<Props> = ({
             },
           }}
         ></Checkbox>
+      )}
+
+      {!pastToast && !isUserToast && (
+        <div className={styles.emptyContainer}></div>
       )}
       <ToastModal
         title="שינוי שתיה"

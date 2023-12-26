@@ -1,4 +1,5 @@
 import { Toast, Score, Record } from '../../types';
+import { AddToast } from '../../types/add-toast.type';
 import { serverApi } from './server.api';
 
 const toastApi = serverApi.injectEndpoints({
@@ -15,10 +16,17 @@ const toastApi = serverApi.injectEndpoints({
     GetPastUserToasts: builder.query<Toast[], string>({
       query: (id) => ({ url: `user_past_toasts/${id}`, method: 'GET' }),
     }),
-    DeleteToast: builder.query<number, { id: string; userId: string }>({
+    DeleteToast: builder.mutation<number, { id: string; userId: string }>({
       query: (ids) => ({
         url: `remove_toast/${ids.id}?userId=${ids.userId}`,
         method: 'GET',
+      }),
+    }),
+    CreateToast: builder.mutation<Toast, AddToast>({
+      query: (body) => ({
+        url: 'toast',
+        method: 'POST',
+        body,
       }),
     }),
   }),
@@ -29,5 +37,6 @@ export const {
   useGetLeaderboardQuery,
   useGetTotalToastsQuery,
   useGetPastUserToastsQuery,
-  useLazyDeleteToastQuery,
+  useDeleteToastMutation,
+  useCreateToastMutation,
 } = toastApi;
