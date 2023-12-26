@@ -24,9 +24,9 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
     isLoading,
     isError,
   } = useGetPastUserToastsQuery(
-    result.isUninitialized || !result.data ? '' : result.data.id,
+    !result.isSuccess || !result.data ? '' : result.data.id,
     {
-      skip: result.isUninitialized,
+      skip: !result.isSuccess,
     }
   );
 

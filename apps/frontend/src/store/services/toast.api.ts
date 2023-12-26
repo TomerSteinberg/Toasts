@@ -6,6 +6,7 @@ const toastApi = serverApi.injectEndpoints({
   endpoints: (builder) => ({
     GetFutureToasts: builder.query<Toast[], void>({
       query: () => ({ url: 'future_toast', method: 'GET' }),
+      providesTags: ['toasts'],
     }),
     GetLeaderboard: builder.query<Score[], void>({
       query: () => ({ url: 'leaderboard', method: 'GET' }),
@@ -21,6 +22,7 @@ const toastApi = serverApi.injectEndpoints({
         url: `remove_toast/${ids.id}?userId=${ids.userId}`,
         method: 'GET',
       }),
+      invalidatesTags: ['toasts'],
     }),
     CreateToast: builder.mutation<Toast, AddToast>({
       query: (body) => ({
@@ -28,6 +30,7 @@ const toastApi = serverApi.injectEndpoints({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['toasts'],
     }),
     UpdateToast: builder.mutation<number, UpdateToast>({
       query: (body) => ({
@@ -35,6 +38,7 @@ const toastApi = serverApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
+      invalidatesTags: ['toasts'],
     }),
   }),
 });
