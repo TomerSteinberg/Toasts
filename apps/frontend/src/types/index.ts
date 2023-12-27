@@ -7,3 +7,4 @@ export * from './update-toast.type';
 export * from './logged-user.type';
 export * from './login.type';
 export * from './user.type';
+export * from './update-user.type';

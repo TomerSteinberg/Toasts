@@ -13,7 +13,14 @@
   border-color: #715659;
   border-style: solid;
   border-width: 0.2rem;
-  background-color: #f4a22e;
+  background: rgb(255, 114, 31);
+  background: linear-gradient(
+    248deg,
+    rgba(255, 114, 31, 1) 15%,
+    rgba(255, 114, 31, 1) 41%,
+    rgba(255, 133, 19, 1) 57%,
+    rgba(255, 160, 1, 1) 100%
+  );
   height: 10rem;
   width: 8rem;
   transition-duration: 100ms;

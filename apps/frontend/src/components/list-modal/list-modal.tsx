@@ -79,13 +79,6 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
             flexDirection: 'column',
           }}
         >
-          <div className={styles.colName}>
-            <label>שם</label>
-            <label>שעה</label>
-            <label>תאריך</label>
-            <label>סיבה לשתיה</label>
-            <label>שתיה מפשיעה</label>
-          </div>
           <ul>
             {toasts &&
               !isError &&

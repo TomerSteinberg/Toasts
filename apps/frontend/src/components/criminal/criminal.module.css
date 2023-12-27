@@ -5,7 +5,13 @@
   border-color: #715659;
   border-style: solid;
   border-width: 0.2rem;
-  background-color: #ff4242;
+  background: rgb(223, 44, 22);
+  background: linear-gradient(
+    25deg,
+    rgba(223, 44, 22, 1) 4%,
+    rgba(253, 61, 38, 1) 35%,
+    rgba(253, 29, 29, 1) 100%
+  );
   justify-content: space-evenly;
   height: 3rem;
   width: 90%;

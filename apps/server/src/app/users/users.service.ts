@@ -58,10 +58,14 @@ export class UsersService {
    * @return: object with number of effected rows
    */
   async updateUser(userParams: UpdateUser, userId: string) {
-    const affectedUsers = await this.UsersModel.update(userParams, {
-      where: { id: userId },
-    });
-    return affectedUsers;
+    try {
+      const affectedUsers = await this.UsersModel.update(userParams, {
+        where: { id: userId },
+      });
+      return affectedUsers;
+    } catch (e) {
+      throw new DuplicateUsernameError();
+    }
   }
 
   /**

@@ -41,14 +41,13 @@ export const ToastModal: React.FC<Props> = ({
   const [reason, setReason] = useState(
     defaultReason !== undefined ? defaultReason : ''
   );
-
   const isUpdateMode = (): boolean => {
     return defaultDate !== undefined && defaultReason !== undefined;
   };
 
-  const createToast = () => {
+  const createToast = async () => {
     if (result.data) {
-      createTrigger({
+      await createTrigger({
         reason: reason,
         userId: result.data.id,
         date: new Date(date + ' ' + time).toISOString(),
@@ -56,9 +55,9 @@ export const ToastModal: React.FC<Props> = ({
     }
   };
 
-  const updateToast = () => {
+  const updateToast = async () => {
     if (result.data && toastId) {
-      updateTrigger({
+      await updateTrigger({
         reason: reason,
         date: new Date(date + ' ' + time).toISOString(),
         id: toastId,

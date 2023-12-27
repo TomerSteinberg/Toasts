@@ -1,9 +1,17 @@
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import styles from './user-modal.module.css';
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
-import { useLoginMutation } from '../../store/services/user.api';
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useState,
+  useEffect,
+} from 'react';
+import {
+  useLoginMutation,
+  useUpdateUserMutation,
+} from '../../store/services/user.api';
 import { Login } from '../../types/login.type';
-
 export interface Props {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -20,19 +28,21 @@ export const UserModal: React.FC<Props> = ({
   const LOGIN = false;
   const SIGNUP = true;
 
-  const [updatePost] = useLoginMutation({
+  const [loginTrigger, result] = useLoginMutation({
     fixedCacheKey: 'shared-update-post',
   });
+
+  const [updateUser] = useUpdateUserMutation();
 
   const isUpdateUserMode = (): boolean => {
     return username !== undefined && password !== undefined;
   };
 
   const [usernameIn, setUsernameIn] = useState(
-    isUpdateUserMode() ? username : ''
+    username !== undefined ? username : ''
   );
   const [passwordIn, setPasswordIn] = useState(
-    isUpdateUserMode() ? password : ''
+    password !== undefined ? password : ''
   );
 
   const [error, setError] = useState('');
@@ -49,7 +59,7 @@ export const UserModal: React.FC<Props> = ({
   const sendLogin = async () => {
     if (usernameIn && passwordIn) {
       const loginParams: Login = { username: usernameIn, password: passwordIn };
-      await updatePost(loginParams)
+      await loginTrigger(loginParams)
         .unwrap()
         .then(() => {
           handleClose();
@@ -59,6 +69,29 @@ export const UserModal: React.FC<Props> = ({
         );
     }
   };
+
+  const sendUpdate = async () => {
+    if (usernameIn && passwordIn && result.data) {
+      await updateUser({
+        id: result.data.id,
+        username: usernameIn,
+        password: passwordIn,
+      })
+        .unwrap()
+        .then(() => {
+          loginTrigger({ username: usernameIn, password: passwordIn });
+          handleClose();
+        })
+        .catch((error: { data: { message: string } }) => {
+          setError(error.data.message);
+        });
+    }
+  };
+
+  useEffect(() => {
+    setPasswordIn(password !== undefined ? password : '');
+    setUsernameIn(username !== undefined ? username : '');
+  }, [isOpen]);
 
   const inputsFilled = (): boolean => {
     return (
@@ -95,7 +128,9 @@ export const UserModal: React.FC<Props> = ({
           }}
         >
           {isUpdateUserMode() ? (
-            <h2>פרטי משתמש</h2>
+            <div>
+              <h2>פרטי משתמש</h2>
+            </div>
           ) : (
             <div className={styles.titleContainer}>
               <h2
@@ -153,7 +188,7 @@ export const UserModal: React.FC<Props> = ({
                 }
                 disabled={!inputsFilled()}
                 onClick={() => {
-                  sendLogin();
+                  isUpdateUserMode() ? sendUpdate() : sendLogin();
                 }}
               >
                 {isUpdateUserMode()

@@ -10,6 +10,7 @@ const toastApi = serverApi.injectEndpoints({
     }),
     GetLeaderboard: builder.query<Score[], void>({
       query: () => ({ url: 'leaderboard', method: 'GET' }),
+      providesTags: ['user'],
     }),
     GetTotalToasts: builder.query<Record, void>({
       query: () => ({ url: 'count_toasts', method: 'GET' }),

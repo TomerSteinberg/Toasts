@@ -8,13 +8,6 @@
   background-color: transparent;
 }
 
-.colName {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  justify-content: space-around;
-}
-
 .closeIcon {
   transform: scale(1.25);
   cursor: pointer;

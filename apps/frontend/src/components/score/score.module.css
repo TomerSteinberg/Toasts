@@ -5,7 +5,14 @@
   border-color: #715659;
   border-style: solid;
   border-width: 0.2rem;
-  background-color: #fee92e;
+  background: rgb(254, 237, 46);
+  background: linear-gradient(
+    63deg,
+    rgba(254, 237, 46, 1) 16%,
+    rgba(254, 232, 33, 1) 44%,
+    rgba(254, 231, 22, 1) 67%,
+    rgba(255, 213, 1, 1) 89%
+  );
   justify-content: space-evenly;
   height: 3rem;
   width: 90%;

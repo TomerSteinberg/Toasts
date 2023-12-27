@@ -46,6 +46,16 @@ export const Toast: React.FC<Props> = ({
           <button
             className={styles.toastBtn}
             onClick={() => {
+              setIsOpen(true);
+            }}
+          >
+            <Tooltip title="שינוי שתיה">
+              <EditIcon className={styles.toastIcon} />
+            </Tooltip>
+          </button>
+          <button
+            className={styles.toastBtn}
+            onClick={() => {
               if (result.data) {
                 deleteToast(id, result.data.id);
               }
@@ -53,16 +63,6 @@ export const Toast: React.FC<Props> = ({
           >
             <Tooltip title="מחיקת שתיה">
               <ClearIcon className={styles.toastIcon} />
-            </Tooltip>
-          </button>
-          <button
-            className={styles.toastBtn}
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          >
-            <Tooltip title="שינוי שתיה">
-              <EditIcon className={styles.toastIcon} />
             </Tooltip>
           </button>
         </div>
