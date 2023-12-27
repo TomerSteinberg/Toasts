@@ -11,7 +11,7 @@ export interface Props {
   name: string;
   date: string;
   reason: string;
-  pastToast: boolean;
+  isPastToast: boolean;
   isUserToast: boolean;
   isConvicting?: boolean;
   id: string;
@@ -20,7 +20,7 @@ export const Toast: React.FC<Props> = ({
   name,
   date,
   reason,
-  pastToast,
+  isPastToast,
   isUserToast,
   isConvicting,
   id,
@@ -37,11 +37,13 @@ export const Toast: React.FC<Props> = ({
     await trigger({ id: id, userId: userId });
   };
   return (
-    <div className={styles.container}>
-      <p className={styles.toastText}>{name}</p>
-      <p className={styles.toastText}>{reason}</p>
+    <div className={isPastToast ? styles.pastContainer : styles.container}>
+      <p className={isPastToast ? styles.pastText : styles.toastText}>{name}</p>
+      <p className={isPastToast ? styles.pastText : styles.toastText}>
+        {reason}
+      </p>
       <label>{date}</label>
-      {!pastToast && isUserToast && (
+      {!isPastToast && isUserToast && (
         <div className={styles.toastButtonContainer}>
           <button
             className={styles.toastBtn}
@@ -67,20 +69,22 @@ export const Toast: React.FC<Props> = ({
           </button>
         </div>
       )}
-      {pastToast && (
-        <Checkbox
-          checked={isConvicting ? true : false}
-          disabled={true}
-          sx={{
-            color: 'black',
-            '&.Mui-checked': {
+      {isPastToast && (
+        <Tooltip title="?שתיה מפשיעה">
+          <Checkbox
+            checked={isConvicting ? true : false}
+            disabled={result.data && !result.data.isAdmin}
+            sx={{
               color: 'black',
-            },
-          }}
-        ></Checkbox>
+              '&.Mui-checked': {
+                color: 'black',
+              },
+            }}
+          ></Checkbox>
+        </Tooltip>
       )}
 
-      {!pastToast && !isUserToast && (
+      {!isPastToast && !isUserToast && (
         <div className={styles.emptyContainer}></div>
       )}
       <ToastModal

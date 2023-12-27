@@ -12,7 +12,15 @@ const userApi = serverApi.injectEndpoints({
       query: (body) => ({ url: `user/${body.id}`, method: 'PATCH', body }),
       invalidatesTags: ['toasts', 'user'],
     }),
+    Signup: builder.mutation<LoggedUser, Login>({
+      query: (body) => ({
+        url: 'signup',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useUpdateUserMutation } = userApi;
+export const { useLoginMutation, useUpdateUserMutation, useSignupMutation } =
+  userApi;

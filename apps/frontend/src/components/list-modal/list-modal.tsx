@@ -91,7 +91,7 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
                       reason={toast.reason}
                       date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
                       isUserToast={false}
-                      pastToast={true}
+                      isPastToast={true}
                       isConvicting={toast.isConvicting}
                       id={toast.id}
                     ></Toast>

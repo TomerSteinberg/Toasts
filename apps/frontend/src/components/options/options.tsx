@@ -7,6 +7,7 @@ import { Tooltip } from '@mui/material';
 import Fade from '@mui/material/Fade';
 import { UserModal } from '../user-modal';
 import { ListModal } from '../list-modal/list-modal';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 import { useLoginMutation } from '../../store/services/user.api';
 
@@ -68,6 +69,20 @@ export const Options = () => {
               <HistoryIcon className={styles.menuIcons} />
             </Tooltip>
           </button>
+          {result.data && result.data.isAdmin && (
+            <button className={styles.menuButton} onClick={() => {}}>
+              <Tooltip
+                title="הרשאות משתמשים"
+                TransitionComponent={Fade}
+                TransitionProps={{ timeout: 300 }}
+                placement="left"
+              >
+                <AdminPanelSettingsIcon
+                  className={styles.menuIcons}
+                ></AdminPanelSettingsIcon>
+              </Tooltip>
+            </button>
+          )}
         </div>
       )}
       <UserModal

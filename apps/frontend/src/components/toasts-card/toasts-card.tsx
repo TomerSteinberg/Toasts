@@ -43,7 +43,7 @@ export const ToastsCard = () => {
             return (
               <li key={toast.id} className={styles.toast}>
                 <Toast
-                  pastToast={false}
+                  isPastToast={false}
                   name={toast.user.username}
                   date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
                   reason={toast.reason}

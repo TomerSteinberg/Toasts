@@ -8,9 +8,8 @@ import {
   Get,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUser } from './dto/create-user.dto';
 import { UpdateUser } from './dto/update-user.dto';
-import { UserLogin } from './dto/user-login.dto';
+import { User } from './dto/user.dto';
 import { Users } from './entities/users.entity';
 
 @Controller()
@@ -18,17 +17,17 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post('signup')
-  signUp(@Body() userParams: CreateUser, @Query('adminId') adminId?: string) {
-    return this.usersService.signup(userParams, adminId);
+  signUp(@Body() userParams: User) {
+    return this.usersService.signup(userParams);
   }
 
   @Post('login')
-  login(@Body() userParams: UserLogin) {
+  login(@Body() userParams: User) {
     return this.usersService.login(userParams);
   }
 
   @Patch('user/:id')
-  updateUser(@Body() userParams: UpdateUser, @Param('id') userId: string) {
+  updateUser(@Body() userParams: User, @Param('id') userId: string) {
     return this.usersService.updateUser(userParams, userId);
   }
 

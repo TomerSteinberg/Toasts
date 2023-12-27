@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
-export class CreateUser {
+export class User {
   @IsNotEmpty()
   @IsString()
   @MinLength(1)
@@ -10,7 +10,4 @@ export class CreateUser {
   @IsString()
   @MinLength(7)
   password: string;
-
-  @IsNotEmpty()
-  isAdmin: boolean;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Users } from './entities/users.entity';
-import { CreateUser, UpdateUser, UserLogin } from './dto';
+import { User } from './dto';
 import {
   LoginError,
   CreateAdminError,
@@ -22,13 +22,7 @@ export class UsersService {
    * @param: username, password and adminId (if you want to make the new user an admin)
    * @return: if succeeded
    */
-  async signup(userParams: CreateUser, adminId?: string) {
-    if (userParams.isAdmin) {
-      const adminCheck = !(await this.isAdmin(adminId));
-      if (adminCheck) {
-        throw new CreateAdminError();
-      }
-    }
+  async signup(userParams: User) {
     try {
       const user = await this.UsersModel.create(userParams);
       return { id: user['id'], isAdmin: user['isAdmin'] };
@@ -42,7 +36,7 @@ export class UsersService {
    * @param: User credentials (Username and Password)
    * @return: User id and admin flag
    */
-  async login(userParams: UserLogin) {
+  async login(userParams: User) {
     const user = await this.UsersModel.findOne({
       where: { username: userParams.username, password: userParams.password },
     });
@@ -57,7 +51,7 @@ export class UsersService {
    * @param: update dto and id of instance
    * @return: object with number of effected rows
    */
-  async updateUser(userParams: UpdateUser, userId: string) {
+  async updateUser(userParams: User, userId: string) {
     try {
       const affectedUsers = await this.UsersModel.update(userParams, {
         where: { id: userId },

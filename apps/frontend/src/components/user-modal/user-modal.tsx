@@ -10,8 +10,10 @@ import {
 import {
   useLoginMutation,
   useUpdateUserMutation,
+  useSignupMutation,
 } from '../../store/services/user.api';
 import { Login } from '../../types/login.type';
+
 export interface Props {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -33,6 +35,8 @@ export const UserModal: React.FC<Props> = ({
   });
 
   const [updateUser] = useUpdateUserMutation();
+
+  const [signupTrigger] = useSignupMutation();
 
   const isUpdateUserMode = (): boolean => {
     return username !== undefined && password !== undefined;
@@ -67,6 +71,28 @@ export const UserModal: React.FC<Props> = ({
         .catch((error: { data: { message: string } }) =>
           setError(error.data.message)
         );
+    }
+  };
+
+  const sendSignup = async () => {
+    if (usernameIn && passwordIn) {
+      const signupParams: Login = {
+        username: usernameIn,
+        password: passwordIn,
+      };
+      await signupTrigger(signupParams)
+        .unwrap()
+        .then(() => {
+          loginTrigger(signupParams)
+            .unwrap()
+            .then(() => {
+              handleClose();
+            });
+        })
+        .catch((error: { data: { message: string } }) => {
+          setError(error.data.message);
+          return;
+        });
     }
   };
 
@@ -188,7 +214,11 @@ export const UserModal: React.FC<Props> = ({
                 }
                 disabled={!inputsFilled()}
                 onClick={() => {
-                  isUpdateUserMode() ? sendUpdate() : sendLogin();
+                  isUpdateUserMode()
+                    ? sendUpdate()
+                    : authType
+                    ? sendSignup()
+                    : sendLogin();
                 }}
               >
                 {isUpdateUserMode()
