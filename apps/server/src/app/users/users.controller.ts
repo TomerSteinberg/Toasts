@@ -8,7 +8,6 @@ import {
   Get,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UpdateUser } from './dto/update-user.dto';
 import { User } from './dto/user.dto';
 import { Users } from './entities/users.entity';
 

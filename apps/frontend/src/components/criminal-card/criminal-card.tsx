@@ -21,6 +21,7 @@ export const CriminalCard = () => {
                 <Criminal
                   username={criminal.users.username}
                   type={criminal.criminalType}
+                  id={criminal.id}
                 ></Criminal>
               </li>
             );

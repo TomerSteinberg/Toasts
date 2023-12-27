@@ -20,7 +20,7 @@
 }
 
 .container:hover {
-  transform: scale(1.07);
+  transform: scale(1.04);
 }
 
 p {
@@ -32,4 +32,21 @@ p {
   overflow-x: auto;
   max-width: 60%;
   max-height: 90%;
+}
+
+.criminalIcon {
+  cursor: pointer;
+  transition-duration: 150ms;
+  transition-property: transform !important;
+}
+
+.criminalIcon:hover {
+  transform: scale(1.25);
+}
+
+.criminalButton {
+  border: none;
+  background-color: transparent;
+  padding-right: 0.5em;
+  padding-top: 0.5em;
 }

@@ -2,12 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Users } from './entities/users.entity';
 import { User } from './dto';
-import {
-  LoginError,
-  CreateAdminError,
-  DuplicateUsernameError,
-  AdminIdError,
-} from './exceptions';
+import { LoginError, DuplicateUsernameError, AdminIdError } from './exceptions';
 import { z } from 'zod';
 
 @Injectable()
