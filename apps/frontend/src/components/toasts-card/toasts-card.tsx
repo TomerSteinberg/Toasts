@@ -12,7 +12,7 @@ import { useLoginMutation } from '../../store/services/user.api';
 export const ToastsCard = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
 
   const { data: futureToasts } = useGetFutureToastsQuery();

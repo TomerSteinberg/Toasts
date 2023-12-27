@@ -16,7 +16,7 @@ export interface Props {
 export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
 
   const {

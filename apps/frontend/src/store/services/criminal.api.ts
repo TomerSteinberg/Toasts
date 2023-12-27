@@ -14,7 +14,22 @@ const criminalApi = serverApi.injectEndpoints({
       }),
       invalidatesTags: ['criminal'],
     }),
+    UpdateCriminal: builder.mutation<
+      number,
+      { criminalType: boolean; id: string; adminId: string }
+    >({
+      query: (body) => ({
+        url: `criminals/${body.id}?adminId=${body.adminId}`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: ['criminal'],
+    }),
   }),
 });
 
-export const { useGetCriminalsQuery, useDeleteCriminalMutation } = criminalApi;
+export const {
+  useGetCriminalsQuery,
+  useDeleteCriminalMutation,
+  useUpdateCriminalMutation,
+} = criminalApi;

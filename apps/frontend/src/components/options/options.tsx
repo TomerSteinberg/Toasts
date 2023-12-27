@@ -22,7 +22,7 @@ export const Options = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
 
   return (

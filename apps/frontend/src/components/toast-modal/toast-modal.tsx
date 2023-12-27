@@ -32,7 +32,7 @@ export const ToastModal: React.FC<Props> = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
   const [createTrigger] = useCreateToastMutation();
   const [updateTrigger] = useUpdateToastMutation();

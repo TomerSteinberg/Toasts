@@ -28,7 +28,7 @@ export const Toast: React.FC<Props> = ({
   const [isOpen, setIsOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
 
   const [trigger] = useDeleteToastMutation();

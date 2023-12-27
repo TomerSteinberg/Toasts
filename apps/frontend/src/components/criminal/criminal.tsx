@@ -2,7 +2,11 @@ import { useLoginMutation } from '../../store/services/user.api';
 import ClearIcon from '@mui/icons-material/Clear';
 import styles from './criminal.module.css';
 import { Tooltip } from '@mui/material';
-import { useDeleteCriminalMutation } from '../../store/services/criminal.api';
+import {
+  useDeleteCriminalMutation,
+  useUpdateCriminalMutation,
+} from '../../store/services/criminal.api';
+import { Checkbox } from '@mui/material';
 
 export interface Props {
   username: string;
@@ -13,10 +17,21 @@ export interface Props {
 export const Criminal: React.FC<Props> = ({ username, type, id }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
 
+  const [updateCriminalTrigger] = useUpdateCriminalMutation();
   const [deleteCriminalTrigger] = useDeleteCriminalMutation();
+  const updateCriminal = async () => {
+    if (result.data && result.data.isAdmin) {
+      await updateCriminalTrigger({
+        criminalType: !type,
+        id: id,
+        adminId: result.data.id,
+      });
+    }
+  };
+
   const deleteCriminal = async () => {
     if (result.data && result.data.isAdmin) {
       await deleteCriminalTrigger({ id: id, adminId: result.data.id });
@@ -39,6 +54,20 @@ export const Criminal: React.FC<Props> = ({ username, type, id }) => {
       )}
       <p>{username}</p>
       <p>{type ? 'פרסונה נון גרטה' : 'פושע רגיל'}</p>
+      {result.data && result.data.isAdmin && (
+        <Checkbox
+          checked={type ? true : false}
+          onChange={() => {
+            updateCriminal();
+          }}
+          sx={{
+            color: 'black',
+            '&.Mui-checked': {
+              color: 'black',
+            },
+          }}
+        ></Checkbox>
+      )}
     </div>
   );
 };

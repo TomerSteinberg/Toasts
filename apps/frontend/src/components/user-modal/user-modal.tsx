@@ -31,7 +31,7 @@ export const UserModal: React.FC<Props> = ({
   const SIGNUP = true;
 
   const [loginTrigger, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
 
   const [updateUser] = useUpdateUserMutation();

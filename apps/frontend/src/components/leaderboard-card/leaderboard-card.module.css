@@ -13,6 +13,7 @@
 .empty {
   opacity: 0.6;
   user-select: none;
+  max-height: 100%;
 }
 
 label {
