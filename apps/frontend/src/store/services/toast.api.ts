@@ -18,6 +18,7 @@ const toastApi = serverApi.injectEndpoints({
     GetPastUserToasts: builder.query<Toast[], string>({
       query: (id) => ({ url: `user_past_toasts/${id}`, method: 'GET' }),
       providesTags: ['user', 'criminal'],
+      serializeQueryArgs: (arg) => ({ id: arg }),
     }),
     DeleteToast: builder.mutation<number, { id: string; userId: string }>({
       query: (ids) => ({
@@ -40,7 +41,7 @@ const toastApi = serverApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: ['toasts'],
+      invalidatesTags: ['toasts', 'criminal'],
     }),
   }),
 });

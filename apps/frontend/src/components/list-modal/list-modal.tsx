@@ -1,9 +1,18 @@
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Select,
+} from '@mui/material';
 import styles from './list-modal.module.css';
 import { Dispatch, SetStateAction } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useGetPastUserToastsQuery } from '../../store/services/toast.api';
-import { useLoginMutation } from '../../store/services/user.api';
+import {
+  useGetUsersQuery,
+  useLoginMutation,
+} from '../../store/services/user.api';
 import { Toast as ToastType } from '../../types';
 import { Toast } from '../toast';
 import { format } from 'date-fns';
@@ -19,6 +28,8 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
     fixedCacheKey: 'userKey',
   });
 
+  const { data: allUsers } = useGetUsersQuery();
+
   const {
     data: toasts,
     isLoading,
@@ -29,6 +40,10 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
       skip: !result.isSuccess,
     }
   );
+
+  const getUserHistory = async (id: string) => {
+    //refetch(id);
+  };
 
   const handleClose = () => {
     setIsOpen(false);
@@ -79,7 +94,35 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
             flexDirection: 'column',
           }}
         >
-          <ul>
+          {result.data && result.data.isAdmin && (
+            <Select
+              onChange={(e) => {
+                getUserHistory(e.target.value);
+              }}
+              defaultValue={result.data.id}
+              dir="rtl"
+              autoWidth
+              sx={{
+                maxWidth: '60%',
+                marginLeft: '20%',
+                marginBottom: '5%',
+                maxHeight: '20%',
+              }}
+            >
+              {allUsers ? (
+                allUsers.map((user) => {
+                  return (
+                    <MenuItem dir="rtl" value={user.id}>
+                      {user.username}
+                    </MenuItem>
+                  );
+                })
+              ) : (
+                <p>אין</p>
+              )}
+            </Select>
+          )}
+          <ul className={styles.toastList}>
             {toasts &&
               !isError &&
               !isLoading &&
@@ -94,6 +137,7 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
                       isPastToast={true}
                       isConvicting={toast.isConvicting}
                       id={toast.id}
+                      userId={toast.userId}
                     ></Toast>
                   </li>
                 );

@@ -5,7 +5,14 @@ import { Tooltip, Checkbox } from '@mui/material';
 import { useState } from 'react';
 import { ToastModal } from '../toast-modal';
 import { useLoginMutation } from '../../store/services/user.api';
-import { useDeleteToastMutation } from '../../store/services/toast.api';
+import {
+  useDeleteToastMutation,
+  useUpdateToastMutation,
+} from '../../store/services/toast.api';
+import {
+  useCreateCriminalMutation,
+  useGetCriminalsQuery,
+} from '../../store/services/criminal.api';
 
 export interface Props {
   name: string;
@@ -15,6 +22,7 @@ export interface Props {
   isUserToast: boolean;
   isConvicting?: boolean;
   id: string;
+  userId: string;
 }
 export const Toast: React.FC<Props> = ({
   name,
@@ -24,6 +32,7 @@ export const Toast: React.FC<Props> = ({
   isUserToast,
   isConvicting,
   id,
+  userId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -32,6 +41,30 @@ export const Toast: React.FC<Props> = ({
   });
 
   const [trigger] = useDeleteToastMutation();
+  const [triggerUpdate] = useUpdateToastMutation();
+  const { data: criminals } = useGetCriminalsQuery();
+  const [triggerCreateCriminal] = useCreateCriminalMutation();
+
+  const updateToastDidHappen = async () => {
+    if (result.data && result.data.isAdmin) {
+      await triggerUpdate({
+        userId: result.data.id,
+        isConvicting: !isConvicting,
+        id: id,
+      });
+      if (
+        !isConvicting &&
+        criminals &&
+        !criminals.find((criminal) => criminal.users.id === userId)
+      ) {
+        triggerCreateCriminal({
+          criminalType: false,
+          userId: userId,
+          adminId: result.data.id,
+        });
+      }
+    }
+  };
 
   const deleteToast = async (id: string, userId: string) => {
     await trigger({ id: id, userId: userId });
@@ -72,6 +105,9 @@ export const Toast: React.FC<Props> = ({
       {isPastToast && (
         <Tooltip title="?שתיה מפשיעה">
           <Checkbox
+            onChange={() => {
+              updateToastDidHappen();
+            }}
             checked={isConvicting ? true : false}
             disabled={result.data && !result.data.isAdmin}
             sx={{

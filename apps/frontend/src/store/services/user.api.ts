@@ -19,8 +19,18 @@ const userApi = serverApi.injectEndpoints({
         body,
       }),
     }),
+    GetUsers: builder.query<{ username: string; id: string }[], void>({
+      query: () => ({
+        url: 'users',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useUpdateUserMutation, useSignupMutation } =
-  userApi;
+export const {
+  useLoginMutation,
+  useUpdateUserMutation,
+  useSignupMutation,
+  useGetUsersQuery,
+} = userApi;

@@ -53,6 +53,7 @@ export const ToastsCard = () => {
                       : false
                   }
                   id={toast.id}
+                  userId={toast.userId}
                 ></Toast>
               </li>
             );

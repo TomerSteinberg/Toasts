@@ -13,7 +13,7 @@ export const LeaderboardCard = () => {
   return (
     <Card title="🏆לוח תוצאות" width="25vw" height="95vh">
       <div className={styles.emptyContainer}></div>
-      <ul className={styles.score_list}>
+      <ul className={styles.scoreList}>
         {leaderboard === undefined || leaderboard.length === 0 ? (
           <li>
             <p className={styles.empty}>אין נקודות</p>
@@ -32,13 +32,13 @@ export const LeaderboardCard = () => {
           })
         )}
       </ul>
-      <div className={styles.count_container}>
-        <h1 className={styles.toast_number}>
+      <div className={styles.countContainer}>
+        <h1 className={styles.toastNumber}>
           {!toastNumber
             ? 'אין / אין'
             : toastNumber.currentPeriod + ' / ' + toastNumber.record}
         </h1>
-        <div className={styles.number_label}>
+        <div className={styles.numberLabel}>
           <label>נוכחי</label>
           <label>שיא </label>
         </div>

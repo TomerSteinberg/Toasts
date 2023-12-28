@@ -107,6 +107,7 @@ export class UsersService {
   async getUsers(): Promise<Users[]> {
     const users = this.UsersModel.findAll({
       attributes: { exclude: ['password'] },
+      order: [['username', 'ASC']],
     });
     return users;
   }
