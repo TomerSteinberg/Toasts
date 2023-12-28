@@ -131,7 +131,11 @@ export class ToastsService {
     }
 
     return {
-      currentPeriod: parseInt(currPeriodToasts.toasts),
+      currentPeriod:
+        new Date(currPeriodToasts.year).getFullYear() ===
+        new Date().getFullYear()
+          ? parseInt(currPeriodToasts.toasts)
+          : 0,
       record: Math.max(
         parseInt(maxAfterJune.toasts),
         parseInt(maxBeforeJune.toasts)

@@ -20,10 +20,6 @@
   transition-property: transform;
 }
 
-.container:hover {
-  transform: scale(1.04);
-}
-
 .placement {
   direction: rtl;
 }

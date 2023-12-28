@@ -55,18 +55,20 @@ export const Criminal: React.FC<Props> = ({ username, type, id }) => {
       <p>{username}</p>
       <p>{type ? 'פרסונה נון גרטה' : 'פושע רגיל'}</p>
       {result.data && result.data.isAdmin && (
-        <Checkbox
-          checked={type ? true : false}
-          onChange={() => {
-            updateCriminal();
-          }}
-          sx={{
-            color: 'black',
-            '&.Mui-checked': {
+        <Tooltip title="סוג פושע">
+          <Checkbox
+            checked={type ? true : false}
+            onChange={() => {
+              updateCriminal();
+            }}
+            sx={{
               color: 'black',
-            },
-          }}
-        ></Checkbox>
+              '&.Mui-checked': {
+                color: 'black',
+              },
+            }}
+          ></Checkbox>
+        </Tooltip>
       )}
     </div>
   );

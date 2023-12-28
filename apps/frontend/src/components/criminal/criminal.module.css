@@ -19,10 +19,6 @@
   transition-property: transform;
 }
 
-.container:hover {
-  transform: scale(1.04);
-}
-
 p {
   margin: auto;
   font-size: large;
