@@ -9,7 +9,7 @@ export const CriminalCard = () => {
   return (
     <Card title="🚷פושעים" width="25vw" height="95vh">
       <div className={styles.emptyContainer}></div>
-      <ul>
+      <ul className={styles.criminalList}>
         {criminals === undefined || criminals.length === 0 ? (
           <li>
             <p className={styles.empty}>אין פושעים</p>
@@ -21,6 +21,7 @@ export const CriminalCard = () => {
                 <Criminal
                   username={criminal.users.username}
                   type={criminal.criminalType}
+                  id={criminal.id}
                 ></Criminal>
               </li>
             );

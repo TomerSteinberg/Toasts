@@ -61,7 +61,7 @@
 }
 
 .menuIcons {
-  font-size: 2.5em !important;
+  font-size: 3em !important;
   transition-duration: 200ms;
   transition-property: transform !important;
   animation: menu_rotate 250ms linear;
