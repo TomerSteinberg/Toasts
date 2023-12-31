@@ -40,7 +40,7 @@ const toastApi = serverApi.injectEndpoints({
       query: (body) => ({
         url: `toast/${body.id}/?userId=${body.userId}`,
         method: 'PATCH',
-        body,
+        body: { reason: body.reason, date: body.date },
       }),
       invalidatesTags: ['toasts', 'criminal', 'score'],
     }),

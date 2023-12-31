@@ -7,6 +7,7 @@ import {
   useUpdateToastMutation,
 } from '../../store/services/toast.api';
 import { useLoginMutation } from '../../store/services/user.api';
+import { UserSelect } from '../user-select/user-select';
 
 export interface Props {
   title: string;
@@ -41,6 +42,12 @@ export const ToastModal: React.FC<Props> = ({
   const [reason, setReason] = useState(
     defaultReason !== undefined ? defaultReason : ''
   );
+  const [selected, setSelected] = useState('');
+
+  const handleSelected = (e: string) => {
+    setSelected(e);
+  };
+
   const isUpdateMode = (): boolean => {
     return defaultDate !== undefined && defaultReason !== undefined;
   };
@@ -49,9 +56,11 @@ export const ToastModal: React.FC<Props> = ({
     if (result.data) {
       await createTrigger({
         reason: reason,
-        userId: result.data.id,
+        userId:
+          result.data.isAdmin && selected !== '' ? selected : result.data.id,
         date: new Date(date + ' ' + time).toISOString(),
       });
+      setSelected('');
     }
   };
 
@@ -76,6 +85,7 @@ export const ToastModal: React.FC<Props> = ({
     setTime('');
     setDate('');
     setReason('');
+    setSelected('');
   };
 
   const handleClose = () => {
@@ -113,6 +123,7 @@ export const ToastModal: React.FC<Props> = ({
             background: '#f9eeda',
             display: 'flex',
             flexDirection: 'column',
+            gap: '1em',
           }}
         >
           <div className={styles.pickerContainer}>
@@ -144,6 +155,9 @@ export const ToastModal: React.FC<Props> = ({
             maxLength={20}
             placeholder="סיבה לשתיה"
           />
+          {result.data && result.data.isAdmin && !isUpdateMode() && (
+            <UserSelect selectFunction={handleSelected} />
+          )}
           <div className={styles.actionContainer}>
             <button
               className={

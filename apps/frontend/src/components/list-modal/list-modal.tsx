@@ -1,10 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  MenuItem,
-  Select,
-} from '@mui/material';
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import styles from './list-modal.module.css';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,6 +11,7 @@ import { Toast as ToastType } from '../../types';
 import { Toast } from '../toast';
 import { format } from 'date-fns';
 import { User } from '../user';
+import { UserSelect } from '../user-select/user-select';
 
 export interface Props {
   isOpen: boolean;
@@ -99,32 +94,7 @@ export const ListModal: React.FC<Props> = ({
           }}
         >
           {isHistory && result.data && result.data.isAdmin && (
-            <Select
-              onChange={(e) => {
-                getUserHistory(e.target.value);
-              }}
-              defaultValue={result.data.id}
-              dir="rtl"
-              autoWidth
-              sx={{
-                maxWidth: '60%',
-                marginLeft: '20%',
-                marginBottom: '5%',
-                maxHeight: '20%',
-              }}
-            >
-              {allUsers ? (
-                allUsers.map((user) => {
-                  return (
-                    <MenuItem dir="rtl" value={user.id}>
-                      {user.username}
-                    </MenuItem>
-                  );
-                })
-              ) : (
-                <p>אין</p>
-              )}
-            </Select>
+            <UserSelect selectFunction={getUserHistory} />
           )}
           <ul className={styles.toastList}>
             {isHistory &&

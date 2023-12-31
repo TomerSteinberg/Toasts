@@ -76,32 +76,33 @@ export const Toast: React.FC<Props> = ({
         {reason}
       </p>
       <label>{date}</label>
-      {!isPastToast && isUserToast && (
-        <div className={styles.toastButtonContainer}>
-          <button
-            className={styles.toastBtn}
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          >
-            <Tooltip title="שינוי שתיה">
-              <EditIcon className={styles.toastIcon} />
-            </Tooltip>
-          </button>
-          <button
-            className={styles.toastBtn}
-            onClick={() => {
-              if (result.data) {
-                deleteToast(id, result.data.id);
-              }
-            }}
-          >
-            <Tooltip title="מחיקת שתיה">
-              <ClearIcon className={styles.toastIcon} />
-            </Tooltip>
-          </button>
-        </div>
-      )}
+      {!isPastToast &&
+        (isUserToast || (result.data && result.data.isAdmin)) && (
+          <div className={styles.toastButtonContainer}>
+            <button
+              className={styles.toastBtn}
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              <Tooltip title="שינוי שתיה">
+                <EditIcon className={styles.toastIcon} />
+              </Tooltip>
+            </button>
+            <button
+              className={styles.toastBtn}
+              onClick={() => {
+                if (result.data) {
+                  deleteToast(id, result.data.id);
+                }
+              }}
+            >
+              <Tooltip title="מחיקת שתיה">
+                <ClearIcon className={styles.toastIcon} />
+              </Tooltip>
+            </button>
+          </div>
+        )}
       {isPastToast && (
         <Tooltip title="?שתיה מפשיעה">
           <Checkbox
@@ -120,7 +121,7 @@ export const Toast: React.FC<Props> = ({
         </Tooltip>
       )}
 
-      {!isPastToast && !isUserToast && (
+      {!isPastToast && !isUserToast && result.data && !result.data.isAdmin && (
         <div className={styles.emptyContainer}></div>
       )}
       <ToastModal

@@ -77,12 +77,17 @@ export class ToastsService {
    */
   async removeToast(toastId: string, userId: string) {
     const doesUserExist = await this.usersService.doesExist(userId);
+    const isAdmin = await this.usersService.isAdmin(userId);
     if (!doesUserExist) {
       throw new InvalidUserID();
     }
-    const destroy = await this.toastsModel.destroy({
-      where: { id: toastId, userId },
-    });
+    const destroy = isAdmin
+      ? await this.toastsModel.destroy({
+          where: { id: toastId },
+        })
+      : await this.toastsModel.destroy({
+          where: { id: toastId, userId },
+        });
     return destroy;
   }
 
