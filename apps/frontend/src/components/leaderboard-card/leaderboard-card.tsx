@@ -39,8 +39,8 @@ export const LeaderboardCard = () => {
             : toastNumber.currentPeriod + ' / ' + toastNumber.record}
         </h1>
         <div className={styles.numberLabel}>
-          <label>נוכחי</label>
-          <label>שיא </label>
+          <label className={styles.recordLabel}>נוכחי</label>
+          <label className={styles.recordLabel}>שיא </label>
         </div>
       </div>
     </Card>

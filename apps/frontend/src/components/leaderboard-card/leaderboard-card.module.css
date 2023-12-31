@@ -48,3 +48,7 @@ h1 {
   width: 100%;
   padding: 0 0 0 0;
 }
+
+.recordLabel {
+  font-size: large;
+}
