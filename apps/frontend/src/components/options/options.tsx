@@ -13,6 +13,7 @@ import { useLoginMutation } from '../../store/services/user.api';
 
 export const Options = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isPermissionOpen, setIsPermissionOpen] = useState(false);
   const [updateUserOpen, setUpdateUserOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
@@ -70,7 +71,12 @@ export const Options = () => {
             </Tooltip>
           </button>
           {result.data && result.data.isAdmin && (
-            <button className={styles.menuButton} onClick={() => {}}>
+            <button
+              className={styles.menuButton}
+              onClick={() => {
+                setIsPermissionOpen(true);
+              }}
+            >
               <Tooltip
                 title="הרשאות משתמשים"
                 TransitionComponent={Fade}
@@ -91,7 +97,18 @@ export const Options = () => {
         username={result.data?.username}
         password={result.data?.password}
       />
-      <ListModal isOpen={isHistoryOpen} setIsOpen={setIsHistoryOpen} />
+      <ListModal
+        title="היסטורית שתיות"
+        isHistory={true}
+        isOpen={isHistoryOpen}
+        setIsOpen={setIsHistoryOpen}
+      />
+      <ListModal
+        title="הרשאות משתמשים"
+        isHistory={false}
+        isOpen={isPermissionOpen}
+        setIsOpen={setIsPermissionOpen}
+      />
     </div>
   );
 };

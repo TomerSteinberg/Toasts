@@ -48,7 +48,7 @@ export const ToastsCard = () => {
                   date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
                   reason={toast.reason}
                   isUserToast={
-                    result.data !== undefined && toast.userId === result.data.id
+                    result.data && toast.userId === result.data.id
                       ? true
                       : false
                   }

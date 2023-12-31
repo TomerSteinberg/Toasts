@@ -9,9 +9,9 @@ export interface Props {
 export const Score: React.FC<Props> = ({ placement, username, score }) => {
   return (
     <div className={styles.container}>
-      <h2 className="placement">#{placement}</h2>
-      <p>{username}</p>
-      <p>{score}</p>
+      <h2 className={styles.scoreText}>#{placement}</h2>
+      <p className={styles.scoreText}>{username}</p>
+      <p className={styles.scoreText}>{score}</p>
     </div>
   );
 };

@@ -32,7 +32,7 @@ const criminalApi = serverApi.injectEndpoints({
       query: (body) => ({
         url: `criminals?adminId=${body.adminId}`,
         method: 'POST',
-        body,
+        body: { criminalType: body.criminalType, userId: body.userId },
       }),
       invalidatesTags: ['criminal'],
     }),

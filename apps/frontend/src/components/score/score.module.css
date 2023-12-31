@@ -24,12 +24,13 @@
   direction: rtl;
 }
 
-p,
-h2 {
+.scoreText {
   margin: auto;
   font-size: large;
   font-weight: 500;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: black;
-  overflow-x: auto;
+  overflow-x: hidden;
+  width: 70%;
+  text-align: center;
 }

@@ -32,3 +32,15 @@
 .emptyText {
   color: #00000080;
 }
+
+.titleText {
+  color: black;
+  transition-property: transform;
+  transition-duration: 100ms;
+  margin: auto;
+  font-size: 1.3em;
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: black;
+  overflow-x: auto;
+}

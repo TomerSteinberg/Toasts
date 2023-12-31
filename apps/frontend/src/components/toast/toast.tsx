@@ -48,7 +48,7 @@ export const Toast: React.FC<Props> = ({
   const updateToastDidHappen = async () => {
     if (result.data && result.data.isAdmin) {
       await triggerUpdate({
-        userId: result.data.id,
+        userId: userId,
         isConvicting: !isConvicting,
         id: id,
       });

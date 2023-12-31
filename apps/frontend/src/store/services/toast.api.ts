@@ -14,6 +14,7 @@ const toastApi = serverApi.injectEndpoints({
     }),
     GetTotalToasts: builder.query<Record, void>({
       query: () => ({ url: 'count_toasts', method: 'GET' }),
+      providesTags: ['score'],
     }),
     GetPastUserToasts: builder.query<Toast[], string>({
       query: (id) => ({ url: `user_past_toasts/${id}`, method: 'GET' }),
@@ -41,7 +42,7 @@ const toastApi = serverApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: ['toasts', 'criminal'],
+      invalidatesTags: ['toasts', 'criminal', 'score'],
     }),
   }),
 });
@@ -50,7 +51,7 @@ export const {
   useGetFutureToastsQuery,
   useGetLeaderboardQuery,
   useGetTotalToastsQuery,
-  useGetPastUserToastsQuery,
+  useLazyGetPastUserToastsQuery,
   useDeleteToastMutation,
   useCreateToastMutation,
   useUpdateToastMutation,

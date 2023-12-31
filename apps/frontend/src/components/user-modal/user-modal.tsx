@@ -123,7 +123,7 @@ export const UserModal: React.FC<Props> = ({
     return (
       usernameIn !== undefined &&
       passwordIn !== undefined &&
-      passwordIn.length > 8
+      passwordIn.length >= 8
     );
   };
 
@@ -155,7 +155,7 @@ export const UserModal: React.FC<Props> = ({
         >
           {isUpdateUserMode() ? (
             <div>
-              <h2>פרטי משתמש</h2>
+              <h2 className={styles.updateTitle}>פרטי משתמש</h2>
             </div>
           ) : (
             <div className={styles.titleContainer}>

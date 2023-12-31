@@ -117,7 +117,7 @@ export const ToastModal: React.FC<Props> = ({
         >
           <div className={styles.pickerContainer}>
             <input
-              defaultValue={date}
+              defaultValue={parsedDate}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 if (new Date(e.target.value) >= new Date()) {
                   setDate(e.target.value);
@@ -128,7 +128,7 @@ export const ToastModal: React.FC<Props> = ({
               type="date"
             />
             <input
-              defaultValue={time}
+              defaultValue={parsedTime}
               className={styles.timeInput}
               type="time"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -137,7 +137,7 @@ export const ToastModal: React.FC<Props> = ({
             />
           </div>
           <input
-            defaultValue={reason}
+            defaultValue={defaultReason}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setReason(e.target.value);
             }}

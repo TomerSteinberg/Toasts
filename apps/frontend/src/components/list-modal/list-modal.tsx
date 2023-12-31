@@ -6,9 +6,9 @@ import {
   Select,
 } from '@mui/material';
 import styles from './list-modal.module.css';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { useGetPastUserToastsQuery } from '../../store/services/toast.api';
+import { useLazyGetPastUserToastsQuery } from '../../store/services/toast.api';
 import {
   useGetUsersQuery,
   useLoginMutation,
@@ -16,13 +16,21 @@ import {
 import { Toast as ToastType } from '../../types';
 import { Toast } from '../toast';
 import { format } from 'date-fns';
+import { User } from '../user';
 
 export interface Props {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  isHistory: boolean;
+  title: string;
 }
 
-export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
+export const ListModal: React.FC<Props> = ({
+  isOpen,
+  setIsOpen,
+  isHistory,
+  title,
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
     fixedCacheKey: 'userKey',
@@ -30,19 +38,15 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
 
   const { data: allUsers } = useGetUsersQuery();
 
-  const {
-    data: toasts,
-    isLoading,
-    isError,
-  } = useGetPastUserToastsQuery(
-    !result.isSuccess || !result.data ? '' : result.data.id,
-    {
-      skip: !result.isSuccess,
+  const [triggerPastToasts, toasts] = useLazyGetPastUserToastsQuery();
+  useEffect(() => {
+    if (result.data) {
+      triggerPastToasts(result.data.id);
     }
-  );
+  }, [result.data, isOpen]);
 
   const getUserHistory = async (id: string) => {
-    //refetch(id);
+    triggerPastToasts(id);
   };
 
   const handleClose = () => {
@@ -76,7 +80,7 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
           }}
         >
           <div className={styles.titleContainer}>
-            <h2> היסטורית שתיות </h2>
+            <h2 className={styles.titleText}> {title}</h2>
             <button
               className={styles.closeBtn}
               onClick={() => {
@@ -94,7 +98,7 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
             flexDirection: 'column',
           }}
         >
-          {result.data && result.data.isAdmin && (
+          {isHistory && result.data && result.data.isAdmin && (
             <Select
               onChange={(e) => {
                 getUserHistory(e.target.value);
@@ -123,10 +127,9 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
             </Select>
           )}
           <ul className={styles.toastList}>
-            {toasts &&
-              !isError &&
-              !isLoading &&
-              toasts.map((toast: ToastType) => {
+            {isHistory &&
+              toasts.data &&
+              toasts.data.map((toast: ToastType) => {
                 return (
                   <li key={toast.id}>
                     <Toast
@@ -139,6 +142,23 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
                       id={toast.id}
                       userId={toast.userId}
                     ></Toast>
+                  </li>
+                );
+              })}
+            {isHistory && toasts.data && toasts.data.length === 0 && (
+              <p className={styles.emptyText}>אין שתיות בהיסטוריה</p>
+            )}
+
+            {!isHistory &&
+              allUsers &&
+              allUsers.map((user) => {
+                return (
+                  <li>
+                    <User
+                      username={user.username}
+                      id={user.id}
+                      isAdmin={user.isAdmin}
+                    />
                   </li>
                 );
               })}

@@ -19,11 +19,22 @@ const userApi = serverApi.injectEndpoints({
         body,
       }),
     }),
-    GetUsers: builder.query<{ username: string; id: string }[], void>({
+    GetUsers: builder.query<
+      { username: string; id: string; isAdmin: boolean }[],
+      void
+    >({
       query: () => ({
         url: 'users',
         method: 'GET',
       }),
+      providesTags: ['user'],
+    }),
+    MakeAdmin: builder.mutation<number, { id: string; adminId: string }>({
+      query: (ids) => ({
+        url: `make_admin/${ids.id}?adminId=${ids.adminId}`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: ['user'],
     }),
   }),
 });
@@ -33,4 +44,5 @@ export const {
   useUpdateUserMutation,
   useSignupMutation,
   useGetUsersQuery,
+  useMakeAdminMutation,
 } = userApi;
