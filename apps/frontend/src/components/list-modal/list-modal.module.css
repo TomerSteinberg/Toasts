@@ -8,13 +8,6 @@
   background-color: transparent;
 }
 
-.colName {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  justify-content: space-around;
-}
-
 .closeIcon {
   transform: scale(1.25);
   cursor: pointer;
@@ -22,4 +15,32 @@
 .closeIcon:hover {
   transform: scale(1.5);
   color: red;
+}
+
+.toastList {
+  overflow-y: auto;
+  margin: auto;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  height: 100vh;
+  width: 100%;
+  padding: 0 0 0 0;
+}
+
+.emptyText {
+  color: #00000080;
+}
+
+.titleText {
+  color: black;
+  transition-property: transform;
+  transition-duration: 100ms;
+  margin: auto;
+  font-size: 1.3em;
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: black;
+  overflow-x: auto;
 }

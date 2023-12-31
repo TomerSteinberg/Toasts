@@ -2,6 +2,11 @@ import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styles from './toast-modal.module.css';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { useState } from 'react';
+import {
+  useCreateToastMutation,
+  useUpdateToastMutation,
+} from '../../store/services/toast.api';
+import { useLoginMutation } from '../../store/services/user.api';
 
 export interface Props {
   title: string;
@@ -9,6 +14,7 @@ export interface Props {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   defaultDate?: string;
   defaultReason?: string;
+  toastId?: string;
 }
 
 export const ToastModal: React.FC<Props> = ({
@@ -17,17 +23,48 @@ export const ToastModal: React.FC<Props> = ({
   setIsOpen,
   defaultDate,
   defaultReason,
+  toastId,
 }) => {
   const parsedDate = defaultDate
     ? defaultDate.split(' ')[0].split('/').reverse().join('-')
     : '';
   const parsedTime = defaultDate ? defaultDate.split(' ')[1] : '';
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, result] = useLoginMutation({
+    fixedCacheKey: 'userKey',
+  });
+  const [createTrigger] = useCreateToastMutation();
+  const [updateTrigger] = useUpdateToastMutation();
   const [date, setDate] = useState(parsedDate);
   const [time, setTime] = useState(parsedTime);
   const [reason, setReason] = useState(
     defaultReason !== undefined ? defaultReason : ''
   );
+  const isUpdateMode = (): boolean => {
+    return defaultDate !== undefined && defaultReason !== undefined;
+  };
+
+  const createToast = async () => {
+    if (result.data) {
+      await createTrigger({
+        reason: reason,
+        userId: result.data.id,
+        date: new Date(date + ' ' + time).toISOString(),
+      });
+    }
+  };
+
+  const updateToast = async () => {
+    if (result.data && toastId) {
+      await updateTrigger({
+        reason: reason,
+        date: new Date(date + ' ' + time).toISOString(),
+        id: toastId,
+        userId: result.data.id,
+      });
+    }
+  };
 
   const resetStates = () => {
     if (defaultReason !== undefined && defaultDate !== undefined) {
@@ -80,7 +117,7 @@ export const ToastModal: React.FC<Props> = ({
         >
           <div className={styles.pickerContainer}>
             <input
-              defaultValue={date}
+              defaultValue={parsedDate}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 if (new Date(e.target.value) >= new Date()) {
                   setDate(e.target.value);
@@ -91,7 +128,7 @@ export const ToastModal: React.FC<Props> = ({
               type="date"
             />
             <input
-              defaultValue={time}
+              defaultValue={parsedTime}
               className={styles.timeInput}
               type="time"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +137,7 @@ export const ToastModal: React.FC<Props> = ({
             />
           </div>
           <input
-            defaultValue={reason}
+            defaultValue={defaultReason}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setReason(e.target.value);
             }}
@@ -116,6 +153,7 @@ export const ToastModal: React.FC<Props> = ({
               }
               disabled={allInputsFilled ? true : false}
               onClick={() => {
+                isUpdateMode() ? updateToast() : createToast();
                 handleClose();
               }}
             >

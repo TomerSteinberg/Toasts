@@ -131,7 +131,11 @@ export class ToastsService {
     }
 
     return {
-      currentPeriod: parseInt(currPeriodToasts.toasts),
+      currentPeriod:
+        new Date(currPeriodToasts.year).getFullYear() ===
+        new Date().getFullYear()
+          ? parseInt(currPeriodToasts.toasts)
+          : 0,
       record: Math.max(
         parseInt(maxAfterJune.toasts),
         parseInt(maxBeforeJune.toasts)
@@ -180,8 +184,8 @@ export class ToastsService {
    * @returns number of toasts done in given period (max if isRecord is true)
    */
   private async getMaxOfYearlyPeriod(isGreater: boolean, isRecord: boolean) {
-    const JULY = 7;
-    const JUNE = 6;
+    const JULY = 6;
+    const JUNE = 5;
     const JANUARY = 0;
     const boundary = this.getBoundaryDate();
     boundary.setMonth(isGreater ? JANUARY : JULY);
@@ -211,7 +215,10 @@ export class ToastsService {
         group: Sequelize.fn('date_trunc', 'year', Sequelize.col('date')),
       })
       .then((periodMax) => {
-        return periodMax[0].dataValues as { year: string; toasts: string };
+        if (periodMax[0]) {
+          return periodMax[0].dataValues as { year: string; toasts: string };
+        }
+        return { year: new Date().getFullYear(), toasts: '0' };
       });
     return maxOfPeriod;
   }

@@ -12,7 +12,7 @@ import { useLoginMutation } from '../../store/services/user.api';
 export const ToastsCard = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
 
   const { data: futureToasts } = useGetFutureToastsQuery();
@@ -33,7 +33,7 @@ export const ToastsCard = () => {
         </button>
         <ToastModal title="הוספת שתיה" setIsOpen={setIsOpen} isOpen={isOpen} />
       </div>
-      <ul>
+      <ul className={styles.toastList}>
         {futureToasts === undefined || futureToasts.length === 0 ? (
           <li>
             <p className={styles.empty}>אין שתיות</p>
@@ -41,17 +41,19 @@ export const ToastsCard = () => {
         ) : (
           futureToasts.map((toast) => {
             return (
-              <li key={toast.id}>
+              <li key={toast.id} className={styles.toast}>
                 <Toast
-                  pastToast={false}
+                  isPastToast={false}
                   name={toast.user.username}
                   date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
                   reason={toast.reason}
                   isUserToast={
-                    result.data !== undefined && toast.userId === result.data.id
+                    result.data && toast.userId === result.data.id
                       ? true
                       : false
                   }
+                  id={toast.id}
+                  userId={toast.userId}
                 ></Toast>
               </li>
             );
