@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Toasts } from './entities/toasts.entity';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateToast } from './dto/create-toast.dto';
-import { UpdateToast } from './dto/update-toast.dto';
+import { CreateToastDTO } from './dto/create-toast.dto';
+import { UpdateToastDTO } from './dto/update-toast.dto';
 import { UsersService } from '../users/users.service';
 import { InvalidUserID, NoToastsHappened } from './exceptions';
 import { Op, Sequelize } from 'sequelize';
@@ -61,7 +61,7 @@ export class ToastsService {
    * @param: toast dto
    * @return: toast instance
    */
-  async createToast(toastParams: CreateToast) {
+  async createToast(toastParams: CreateToastDTO) {
     const doesUserExist = await this.usersService.doesExist(toastParams.userId);
     if (!doesUserExist) {
       throw new InvalidUserID();
@@ -77,12 +77,17 @@ export class ToastsService {
    */
   async removeToast(toastId: string, userId: string) {
     const doesUserExist = await this.usersService.doesExist(userId);
+    const isAdmin = await this.usersService.isAdmin(userId);
     if (!doesUserExist) {
       throw new InvalidUserID();
     }
-    const destroy = await this.toastsModel.destroy({
-      where: { id: toastId, userId },
-    });
+    const destroy = isAdmin
+      ? await this.toastsModel.destroy({
+          where: { id: toastId },
+        })
+      : await this.toastsModel.destroy({
+          where: { id: toastId, userId },
+        });
     return destroy;
   }
 
@@ -92,7 +97,7 @@ export class ToastsService {
    * @return: object with number of effected rows
    */
   async updateToast(
-    toastParams: UpdateToast,
+    toastParams: UpdateToastDTO,
     toastId: string,
     userId?: string
   ) {
@@ -131,7 +136,11 @@ export class ToastsService {
     }
 
     return {
-      currentPeriod: parseInt(currPeriodToasts.toasts),
+      currentPeriod:
+        new Date(currPeriodToasts.year).getFullYear() ===
+        new Date().getFullYear()
+          ? parseInt(currPeriodToasts.toasts)
+          : 0,
       record: Math.max(
         parseInt(maxAfterJune.toasts),
         parseInt(maxBeforeJune.toasts)
@@ -182,9 +191,7 @@ export class ToastsService {
   private async getMaxOfYearlyPeriod(isGreater: boolean, isRecord: boolean) {
     const JULY = 7;
     const JUNE = 6;
-    const JANUARY = 0;
     const boundary = this.getBoundaryDate();
-    boundary.setMonth(isGreater ? JANUARY : JULY);
     const currDate = isRecord ? boundary : new Date();
 
     const maxOfPeriod = await this.toastsModel
@@ -211,7 +218,10 @@ export class ToastsService {
         group: Sequelize.fn('date_trunc', 'year', Sequelize.col('date')),
       })
       .then((periodMax) => {
-        return periodMax[0].dataValues as { year: string; toasts: string };
+        if (periodMax[0]) {
+          return periodMax[0].dataValues as { year: string; toasts: string };
+        }
+        return { year: new Date().getFullYear(), toasts: '0' };
       });
     return maxOfPeriod;
   }

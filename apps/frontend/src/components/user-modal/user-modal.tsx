@@ -1,8 +1,18 @@
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import styles from './user-modal.module.css';
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
-import { useLoginMutation } from '../../store/services/user.api';
-import { Login } from '../../types/login.type';
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useState,
+  useEffect,
+} from 'react';
+import {
+  useLoginMutation,
+  useUpdateUserMutation,
+  useSignupMutation,
+} from '../../store/services';
+import { LoginInput } from '../../types/login.type';
 
 export interface Props {
   isOpen: boolean;
@@ -20,20 +30,19 @@ export const UserModal: React.FC<Props> = ({
   const LOGIN = false;
   const SIGNUP = true;
 
-  const [updatePost] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+  const [login, result] = useLoginMutation({
+    fixedCacheKey: 'userKey',
   });
+
+  const [updateUser] = useUpdateUserMutation();
+  const [signup] = useSignupMutation();
 
   const isUpdateUserMode = (): boolean => {
     return username !== undefined && password !== undefined;
   };
 
-  const [usernameIn, setUsernameIn] = useState(
-    isUpdateUserMode() ? username : ''
-  );
-  const [passwordIn, setPasswordIn] = useState(
-    isUpdateUserMode() ? password : ''
-  );
+  const [usernameIn, setUsernameIn] = useState(username ?? '');
+  const [passwordIn, setPasswordIn] = useState(password ?? '');
 
   const [error, setError] = useState('');
   const [authType, setAuthType] = useState(LOGIN);
@@ -48,8 +57,11 @@ export const UserModal: React.FC<Props> = ({
 
   const sendLogin = async () => {
     if (usernameIn && passwordIn) {
-      const loginParams: Login = { username: usernameIn, password: passwordIn };
-      await updatePost(loginParams)
+      const loginParams: LoginInput = {
+        username: usernameIn,
+        password: passwordIn,
+      };
+      await login(loginParams)
         .unwrap()
         .then(() => {
           handleClose();
@@ -60,11 +72,55 @@ export const UserModal: React.FC<Props> = ({
     }
   };
 
+  const sendSignup = async () => {
+    if (usernameIn && passwordIn) {
+      const signupParams: LoginInput = {
+        username: usernameIn,
+        password: passwordIn,
+      };
+      await signup(signupParams)
+        .unwrap()
+        .then(() => {
+          login(signupParams)
+            .unwrap()
+            .then(() => {
+              handleClose();
+            });
+        })
+        .catch((error: { data: { message: string } }) => {
+          setError(error.data.message);
+        });
+    }
+  };
+
+  const sendUpdate = async () => {
+    if (usernameIn && passwordIn && result.data) {
+      await updateUser({
+        id: result.data.id,
+        username: usernameIn,
+        password: passwordIn,
+      })
+        .unwrap()
+        .then(() => {
+          login({ username: usernameIn, password: passwordIn });
+          handleClose();
+        })
+        .catch((error: { data: { message: string } }) => {
+          setError(error.data.message);
+        });
+    }
+  };
+
+  useEffect(() => {
+    setPasswordIn(password !== undefined ? password : '');
+    setUsernameIn(username !== undefined ? username : '');
+  }, [isOpen]);
+
   const inputsFilled = (): boolean => {
     return (
       usernameIn !== undefined &&
       passwordIn !== undefined &&
-      passwordIn.length > 8
+      passwordIn.length >= 8
     );
   };
 
@@ -95,7 +151,9 @@ export const UserModal: React.FC<Props> = ({
           }}
         >
           {isUpdateUserMode() ? (
-            <h2>פרטי משתמש</h2>
+            <div>
+              <h2 className={styles.updateTitle}>פרטי משתמש</h2>
+            </div>
           ) : (
             <div className={styles.titleContainer}>
               <h2
@@ -153,7 +211,11 @@ export const UserModal: React.FC<Props> = ({
                 }
                 disabled={!inputsFilled()}
                 onClick={() => {
-                  sendLogin();
+                  isUpdateUserMode()
+                    ? sendUpdate()
+                    : authType
+                    ? sendSignup()
+                    : sendLogin();
                 }}
               >
                 {isUpdateUserMode()

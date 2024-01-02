@@ -7,7 +7,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export class CreateToast {
+export class CreateToastDTO {
   @IsNotEmpty()
   @IsString()
   @MinLength(1)

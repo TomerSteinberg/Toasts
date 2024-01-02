@@ -2,27 +2,34 @@
   display: flex;
   flex-direction: row-reverse;
   border-radius: 1.5vh;
-  border-color: #715659;
+  border-color: black;
   border-style: solid;
   border-width: 0.2rem;
-  background-color: #fee92e;
+  background: rgb(254, 237, 46);
+  background: linear-gradient(
+    63deg,
+    rgba(254, 237, 46, 1) 16%,
+    rgba(254, 232, 33, 1) 44%,
+    rgba(254, 231, 22, 1) 67%,
+    rgba(255, 213, 1, 1) 89%
+  );
   justify-content: space-evenly;
   height: 3rem;
   width: 90%;
-  transition-duration: 100ms;
-  transition-property: background-color;
+  transition-duration: 170ms;
+  transition-property: transform;
 }
 
 .placement {
   direction: rtl;
 }
 
-p,
-h2 {
+.scoreText {
   margin: auto;
   font-size: large;
   font-weight: 500;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: black;
-  overflow-x: auto;
+  overflow-x: hidden;
+  width: 70%;
+  text-align: center;
 }

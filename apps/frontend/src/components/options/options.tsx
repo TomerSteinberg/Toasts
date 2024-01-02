@@ -7,11 +7,13 @@ import { Tooltip } from '@mui/material';
 import Fade from '@mui/material/Fade';
 import { UserModal } from '../user-modal';
 import { ListModal } from '../list-modal/list-modal';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 import { useLoginMutation } from '../../store/services/user.api';
 
 export const Options = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isPermissionOpen, setIsPermissionOpen] = useState(false);
   const [updateUserOpen, setUpdateUserOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
@@ -21,7 +23,7 @@ export const Options = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
 
   return (
@@ -68,6 +70,23 @@ export const Options = () => {
               <HistoryIcon className={styles.menuIcons} />
             </Tooltip>
           </button>
+          {result.data && result.data.isAdmin && (
+            <button
+              className={styles.menuButton}
+              onClick={() => {
+                setIsPermissionOpen(true);
+              }}
+            >
+              <Tooltip
+                title="הרשאות משתמשים"
+                TransitionComponent={Fade}
+                TransitionProps={{ timeout: 300 }}
+                placement="left"
+              >
+                <AdminPanelSettingsIcon className={styles.menuIcons} />
+              </Tooltip>
+            </button>
+          )}
         </div>
       )}
       <UserModal
@@ -76,7 +95,18 @@ export const Options = () => {
         username={result.data?.username}
         password={result.data?.password}
       />
-      <ListModal isOpen={isHistoryOpen} setIsOpen={setIsHistoryOpen} />
+      <ListModal
+        title="היסטורית שתיות"
+        isShowHistory
+        isOpen={isHistoryOpen}
+        setIsOpen={setIsHistoryOpen}
+      />
+      <ListModal
+        title="הרשאות משתמשים"
+        isShowHistory={false}
+        isOpen={isPermissionOpen}
+        setIsOpen={setIsPermissionOpen}
+      />
     </div>
   );
 };

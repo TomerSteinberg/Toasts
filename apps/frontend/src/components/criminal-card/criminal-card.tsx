@@ -1,6 +1,6 @@
 import { Card } from '../card';
 import { Criminal } from '../criminal';
-import { useGetCriminalsQuery } from '../../store/services/criminal.api';
+import { useGetCriminalsQuery } from '../../store/services';
 import styles from './criminal-card.module.css';
 
 export const CriminalCard = () => {
@@ -9,19 +9,20 @@ export const CriminalCard = () => {
   return (
     <Card title="🚷פושעים" width="25vw" height="95vh">
       <div className={styles.emptyContainer}></div>
-      <ul>
-        {criminals === undefined || criminals.length === 0 ? (
+      <ul className={styles.criminalList}>
+        {!criminals || criminals.length === 0 ? (
           <li>
             <p className={styles.empty}>אין פושעים</p>
           </li>
         ) : (
-          criminals.map((criminal) => {
+          criminals.map(({ id, users, criminalType }) => {
             return (
-              <li key={criminal.id}>
+              <li key={id}>
                 <Criminal
-                  username={criminal.users.username}
-                  type={criminal.criminalType}
-                ></Criminal>
+                  username={users.username}
+                  type={criminalType}
+                  id={id}
+                />
               </li>
             );
           })

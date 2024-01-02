@@ -1,15 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 body {
   background: linear-gradient(
-    90deg,
-    rgba(117, 2, 96, 0.778) 0%,
-    rgba(225, 23, 87, 0.749) 52%,
-    rgba(255, 113, 31, 0.786) 89%,
-    rgba(255, 162, 1, 0.779) 100%
+    to left,
+    #ffa201,
+    #ff8a1b,
+    #ff722c,
+    #fb593a,
+    #f23f47,
+    #e62c50,
+    #d91857,
+    #c9005e,
+    #b50061,
+    #a00063,
+    #8b0062,
+    #750260
   );
   overflow: hidden;
   height: 100vh;
   width: 100vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -35,18 +47,6 @@ body {
   transition-property: background-color;
 }
 
-ul {
-  overflow-y: auto;
-  margin: auto;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  height: 100vh;
-  width: 100%;
-  padding: 0 0 0 0;
-}
-
 li {
   width: 100%;
   display: flex;
@@ -58,7 +58,6 @@ li {
 }
 
 input {
-  font-family: inherit;
   width: 100%;
   border: 0;
   border-bottom: 2px solid;

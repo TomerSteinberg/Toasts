@@ -1,34 +1,45 @@
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import styles from './list-modal.module.css';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useGetPastUserToastsQuery } from '../../store/services/toast.api';
-import { useLoginMutation } from '../../store/services/user.api';
-import { Toast as ToastType } from '../../types';
+import { useGetUsersQuery, useLoginMutation } from '../../store/services';
 import { Toast } from '../toast';
 import { format } from 'date-fns';
+import { User } from '../user';
+import { UserSelect } from '../user-select/user-select';
 
 export interface Props {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  isShowHistory: boolean;
+  title: string;
 }
 
-export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
+export const ListModal: React.FC<Props> = ({
+  isOpen,
+  setIsOpen,
+  isShowHistory,
+  title,
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
-    fixedCacheKey: 'shared-update-post',
+    fixedCacheKey: 'userKey',
   });
 
-  const {
-    data: toasts,
-    isLoading,
-    isError,
-  } = useGetPastUserToastsQuery(
-    result.isUninitialized || !result.data ? '' : result.data.id,
-    {
-      skip: result.isUninitialized,
-    }
+  const { data: allUsers } = useGetUsersQuery();
+  const [selectedUser, setSelectedUser] = useState<string | null>(
+    result.data?.username ?? null
   );
+  const { data: toasts } = useGetPastUserToastsQuery(selectedUser ?? '', {
+    skip: !selectedUser || !result.data,
+  });
+
+  useEffect(() => {
+    if (result.data && !selectedUser) {
+      setSelectedUser(result.data.id);
+    }
+  }, [result.data, selectedUser]);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -61,7 +72,7 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
           }}
         >
           <div className={styles.titleContainer}>
-            <h2> היסטורית שתיות </h2>
+            <h2 className={styles.titleText}> {title}</h2>
             <button
               className={styles.closeBtn}
               onClick={() => {
@@ -79,28 +90,42 @@ export const ListModal: React.FC<Props> = ({ isOpen, setIsOpen }) => {
             flexDirection: 'column',
           }}
         >
-          <div className={styles.colName}>
-            <label>שם</label>
-            <label>שעה</label>
-            <label>תאריך</label>
-            <label>סיבה לשתיה</label>
-            <label>שתיה מפשיעה</label>
-          </div>
-          <ul>
-            {toasts &&
-              !isError &&
-              !isLoading &&
-              toasts.map((toast: ToastType) => {
+          {isShowHistory && result.data && result.data.isAdmin && (
+            <UserSelect
+              selectFunction={setSelectedUser}
+              defaultValue={selectedUser}
+              selectedUser={selectedUser}
+            />
+          )}
+          <ul className={styles.toastList}>
+            {isShowHistory &&
+              toasts &&
+              toasts.map(({ id, reason, date, isConvicting, userId, user }) => {
                 return (
-                  <li key={toast.id}>
+                  <li key={id}>
                     <Toast
-                      name={toast.user.username}
-                      reason={toast.reason}
-                      date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
+                      name={user.username}
+                      reason={reason}
+                      date={format(new Date(date), 'dd/MM/yyyy kk:mm')}
                       isUserToast={false}
-                      pastToast={true}
-                      isConvicting={toast.isConvicting}
+                      isPastToast
+                      isConvicting={isConvicting}
+                      id={id}
+                      userId={userId}
                     ></Toast>
+                  </li>
+                );
+              })}
+            {isShowHistory && toasts && !toasts.length && (
+              <p className={styles.emptyText}>אין שתיות בהיסטוריה</p>
+            )}
+
+            {!isShowHistory &&
+              allUsers &&
+              allUsers.map((user) => {
+                return (
+                  <li key={user.id}>
+                    <User {...user} />
                   </li>
                 );
               })}

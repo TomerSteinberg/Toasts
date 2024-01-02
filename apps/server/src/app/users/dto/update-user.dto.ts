@@ -1,12 +1,6 @@
-import {
-  IsNotEmpty,
-  IsString,
-  Matches,
-  MinLength,
-  IsOptional,
-} from 'class-validator';
+import { IsNotEmpty, IsString, MinLength, IsOptional } from 'class-validator';
 
-export class UpdateUser {
+export class UpdateUserDTO {
   @IsNotEmpty()
   @IsString()
   @IsOptional()
@@ -15,7 +9,6 @@ export class UpdateUser {
 
   @IsNotEmpty()
   @IsOptional()
-  @MinLength(8)
-  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
+  @MinLength(7)
   password?: string;
 }

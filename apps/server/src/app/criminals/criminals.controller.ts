@@ -9,29 +9,29 @@ import {
   Delete,
 } from '@nestjs/common';
 import { CriminalsService } from './criminals.service';
-import { AddCriminal } from './dto/add-criminal.dto';
-import { UpdateCriminal } from './dto/update-criminal.dto';
+import { AddCriminalDTO } from './dto/add-criminal.dto';
+import { UpdateCriminalDTO } from './dto/update-criminal.dto';
 
-@Controller()
+@Controller('criminals')
 export class CriminalsController {
   constructor(private criminalsService: CriminalsService) {}
 
-  @Get('criminals')
+  @Get()
   getCriminals() {
     return this.criminalsService.getCriminals();
   }
 
-  @Post('criminals')
+  @Post()
   addCriminal(
-    @Body() addCriminal: AddCriminal,
+    @Body() addCriminal: AddCriminalDTO,
     @Query('adminId') adminId: string
   ) {
     return this.criminalsService.addCriminal(addCriminal, adminId);
   }
 
-  @Patch('criminals/:id')
+  @Patch('/:id')
   updateCriminals(
-    @Body() updateCriminalType: UpdateCriminal,
+    @Body() updateCriminalType: UpdateCriminalDTO,
     @Query('adminId') adminId: string,
     @Param('id') criminalId: string
   ) {
@@ -42,7 +42,7 @@ export class CriminalsController {
     );
   }
 
-  @Delete('criminals/:id')
+  @Delete('/:id')
   deleteCriminal(
     @Query('adminId') adminId: string,
     @Param('id') criminalId: string

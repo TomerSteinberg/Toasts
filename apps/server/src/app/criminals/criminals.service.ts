@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Criminals } from './entities/criminals.entity';
-import { AddCriminal } from './dto/add-criminal.dto';
+import { AddCriminalDTO } from './dto/add-criminal.dto';
 import { UsersService } from '../users/users.service';
 import { AdminIdError } from '../users/exceptions';
-import { UpdateCriminal } from './dto';
+import { UpdateCriminalDTO } from './dto';
 import { Users } from '../users/entities/users.entity';
 import { InvalidCriminalId } from './exceptions/invalid-criminal-id.error';
 import { Toasts } from '../toasts/entities/toasts.entity';
@@ -44,7 +44,7 @@ export class CriminalsService {
    * @param adminId
    * @returns code of success
    */
-  async addCriminal(addCriminal: AddCriminal, adminId: string) {
+  async addCriminal(addCriminal: AddCriminalDTO, adminId: string) {
     if (await this.usersService.isAdmin(adminId)) {
       const newCriminal = await this.criminalsModel.create(addCriminal);
       return newCriminal;
@@ -60,7 +60,7 @@ export class CriminalsService {
    * @returns if succeeded
    */
   async updateCriminal(
-    newCriminalType: UpdateCriminal,
+    newCriminalType: UpdateCriminalDTO,
     adminId: string,
     criminalId: string
   ) {

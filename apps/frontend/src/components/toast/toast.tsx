@@ -4,60 +4,125 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { Tooltip, Checkbox } from '@mui/material';
 import { useState } from 'react';
 import { ToastModal } from '../toast-modal';
+import { useLoginMutation } from '../../store/services';
+import {
+  useDeleteToastMutation,
+  useUpdateToastMutation,
+} from '../../store/services';
+import {
+  useCreateCriminalMutation,
+  useGetCriminalsQuery,
+} from '../../store/services';
 
 export interface Props {
   name: string;
   date: string;
   reason: string;
-  pastToast: boolean;
+  isPastToast: boolean;
   isUserToast: boolean;
   isConvicting?: boolean;
+  id: string;
+  userId: string;
 }
 export const Toast: React.FC<Props> = ({
   name,
   date,
   reason,
-  pastToast,
+  isPastToast,
   isUserToast,
   isConvicting,
+  id,
+  userId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, result] = useLoginMutation({
+    fixedCacheKey: 'userKey',
+  });
 
+  const [triggerDelete] = useDeleteToastMutation();
+  const [triggerUpdate] = useUpdateToastMutation();
+  const { data: criminals } = useGetCriminalsQuery();
+  const [triggerCreateCriminal] = useCreateCriminalMutation();
+
+  const updateToastDidHappen = async () => {
+    if (result.data && result.data.isAdmin) {
+      await triggerUpdate({
+        userId,
+        isConvicting: !isConvicting,
+        id,
+      });
+      if (
+        !isConvicting &&
+        criminals &&
+        !criminals.find((criminal) => criminal.users.id === userId)
+      ) {
+        triggerCreateCriminal({
+          criminalType: false,
+          userId,
+          adminId: result.data.id,
+        });
+      }
+    }
+  };
+
+  const deleteToast = async (id: string, userId: string) => {
+    await triggerDelete({ id, userId });
+  };
   return (
-    <div className={styles.container}>
-      {!pastToast && isUserToast && (
-        <button className={styles.toastBtn}>
-          <Tooltip title="מחיקת שתיה">
-            <ClearIcon className={styles.toastIcon} />
-          </Tooltip>
-        </button>
-      )}
-      <p>{name}</p>
-      <p>{date}</p>
-      <p>{reason}</p>
-      {!pastToast && isUserToast && (
-        <button
-          className={styles.toastBtn}
-          onClick={() => {
-            setIsOpen(true);
-          }}
-        >
-          <Tooltip title="שינוי שתיה">
-            <EditIcon className={styles.toastIcon} />
-          </Tooltip>
-        </button>
-      )}
-      {pastToast && (
-        <Checkbox
-          checked={isConvicting ? true : false}
-          disabled={true}
-          sx={{
-            color: 'black',
-            '&.Mui-checked': {
+    <div className={isPastToast ? styles.pastContainer : styles.container}>
+      <p className={isPastToast ? styles.pastText : styles.toastText}>{name}</p>
+      <p className={isPastToast ? styles.pastText : styles.toastText}>
+        {reason}
+      </p>
+      <label>{date}</label>
+      {!isPastToast &&
+        (isUserToast || (result.data && result.data.isAdmin)) && (
+          <div className={styles.toastButtonContainer}>
+            <button
+              className={styles.toastBtn}
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              <Tooltip title="שינוי שתיה">
+                <EditIcon className={styles.toastIcon} />
+              </Tooltip>
+            </button>
+            <button
+              className={styles.toastBtn}
+              onClick={() => {
+                if (result.data) {
+                  deleteToast(id, result.data.id);
+                }
+              }}
+            >
+              <Tooltip title="מחיקת שתיה">
+                <ClearIcon className={styles.toastIcon} />
+              </Tooltip>
+            </button>
+          </div>
+        )}
+      {isPastToast && (
+        <Tooltip title="?שתיה מפשיעה">
+          <Checkbox
+            onChange={() => {
+              updateToastDidHappen();
+            }}
+            checked={isConvicting ? true : false}
+            disabled={result.data && !result.data.isAdmin}
+            sx={{
               color: 'black',
-            },
-          }}
-        ></Checkbox>
+              '&.Mui-checked': {
+                color: 'black',
+              },
+            }}
+          ></Checkbox>
+        </Tooltip>
+      )}
+
+      {!isPastToast && !isUserToast && result.data && !result.data.isAdmin && (
+        <div className={styles.emptyContainer}></div>
       )}
       <ToastModal
         title="שינוי שתיה"
@@ -65,6 +130,7 @@ export const Toast: React.FC<Props> = ({
         setIsOpen={setIsOpen}
         defaultDate={date}
         defaultReason={reason}
+        toastId={id}
       />
     </div>
   );
