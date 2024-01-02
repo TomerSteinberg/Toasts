@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.options {
+  border-radius: 100%;
+  border-width: 0.2em;
+  border-style: solid;
+  color: black;
+  border-color: transparent;
+  height: 5em;
+  width: 5em;
+  background-color: transparent;
+  transition-duration: 100ms;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 170ms;
+}
+
+.options:hover {
+  transform: scale(1.15);
+}
+
+.optionsIcon {
+  cursor: pointer;
+  font-size: large;
+  border-radius: 100%;
+  border: none;
+  transition-duration: 100ms;
+  font-size: 5.8em !important;
+  transition-property: transform !important;
+}
+.optionsIconOpen {
+  cursor: pointer;
+  font-size: large;
+  border-radius: 100%;
+  border: none;
+  transition-duration: 100ms;
+  font-size: 5.8em !important;
+  transition-property: transform !important;
+  transform: rotate(70deg);
+}
+
+.menuButtons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1.2em;
+  padding-bottom: 1.2em;
+  animation: slide_down 150ms linear;
+}
+
+.menuButton {
+  background-color: transparent;
+  border: none;
+  transition-duration: 200ms;
+  cursor: pointer;
+  animation: menu_pop 200ms linear;
+}
+
+.menuIcons {
+  font-size: 3em !important;
+  transition-duration: 200ms;
+  transition-property: transform !important;
+  animation: menu_rotate 250ms linear;
+}
+
+.menuBtn:hover {
+  transform: scale(1.15);
+}
+
+.menuIcons:hover {
+  transform: rotate(45deg);
+}
+
+@keyframes slide_down {
+  0% {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  100% {
+    padding-top: 1.2em;
+    padding-bottom: 1.2em;
+  }
+}
+
+@keyframes menu_pop {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes menu_rotate {
+  0% {
+    transform: rotate(-90deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}

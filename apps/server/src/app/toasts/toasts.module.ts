@@ -4,12 +4,10 @@ import { ToastsService } from './toasts.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Toasts } from './entities/toasts.entity';
 import { UserModule } from '../users/users.module';
-import { CriminalModule } from '../criminals/criminals.module';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Toasts]), UserModule, CriminalModule],
+  imports: [SequelizeModule.forFeature([Toasts]), UserModule],
   controllers: [ToastsController],
   providers: [ToastsService],
-  exports: [ToastsService],
 })
 export class ToastsModule {}

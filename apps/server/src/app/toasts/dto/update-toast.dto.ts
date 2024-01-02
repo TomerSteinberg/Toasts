@@ -7,7 +7,7 @@ import {
   IsBoolean,
 } from 'class-validator';
 
-export class UpdateToast {
+export class UpdateToastDTO {
   @IsNotEmpty()
   @IsString()
   @IsOptional()

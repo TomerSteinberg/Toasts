@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f9eeda;
+  border-radius: 0.7em;
+  border-color: black;
+  border-style: solid;
+  height: 95vh;
+}
+
+h1 {
+  font-weight: 500;
+}

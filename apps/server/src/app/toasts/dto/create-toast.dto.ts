@@ -4,12 +4,14 @@ import {
   MinLength,
   IsDateString,
   IsUUID,
+  MaxLength,
 } from 'class-validator';
 
-export class CreateToast {
+export class CreateToastDTO {
   @IsNotEmpty()
   @IsString()
   @MinLength(1)
+  @MaxLength(20)
   reason: string;
 
   @IsNotEmpty()

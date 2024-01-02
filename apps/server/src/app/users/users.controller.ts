@@ -8,27 +8,25 @@ import {
   Get,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUser } from './dto/create-user.dto';
-import { UpdateUser } from './dto/update-user.dto';
-import { UserLogin } from './dto/user-login.dto';
+import { UserDTO } from './dto/user.dto';
 import { Users } from './entities/users.entity';
 
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post('signup')
-  signUp(@Body() userParams: CreateUser, @Query('adminId') adminId?: string) {
-    return this.usersService.signup(userParams, adminId);
+  signUp(@Body() userParams: UserDTO) {
+    return this.usersService.signup(userParams);
   }
 
   @Post('login')
-  login(@Body() userParams: UserLogin) {
+  login(@Body() userParams: UserDTO) {
     return this.usersService.login(userParams);
   }
 
-  @Patch('user/:id')
-  updateUser(@Body() userParams: UpdateUser, @Param('id') userId: string) {
+  @Patch('/:id')
+  updateUser(@Body() userParams: UserDTO, @Param('id') userId: string) {
     return this.usersService.updateUser(userParams, userId);
   }
 
@@ -37,7 +35,7 @@ export class UsersController {
     return this.usersService.makeAdmin(userId, adminId);
   }
 
-  @Get('users')
+  @Get()
   getUsers(): Promise<Users[]> {
     return this.usersService.getUsers();
   }

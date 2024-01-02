@@ -1,0 +1,46 @@
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.closeBtn {
+  border: none;
+  background-color: transparent;
+}
+
+.closeIcon {
+  transform: scale(1.25);
+  cursor: pointer;
+}
+.closeIcon:hover {
+  transform: scale(1.5);
+  color: red;
+}
+
+.toastList {
+  overflow-y: auto;
+  margin: auto;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  height: 100em;
+  width: 27em;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.emptyText {
+  color: #343434;
+}
+
+.titleText {
+  color: black;
+  transition-property: transform;
+  transition-duration: 100ms;
+  margin: auto;
+  font-size: 1.3em;
+  font-weight: 500;
+  color: black;
+  overflow-x: auto;
+}

@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: row-reverse;
+  border-radius: 0.7rem;
+  border-color: black;
+  border-style: solid;
+  border-width: 0.2rem;
+  background-image: linear-gradient(
+    to left,
+    #39bfdf,
+    #3dafcb,
+    #3fa0b7,
+    #4091a4,
+    #408292
+  );
+  justify-content: space-evenly;
+  height: 3rem;
+  width: 90%;
+  transition-duration: 170ms;
+  transition-property: transform;
+}
