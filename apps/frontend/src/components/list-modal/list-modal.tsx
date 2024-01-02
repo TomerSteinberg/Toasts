@@ -1,13 +1,9 @@
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import styles from './list-modal.module.css';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { useLazyGetPastUserToastsQuery } from '../../store/services/toast.api';
-import {
-  useGetUsersQuery,
-  useLoginMutation,
-} from '../../store/services/user.api';
-import { Toast as ToastType } from '../../types';
+import { useGetPastUserToastsQuery } from '../../store/services/toast.api';
+import { useGetUsersQuery, useLoginMutation } from '../../store/services';
 import { Toast } from '../toast';
 import { format } from 'date-fns';
 import { User } from '../user';
@@ -16,14 +12,14 @@ import { UserSelect } from '../user-select/user-select';
 export interface Props {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  isHistory: boolean;
+  isShowHistory: boolean;
   title: string;
 }
 
 export const ListModal: React.FC<Props> = ({
   isOpen,
   setIsOpen,
-  isHistory,
+  isShowHistory,
   title,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -32,17 +28,18 @@ export const ListModal: React.FC<Props> = ({
   });
 
   const { data: allUsers } = useGetUsersQuery();
+  const [selectedUser, setSelectedUser] = useState<string | null>(
+    result.data?.username ?? null
+  );
+  const { data: toasts } = useGetPastUserToastsQuery(selectedUser ?? '', {
+    skip: !selectedUser || !result.data,
+  });
 
-  const [triggerPastToasts, toasts] = useLazyGetPastUserToastsQuery();
   useEffect(() => {
-    if (result.data) {
-      triggerPastToasts(result.data.id);
+    if (result.data && !selectedUser) {
+      setSelectedUser(result.data.id);
     }
-  }, [result.data, isOpen]);
-
-  const getUserHistory = async (id: string) => {
-    triggerPastToasts(id);
-  };
+  }, [result.data, selectedUser]);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -93,42 +90,42 @@ export const ListModal: React.FC<Props> = ({
             flexDirection: 'column',
           }}
         >
-          {isHistory && result.data && result.data.isAdmin && (
-            <UserSelect selectFunction={getUserHistory} />
+          {isShowHistory && result.data && result.data.isAdmin && (
+            <UserSelect
+              selectFunction={setSelectedUser}
+              defaultValue={selectedUser}
+              selectedUser={selectedUser}
+            />
           )}
           <ul className={styles.toastList}>
-            {isHistory &&
-              toasts.data &&
-              toasts.data.map((toast: ToastType) => {
+            {isShowHistory &&
+              toasts &&
+              toasts.map(({ id, reason, date, isConvicting, userId, user }) => {
                 return (
-                  <li key={toast.id}>
+                  <li key={id}>
                     <Toast
-                      name={toast.user.username}
-                      reason={toast.reason}
-                      date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
+                      name={user.username}
+                      reason={reason}
+                      date={format(new Date(date), 'dd/MM/yyyy kk:mm')}
                       isUserToast={false}
-                      isPastToast={true}
-                      isConvicting={toast.isConvicting}
-                      id={toast.id}
-                      userId={toast.userId}
+                      isPastToast
+                      isConvicting={isConvicting}
+                      id={id}
+                      userId={userId}
                     ></Toast>
                   </li>
                 );
               })}
-            {isHistory && toasts.data && toasts.data.length === 0 && (
+            {isShowHistory && toasts && !toasts.length && (
               <p className={styles.emptyText}>אין שתיות בהיסטוריה</p>
             )}
 
-            {!isHistory &&
+            {!isShowHistory &&
               allUsers &&
               allUsers.map((user) => {
                 return (
-                  <li>
-                    <User
-                      username={user.username}
-                      id={user.id}
-                      isAdmin={user.isAdmin}
-                    />
+                  <li key={user.id}>
+                    <User {...user} />
                   </li>
                 );
               })}

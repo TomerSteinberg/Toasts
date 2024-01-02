@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsUUID, IsBoolean } from 'class-validator';
 
-export class AddCriminal {
+export class AddCriminalDTO {
   @IsBoolean()
   @IsNotEmpty()
   criminalType: boolean;

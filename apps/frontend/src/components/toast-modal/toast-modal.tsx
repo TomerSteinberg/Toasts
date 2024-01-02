@@ -1,11 +1,11 @@
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react';
 import styles from './toast-modal.module.css';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { useState } from 'react';
 import {
   useCreateToastMutation,
   useUpdateToastMutation,
-} from '../../store/services/toast.api';
+} from '../../store/services';
 import { useLoginMutation } from '../../store/services/user.api';
 import { UserSelect } from '../user-select/user-select';
 
@@ -39,35 +39,37 @@ export const ToastModal: React.FC<Props> = ({
   const [updateTrigger] = useUpdateToastMutation();
   const [date, setDate] = useState(parsedDate);
   const [time, setTime] = useState(parsedTime);
-  const [reason, setReason] = useState(
-    defaultReason !== undefined ? defaultReason : ''
+  const [reason, setReason] = useState(defaultReason ?? '');
+  const [selectedUser, setSelectedUser] = useState<string | null>(
+    result.data?.username ?? null
   );
-  const [selected, setSelected] = useState('');
 
-  const handleSelected = (e: string) => {
-    setSelected(e);
-  };
+  useEffect(() => {
+    if (result.data && !selectedUser) {
+      setSelectedUser(result.data.id);
+    }
+  }, [result.data, selectedUser]);
 
-  const isUpdateMode = (): boolean => {
-    return defaultDate !== undefined && defaultReason !== undefined;
-  };
+  const isUpdateMode = defaultDate !== undefined && defaultReason !== undefined;
 
   const createToast = async () => {
-    if (result.data) {
+    if (result.data && reason && selectedUser) {
       await createTrigger({
-        reason: reason,
+        reason,
         userId:
-          result.data.isAdmin && selected !== '' ? selected : result.data.id,
+          result.data.isAdmin && selectedUser !== ''
+            ? selectedUser
+            : result.data.id,
         date: new Date(date + ' ' + time).toISOString(),
       });
-      setSelected('');
+      setSelectedUser('');
     }
   };
 
   const updateToast = async () => {
     if (result.data && toastId) {
       await updateTrigger({
-        reason: reason,
+        reason,
         date: new Date(date + ' ' + time).toISOString(),
         id: toastId,
         userId: result.data.id,
@@ -85,7 +87,7 @@ export const ToastModal: React.FC<Props> = ({
     setTime('');
     setDate('');
     setReason('');
-    setSelected('');
+    setSelectedUser('');
   };
 
   const handleClose = () => {
@@ -94,7 +96,11 @@ export const ToastModal: React.FC<Props> = ({
   };
 
   const inputsFilled = (): boolean => {
-    return date === '' || reason.length === 0 || time.length === 0;
+    return (
+      date === '' ||
+      (reason !== undefined && reason.length === 0) ||
+      time.length === 0
+    );
   };
   const allInputsFilled: boolean = inputsFilled();
 
@@ -155,8 +161,12 @@ export const ToastModal: React.FC<Props> = ({
             maxLength={20}
             placeholder="סיבה לשתיה"
           />
-          {result.data && result.data.isAdmin && !isUpdateMode() && (
-            <UserSelect selectFunction={handleSelected} />
+          {result.data && result.data.isAdmin && !isUpdateMode && (
+            <UserSelect
+              selectFunction={setSelectedUser}
+              selectedUser={selectedUser}
+              defaultValue={selectedUser}
+            />
           )}
           <div className={styles.actionContainer}>
             <button
@@ -167,7 +177,7 @@ export const ToastModal: React.FC<Props> = ({
               }
               disabled={allInputsFilled ? true : false}
               onClick={() => {
-                isUpdateMode() ? updateToast() : createToast();
+                isUpdateMode ? updateToast() : createToast();
                 handleClose();
               }}
             >

@@ -11,8 +11,8 @@ import {
   useLoginMutation,
   useUpdateUserMutation,
   useSignupMutation,
-} from '../../store/services/user.api';
-import { Login } from '../../types/login.type';
+} from '../../store/services';
+import { LoginInput } from '../../types/login.type';
 
 export interface Props {
   isOpen: boolean;
@@ -30,24 +30,19 @@ export const UserModal: React.FC<Props> = ({
   const LOGIN = false;
   const SIGNUP = true;
 
-  const [loginTrigger, result] = useLoginMutation({
+  const [login, result] = useLoginMutation({
     fixedCacheKey: 'userKey',
   });
 
   const [updateUser] = useUpdateUserMutation();
-
-  const [signupTrigger] = useSignupMutation();
+  const [signup] = useSignupMutation();
 
   const isUpdateUserMode = (): boolean => {
     return username !== undefined && password !== undefined;
   };
 
-  const [usernameIn, setUsernameIn] = useState(
-    username !== undefined ? username : ''
-  );
-  const [passwordIn, setPasswordIn] = useState(
-    password !== undefined ? password : ''
-  );
+  const [usernameIn, setUsernameIn] = useState(username ?? '');
+  const [passwordIn, setPasswordIn] = useState(password ?? '');
 
   const [error, setError] = useState('');
   const [authType, setAuthType] = useState(LOGIN);
@@ -62,8 +57,11 @@ export const UserModal: React.FC<Props> = ({
 
   const sendLogin = async () => {
     if (usernameIn && passwordIn) {
-      const loginParams: Login = { username: usernameIn, password: passwordIn };
-      await loginTrigger(loginParams)
+      const loginParams: LoginInput = {
+        username: usernameIn,
+        password: passwordIn,
+      };
+      await login(loginParams)
         .unwrap()
         .then(() => {
           handleClose();
@@ -76,14 +74,14 @@ export const UserModal: React.FC<Props> = ({
 
   const sendSignup = async () => {
     if (usernameIn && passwordIn) {
-      const signupParams: Login = {
+      const signupParams: LoginInput = {
         username: usernameIn,
         password: passwordIn,
       };
-      await signupTrigger(signupParams)
+      await signup(signupParams)
         .unwrap()
         .then(() => {
-          loginTrigger(signupParams)
+          login(signupParams)
             .unwrap()
             .then(() => {
               handleClose();
@@ -91,7 +89,6 @@ export const UserModal: React.FC<Props> = ({
         })
         .catch((error: { data: { message: string } }) => {
           setError(error.data.message);
-          return;
         });
     }
   };
@@ -105,7 +102,7 @@ export const UserModal: React.FC<Props> = ({
       })
         .unwrap()
         .then(() => {
-          loginTrigger({ username: usernameIn, password: passwordIn });
+          login({ username: usernameIn, password: passwordIn });
           handleClose();
         })
         .catch((error: { data: { message: string } }) => {

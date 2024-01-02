@@ -33,9 +33,10 @@
   justify-content: flex-start;
   flex-wrap: wrap;
   list-style-type: none;
-  height: 100vh;
+  height: 74vh;
   width: 39vw;
-  padding: 0 0 0 0;
+  overflow-x: hidden;
+  padding: 0;
 }
 
 .toast {
@@ -44,8 +45,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding-top: 5px;
-  padding-bottom: 10px;
+  padding-top: 0.3em;
+  padding-bottom: 0.7em;
   flex-basis: 50%;
   overflow-wrap: anywhere;
 }

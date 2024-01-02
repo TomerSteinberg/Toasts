@@ -1,20 +1,20 @@
-import { UpdateUser } from '../../types';
+import { UpdateUserInput } from '../../types';
 import { LoggedUser } from '../../types/logged-user.type';
-import { Login } from '../../types/login.type';
+import { LoginInput } from '../../types/login.type';
 import { serverApi } from './server.api';
 
 const userApi = serverApi.injectEndpoints({
   endpoints: (builder) => ({
-    Login: builder.mutation<LoggedUser, Login>({
-      query: (body) => ({ url: 'login', method: 'POST', body }),
+    Login: builder.mutation<LoggedUser, LoginInput>({
+      query: (body) => ({ url: 'users/login', method: 'POST', body }),
     }),
-    UpdateUser: builder.mutation<number, UpdateUser>({
-      query: (body) => ({ url: `user/${body.id}`, method: 'PATCH', body }),
+    UpdateUser: builder.mutation<number, UpdateUserInput>({
+      query: (body) => ({ url: `users/${body.id}`, method: 'PATCH', body }),
       invalidatesTags: ['toasts', 'user'],
     }),
-    Signup: builder.mutation<LoggedUser, Login>({
+    Signup: builder.mutation<LoggedUser, LoginInput>({
       query: (body) => ({
-        url: 'signup',
+        url: 'users/signup',
         method: 'POST',
         body,
       }),
@@ -30,8 +30,8 @@ const userApi = serverApi.injectEndpoints({
       providesTags: ['user'],
     }),
     MakeAdmin: builder.mutation<number, { id: string; adminId: string }>({
-      query: (ids) => ({
-        url: `make_admin/${ids.id}?adminId=${ids.adminId}`,
+      query: ({ id, adminId }) => ({
+        url: `users/make_admin/${id}?adminId=${adminId}`,
         method: 'PATCH',
       }),
       invalidatesTags: ['user'],

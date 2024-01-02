@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Toasts } from './entities/toasts.entity';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateToast } from './dto/create-toast.dto';
-import { UpdateToast } from './dto/update-toast.dto';
+import { CreateToastDTO } from './dto/create-toast.dto';
+import { UpdateToastDTO } from './dto/update-toast.dto';
 import { UsersService } from '../users/users.service';
 import { InvalidUserID, NoToastsHappened } from './exceptions';
 import { Op, Sequelize } from 'sequelize';
@@ -61,7 +61,7 @@ export class ToastsService {
    * @param: toast dto
    * @return: toast instance
    */
-  async createToast(toastParams: CreateToast) {
+  async createToast(toastParams: CreateToastDTO) {
     const doesUserExist = await this.usersService.doesExist(toastParams.userId);
     if (!doesUserExist) {
       throw new InvalidUserID();
@@ -97,7 +97,7 @@ export class ToastsService {
    * @return: object with number of effected rows
    */
   async updateToast(
-    toastParams: UpdateToast,
+    toastParams: UpdateToastDTO,
     toastId: string,
     userId?: string
   ) {
@@ -189,11 +189,9 @@ export class ToastsService {
    * @returns number of toasts done in given period (max if isRecord is true)
    */
   private async getMaxOfYearlyPeriod(isGreater: boolean, isRecord: boolean) {
-    const JULY = 6;
-    const JUNE = 5;
-    const JANUARY = 0;
+    const JULY = 7;
+    const JUNE = 6;
     const boundary = this.getBoundaryDate();
-    boundary.setMonth(isGreater ? JANUARY : JULY);
     const currDate = isRecord ? boundary : new Date();
 
     const maxOfPeriod = await this.toastsModel

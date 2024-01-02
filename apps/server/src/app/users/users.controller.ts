@@ -8,25 +8,25 @@ import {
   Get,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './dto/user.dto';
+import { UserDTO } from './dto/user.dto';
 import { Users } from './entities/users.entity';
 
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post('signup')
-  signUp(@Body() userParams: User) {
+  signUp(@Body() userParams: UserDTO) {
     return this.usersService.signup(userParams);
   }
 
   @Post('login')
-  login(@Body() userParams: User) {
+  login(@Body() userParams: UserDTO) {
     return this.usersService.login(userParams);
   }
 
-  @Patch('user/:id')
-  updateUser(@Body() userParams: User, @Param('id') userId: string) {
+  @Patch('/:id')
+  updateUser(@Body() userParams: UserDTO, @Param('id') userId: string) {
     return this.usersService.updateUser(userParams, userId);
   }
 
@@ -35,7 +35,7 @@ export class UsersController {
     return this.usersService.makeAdmin(userId, adminId);
   }
 
-  @Get('users')
+  @Get()
   getUsers(): Promise<Users[]> {
     return this.usersService.getUsers();
   }

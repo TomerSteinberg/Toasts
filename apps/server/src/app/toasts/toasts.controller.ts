@@ -1,15 +1,23 @@
-import { Body, Controller, Post, Param, Patch, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Param,
+  Patch,
+  Query,
+  Delete,
+} from '@nestjs/common';
 import { Get } from '@nestjs/common';
 import { Toasts } from './entities/toasts.entity';
 import { ToastsService } from './toasts.service';
-import { CreateToast } from './dto/create-toast.dto';
-import { UpdateToast } from './dto/update-toast.dto';
+import { CreateToastDTO } from './dto/create-toast.dto';
+import { UpdateToastDTO } from './dto/update-toast.dto';
 
-@Controller()
+@Controller('toasts')
 export class ToastsController {
   constructor(private toastsService: ToastsService) {}
 
-  @Get('toast')
+  @Get()
   getToasts(): Promise<Toasts[]> {
     return this.toastsService.getToasts();
   }
@@ -24,19 +32,19 @@ export class ToastsController {
     return this.toastsService.getPastToastsById(userId);
   }
 
-  @Post('toast')
-  addToast(@Body() toastParams: CreateToast) {
+  @Post()
+  addToast(@Body() toastParams: CreateToastDTO) {
     return this.toastsService.createToast(toastParams);
   }
 
-  @Get('remove_toast/:id')
+  @Delete('/:id')
   removeToast(@Param('id') id: string, @Query('userId') userId: string) {
     return this.toastsService.removeToast(id, userId);
   }
 
-  @Patch('toast/:id')
+  @Patch('/:id')
   updateToast(
-    @Body() toastParams: UpdateToast,
+    @Body() toastParams: UpdateToastDTO,
     @Param('id') toastId: string,
     @Query('userId') userId: string
   ) {

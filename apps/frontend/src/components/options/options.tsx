@@ -83,9 +83,7 @@ export const Options = () => {
                 TransitionProps={{ timeout: 300 }}
                 placement="left"
               >
-                <AdminPanelSettingsIcon
-                  className={styles.menuIcons}
-                ></AdminPanelSettingsIcon>
+                <AdminPanelSettingsIcon className={styles.menuIcons} />
               </Tooltip>
             </button>
           )}
@@ -99,13 +97,13 @@ export const Options = () => {
       />
       <ListModal
         title="היסטורית שתיות"
-        isHistory={true}
+        isShowHistory
         isOpen={isHistoryOpen}
         setIsOpen={setIsHistoryOpen}
       />
       <ListModal
         title="הרשאות משתמשים"
-        isHistory={false}
+        isShowHistory={false}
         isOpen={isPermissionOpen}
         setIsOpen={setIsPermissionOpen}
       />

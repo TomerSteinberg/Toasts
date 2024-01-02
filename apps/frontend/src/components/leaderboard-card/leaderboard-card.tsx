@@ -4,7 +4,7 @@ import { Card } from '../card';
 import {
   useGetLeaderboardQuery,
   useGetTotalToastsQuery,
-} from '../../store/services/toast.api';
+} from '../../store/services';
 
 export const LeaderboardCard = () => {
   const { data: leaderboard } = useGetLeaderboardQuery();
@@ -14,17 +14,17 @@ export const LeaderboardCard = () => {
     <Card title="🏆לוח תוצאות" width="25vw" height="95vh">
       <div className={styles.emptyContainer}></div>
       <ul className={styles.scoreList}>
-        {leaderboard === undefined || leaderboard.length === 0 ? (
+        {!leaderboard || !leaderboard.length ? (
           <li>
             <p className={styles.empty}>אין נקודות</p>
           </li>
         ) : (
-          leaderboard.map((entry, index) => {
+          leaderboard.map(({ toasts, user }, index) => {
             return (
-              <li key={entry.user.id}>
+              <li key={user.id}>
                 <Score
-                  username={entry.user.username}
-                  score={entry.toasts}
+                  username={user.username}
+                  score={toasts}
                   placement={index + 1}
                 />
               </li>

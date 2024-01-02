@@ -17,11 +17,11 @@ export const User: React.FC<Props> = ({ username, id, isAdmin }) => {
     fixedCacheKey: 'userKey',
   });
 
-  const [trigger] = useMakeAdminMutation();
+  const [triggerMakeAdmin] = useMakeAdminMutation();
 
   const makeAdmin = async () => {
     if (result.data) {
-      trigger({ id: id, adminId: result.data.id });
+      triggerMakeAdmin({ id, adminId: result.data.id });
     }
   };
 

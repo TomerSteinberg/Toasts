@@ -1,6 +1,6 @@
 import { IsBoolean } from 'class-validator';
 
-export class UpdateCriminal {
+export class UpdateCriminalDTO {
   @IsBoolean()
   criminalType?: boolean;
 }

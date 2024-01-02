@@ -3,11 +3,11 @@ import styles from './toasts-card.module.css';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { Card } from '../card';
 import { Tooltip } from '@mui/material';
-import { useGetFutureToastsQuery } from '../../store/services/toast.api';
+import { useGetFutureToastsQuery } from '../../store/services';
 import { format } from 'date-fns';
 import { useState } from 'react';
 import { ToastModal } from '../toast-modal';
-import { useLoginMutation } from '../../store/services/user.api';
+import { useLoginMutation } from '../../store/services';
 
 export const ToastsCard = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -34,26 +34,24 @@ export const ToastsCard = () => {
         <ToastModal title="הוספת שתיה" setIsOpen={setIsOpen} isOpen={isOpen} />
       </div>
       <ul className={styles.toastList}>
-        {futureToasts === undefined || futureToasts.length === 0 ? (
+        {!futureToasts || !futureToasts.length ? (
           <li>
             <p className={styles.empty}>אין שתיות</p>
           </li>
         ) : (
-          futureToasts.map((toast) => {
+          futureToasts.map(({ id, user, date, reason, userId }) => {
             return (
-              <li key={toast.id} className={styles.toast}>
+              <li key={id} className={styles.toast}>
                 <Toast
                   isPastToast={false}
-                  name={toast.user.username}
-                  date={format(new Date(toast.date), 'dd/MM/yyyy kk:mm')}
-                  reason={toast.reason}
+                  name={user.username}
+                  date={format(new Date(date), 'dd/MM/yyyy kk:mm')}
+                  reason={reason}
                   isUserToast={
-                    result.data && toast.userId === result.data.id
-                      ? true
-                      : false
+                    result.data && userId === result.data.id ? true : false
                   }
-                  id={toast.id}
-                  userId={toast.userId}
+                  id={id}
+                  userId={userId}
                 ></Toast>
               </li>
             );

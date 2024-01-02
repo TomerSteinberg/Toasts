@@ -4,15 +4,15 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { Tooltip, Checkbox } from '@mui/material';
 import { useState } from 'react';
 import { ToastModal } from '../toast-modal';
-import { useLoginMutation } from '../../store/services/user.api';
+import { useLoginMutation } from '../../store/services';
 import {
   useDeleteToastMutation,
   useUpdateToastMutation,
-} from '../../store/services/toast.api';
+} from '../../store/services';
 import {
   useCreateCriminalMutation,
   useGetCriminalsQuery,
-} from '../../store/services/criminal.api';
+} from '../../store/services';
 
 export interface Props {
   name: string;
@@ -40,7 +40,7 @@ export const Toast: React.FC<Props> = ({
     fixedCacheKey: 'userKey',
   });
 
-  const [trigger] = useDeleteToastMutation();
+  const [triggerDelete] = useDeleteToastMutation();
   const [triggerUpdate] = useUpdateToastMutation();
   const { data: criminals } = useGetCriminalsQuery();
   const [triggerCreateCriminal] = useCreateCriminalMutation();
@@ -48,9 +48,9 @@ export const Toast: React.FC<Props> = ({
   const updateToastDidHappen = async () => {
     if (result.data && result.data.isAdmin) {
       await triggerUpdate({
-        userId: userId,
+        userId,
         isConvicting: !isConvicting,
-        id: id,
+        id,
       });
       if (
         !isConvicting &&
@@ -59,7 +59,7 @@ export const Toast: React.FC<Props> = ({
       ) {
         triggerCreateCriminal({
           criminalType: false,
-          userId: userId,
+          userId,
           adminId: result.data.id,
         });
       }
@@ -67,7 +67,7 @@ export const Toast: React.FC<Props> = ({
   };
 
   const deleteToast = async (id: string, userId: string) => {
-    await trigger({ id: id, userId: userId });
+    await triggerDelete({ id, userId });
   };
   return (
     <div className={isPastToast ? styles.pastContainer : styles.container}>

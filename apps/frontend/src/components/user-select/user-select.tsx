@@ -6,10 +6,16 @@ import {
 import styles from './user-select.module.css';
 
 export interface Props {
-  selectFunction: (param: string) => void;
+  selectFunction: (param: string | null) => void;
+  defaultValue?: string | null;
+  selectedUser: string | null;
 }
 
-export const UserSelect: React.FC<Props> = ({ selectFunction }) => {
+export const UserSelect: React.FC<Props> = ({
+  selectFunction,
+  defaultValue = null,
+  selectedUser,
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, result] = useLoginMutation({
     fixedCacheKey: 'userKey',
@@ -21,10 +27,11 @@ export const UserSelect: React.FC<Props> = ({ selectFunction }) => {
     <div className={styles.container}>
       {result.data && (
         <Select
+          value={selectedUser}
           onChange={(e) => {
             selectFunction(e.target.value);
           }}
-          defaultValue={result.data.id}
+          defaultValue={defaultValue}
           dir="rtl"
           autoWidth
           sx={{
@@ -35,10 +42,10 @@ export const UserSelect: React.FC<Props> = ({ selectFunction }) => {
           }}
         >
           {allUsers ? (
-            allUsers.map((user) => {
+            allUsers.map(({ id, username }) => {
               return (
-                <MenuItem dir="rtl" value={user.id}>
-                  {user.username}
+                <MenuItem key={id} dir="rtl" value={id}>
+                  {username}
                 </MenuItem>
               );
             })

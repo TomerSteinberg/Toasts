@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: row-reverse;
-  border-radius: 1.5vh;
+  border-radius: 0.7rem;
   border-color: black;
   border-style: solid;
   border-width: 0.2rem;

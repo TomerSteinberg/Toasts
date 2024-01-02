@@ -16,10 +16,9 @@
 .modalButton {
   border-color: black;
   border-style: solid;
-  border-radius: 1vh;
+  border-radius: 1rem;
   background-color: white;
   cursor: pointer;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-right: 3%;
   transition-duration: 100ms;
 }

@@ -1,11 +1,11 @@
-import { useLoginMutation } from '../../store/services/user.api';
+import { useLoginMutation } from '../../store/services';
 import ClearIcon from '@mui/icons-material/Clear';
 import styles from './criminal.module.css';
 import { Tooltip } from '@mui/material';
 import {
   useDeleteCriminalMutation,
   useUpdateCriminalMutation,
-} from '../../store/services/criminal.api';
+} from '../../store/services';
 import { Checkbox } from '@mui/material';
 
 export interface Props {
@@ -26,7 +26,7 @@ export const Criminal: React.FC<Props> = ({ username, type, id }) => {
     if (result.data && result.data.isAdmin) {
       await updateCriminalTrigger({
         criminalType: !type,
-        id: id,
+        id,
         adminId: result.data.id,
       });
     }
@@ -34,7 +34,7 @@ export const Criminal: React.FC<Props> = ({ username, type, id }) => {
 
   const deleteCriminal = async () => {
     if (result.data && result.data.isAdmin) {
-      await deleteCriminalTrigger({ id: id, adminId: result.data.id });
+      await deleteCriminalTrigger({ id, adminId: result.data.id });
     }
   };
 
@@ -67,7 +67,7 @@ export const Criminal: React.FC<Props> = ({ username, type, id }) => {
                 color: 'black',
               },
             }}
-          ></Checkbox>
+          />
         </Tooltip>
       )}
     </div>
