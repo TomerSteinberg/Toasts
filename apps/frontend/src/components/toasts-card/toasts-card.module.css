@@ -33,10 +33,11 @@
   justify-content: flex-start;
   flex-wrap: wrap;
   list-style-type: none;
-  height: 74vh;
+  height: 78vh;
   width: 39vw;
   overflow-x: hidden;
   padding: 0;
+  margin-bottom: 3vh;
 }
 
 .toast {
